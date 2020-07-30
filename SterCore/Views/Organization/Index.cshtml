@@ -1,0 +1,83 @@
+﻿@model IEnumerable<leave_management.Models.OrganizationVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success"> <i class="fa fa-plus" aria-hidden="true"></i> Dodaj Organizacje</a>
+</p>
+<table id="tblData" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TaxId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Street)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Code)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TaxId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Street)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HouseNumber)
+                </td>
+                <td>
+                    <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </a>
+                    <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    </a>
+                    @if (item.Disabled == true)
+                    {
+                        <a asp-action="Enable" class="btn btn-success" asp-route-id="@item.Id" onclick="return confirm('Czy napewno chcesz włączyć oprogramowanie w tej organizacji?')">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="Disable" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Czy napewno chcesz wyłączyć oprogramowanie w tej organizacji?')">
+                            <i class="fa fa-ban" aria-hidden="true"></i>
+                        </a>
+                    }
+                    <a style="color: white" class="btn btn-info"><i class="fa fa-bar-chart"></i> Raport</a>
+                    <a style="color: white" class="btn btn-success" disabled><i class="fa fa-level-up"></i> Wgraj</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

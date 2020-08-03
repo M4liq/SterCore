@@ -17,7 +17,7 @@ using Microsoft.Extensions.Logging;
 
 namespace leave_management.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    [Authorize(Roles = "Employer,Agent,Administrator")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<Employee> _signInManager;
@@ -86,9 +86,12 @@ namespace leave_management.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                //var superior = await _userManager.GetUserAsync(HttpContext.User);
+                //To getting Organization by Employer id and assign user to organization
                 var user = new Employee { UserName = Input.Email, Email = Input.Email,
                     Firstname = Input.FirstName, 
                     Lastname = Input.LastName  };
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

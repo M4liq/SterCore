@@ -31,7 +31,7 @@ namespace leave_management
             )
         { 
 
-            if(userManager.FindByNameAsync("admin@localhost.com").Result == null) 
+            if(userManager.FindByNameAsync("admin@stercore.pl").Result == null) 
             {
                 var initalOrganization = new Organization 
                 {

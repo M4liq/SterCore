@@ -8,5 +8,6 @@ namespace leave_management.Contracts
 {
     public interface IOrganizationRepository : IRepositoryBase<Organization>
     {
+        Task<Organization> GetOrganizationByUserId(int id);
     }
 }

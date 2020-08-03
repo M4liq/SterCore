@@ -17,5 +17,6 @@ namespace leave_management.Data
         [ForeignKey("OrganizationId")]
         public Organization Organization { get; set; }
         public int OrganizationId { get; set; }
+        public bool ChangedPassword { get; set; }
     }
 }

@@ -59,10 +59,5 @@ namespace leave_management.Repository
             _db.Organization.Update(entity);
             return await Save();
         }
-
-        public Task<Organization> GetOrganizationByUserId(int id)
-        {
-            throw new NotImplementedException(); //to do some logic here 
-        }
     }
 }

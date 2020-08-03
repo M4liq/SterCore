@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using leave_management.Contracts;
 using leave_management.Data;
+using leave_management.Repository;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -24,17 +26,20 @@ namespace leave_management.Areas.Identity.Pages.Account
         private readonly UserManager<Employee> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IEmployeeRepository _employeeRepository;
 
         public RegisterModel(
             UserManager<Employee> userManager,
             SignInManager<Employee> signInManager,
             ILogger<RegisterModel> logger,
+            IEmployeeRepository employeeRepository,
             IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _employeeRepository = employeeRepository;
         }
 
         [BindProperty]
@@ -86,11 +91,18 @@ namespace leave_management.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                //var superior = await _userManager.GetUserAsync(HttpContext.User);
+                var superior = await _userManager.GetUserAsync(HttpContext.User);
+                var superiorWithOrganization = await _employeeRepository.GetUserWithOrganizationByUserId(superior.Id);
+                var organizaiton = superiorWithOrganization.Organization;
                 //To getting Organization by Employer id and assign user to organization
+
                 var user = new Employee { UserName = Input.Email, Email = Input.Email,
-                    Firstname = Input.FirstName, 
-                    Lastname = Input.LastName  };
+                    Firstname = Input.FirstName,
+                    Lastname = Input.LastName,
+                    Organization = organizaiton,
+                    OrganizationId = organizaiton.Id,
+                    ChangedPassword = false
+                };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)

@@ -52,7 +52,8 @@ namespace leave_management
                     {
                         UserName = "admin@stercore.pl",
                         Email = "admin@stercore.pl",
-                        OrganizationId = initalOrganization.Id
+                        OrganizationId = initalOrganization.Id,
+                        ChangedPassword = true
                     };
 
                     if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")

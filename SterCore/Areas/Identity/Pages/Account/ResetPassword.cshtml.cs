@@ -78,6 +78,15 @@ namespace leave_management.Areas.Identity.Pages.Account
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
             if (result.Succeeded)
             {
+                user.ChangedPassword = true;
+                var updated = await _userManager.UpdateAsync(user);
+
+                if (!updated.Succeeded)
+                {
+                    ModelState.AddModelError("","Nie można zmienić hasła. Spróbuj ponownie później ..." );
+                    return Page();
+                }
+
                 return RedirectToPage("./ResetPasswordConfirmation");
             }
 

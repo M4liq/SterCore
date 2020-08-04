@@ -70,13 +70,6 @@ namespace leave_management.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public ActionResult ListEmployees()
-        {
-            var employees = _userManager.GetUsersInRoleAsync("Employee").Result;
-            var model = _mapper.Map<List<EmployeeVM>>(employees);
-            return View(model);
-        }
-
         // GET: LeaveAllocation/Details/5
         public async Task<ActionResult> Details(string id)
         {

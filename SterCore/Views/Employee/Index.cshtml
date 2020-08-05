@@ -4,21 +4,18 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Użytkownicy</h1>
 
-<a class="nav-link" asp-area="Identity" asp-page="/Account/Register">
-    <i class="fas fa-registered"></i>
-    <p>Register</p>
-</a>
+<hr />
+<p>
+    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-success"> <i class="fa fa-plus" aria-hidden="true"></i> Dodaj Użytkownika</a>
+</p>
 
-<table class="table">
+<table class="table" id="tblData">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                Imię i nazwisko
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Email)
@@ -27,19 +24,7 @@
                 @Html.DisplayNameFor(model => model.PhoneNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Firstname)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Lastname)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TaxId)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.DateOfBirth)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateJoined)
             </th>
             <th></th>
         </tr>
@@ -49,10 +34,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
+                    @Html.DisplayFor(modelItem => item.Firstname) @Html.DisplayFor(modelItem => item.Lastname)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
@@ -61,24 +43,18 @@
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Firstname)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Lastname)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TaxId)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.DateOfBirth)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DateJoined)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">
+                        <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                    </a>
+                    <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    </a>
+                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Czy napewno chcesz usunąć tego pracownika z systemu?')">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </a>
                 </td>
             </tr>
         }

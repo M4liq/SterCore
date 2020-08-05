@@ -111,14 +111,14 @@ namespace leave_management.Controllers
                 var isSuccess = await _repo.Update(leaveType);
                 if (!isSuccess)
                 {
-                    ModelState.AddModelError("", "Something Went Wrong...");
+                    ModelState.AddModelError("", "Coś poszło nie tak skontaktuj się z administratorem...");
                     return View(model);
                 }
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                ModelState.AddModelError("", "Something Went Wrong...");
+                ModelState.AddModelError("", "Coś poszło nie tak skontaktuj się z administratorem...");
                 return View(model);
             }
         }

@@ -47,17 +47,14 @@
                     @Html.DisplayFor(modelItem => item.TaxId)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Street)
+                    @Html.DisplayFor(modelItem => item.Street) @Html.DisplayFor(modelItem => item.HouseNumber)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.City)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.HouseNumber)
-                </td>
-                <td>
                     <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">
-                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                        <i class="fa fa-pencil-alt" aria-hidden="true"></i>
                     </a>
                     <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">
                         <i class="fa fa-info-circle" aria-hidden="true"></i>

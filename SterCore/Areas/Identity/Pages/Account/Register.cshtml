@@ -3,20 +3,14 @@
 @{
     ViewData["Title"] = "Register";
 }
-
-<div class="hold-transition register-page">
-    <div class="register-box">
-        <div class="register-logo">
-            Create a New Account
-        </div>
-
-        <div class="card">
-            <div class="card-body register-card-body">
-                <hr />
+<h1>Dodaj Pracownika </h1>
+        <hr />
+             <div class="row">
+            <div class="col-md-4">
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <form method="post">
                     <div class="input-group mb-3">
-                        <input asp-for="Input.FirstName" class="form-control" placeholder="First name">
+                        <input asp-for="Input.FirstName" class="form-control" placeholder="Imię">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-user"></span>
@@ -25,7 +19,7 @@
                     </div>
                     <span asp-validation-for="Input.FirstName" class="text-danger"></span>
                     <div class="input-group mb-3">
-                        <input asp-for="Input.LastName" class="form-control" placeholder="Last name">
+                        <input asp-for="Input.LastName" class="form-control" placeholder="Nazwisko">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-user"></span>
@@ -42,19 +36,21 @@
                         </div>
                     </div>
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    <div class="input-group mb-3">
+                        @Html.DropDownListFor(q => q.OrganizationId, new SelectList(Model.Organizations, "Value", "Text"), "Wybierz organizacje", new { @class = "form-control" })
+                    </div>
+
                     <div class="row">
-                        <button type="submit" class="btn btn-primary btn-block">Register</button>
+                        <button type="submit" class="btn btn-primary">Dodaj użytkownika</button>  <a class="btn btn-outline-secondary ml-2" asp-controller="Employee" asp-action="Index">Powrót do listy</a>
                         <!-- /.col -->
                     </div>
                 </form>
-                <a asp-page="./Login" class="text-center">I already have an account</a>
             </div>
             <!-- /.form-box -->
-        </div><!-- /.card -->
-    </div>
-    <!-- /.register-box -->
-</div>
+            <!-- /.register-box -->
+            </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+
+        @section Scripts {
+            <partial name="_ValidationScriptsPartial" />
+        }

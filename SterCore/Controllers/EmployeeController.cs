@@ -3,107 +3,120 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using leave_management.Contracts;
 using leave_management.Data;
 using leave_management.Models;
+using leave_management.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace leave_management.Controllers
 {
+    [Authorize(Roles = "Administrator, Agent, Employer")]
     public class EmployeeController : Controller
     {
-        public EmployeeController(UserManager<Employee> userManager, IMapper mapper)
+        public EmployeeController(UserManager<Employee> userManager, IMapper mapper, IEmployeeRepository employeeRepository)
         {
             _mapper = mapper;
             _userManager = userManager;
+            _employeeRepository = employeeRepository;
         }
 
        private  UserManager<Employee> _userManager { get; set; }
        private  IMapper _mapper { get; set; }
+       public IEmployeeRepository _employeeRepository { get; set; }
 
 
         // GET: Employee
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var employees = _userManager.GetUsersInRoleAsync("Employee").Result;
-            var model = _mapper.Map<List<EmployeeVM>>(employees);
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            currentUser = await _employeeRepository.GetUserWithOrganizationByUserId(currentUser.Id);
+            var organizaiton = currentUser.Organization;
+            var sameOrginEmployees = await _employeeRepository.GetEmployeesWithSameOrigin(organizaiton);
+
+            var model = _mapper.Map<IEnumerable<EmployeeVM>>(sameOrginEmployees);
             return View(model);
         }
 
         // GET: Employee/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(string id)
         {
-            return View();
-        }
-
-        // GET: Employee/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Employee/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var employee = await _userManager.FindByIdAsync(id);
+            var model = _mapper.Map<EmployeeVM>(employee);
+            return View(model);
         }
 
         // GET: Employee/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(string id)
         {
-            return View();
+            var employee = await _userManager.FindByIdAsync(id); 
+
+            if (employee == null)
+               return NotFound();
+
+            var model = _mapper.Map<EditEmployeeVM>(employee);
+            return View(model);
         }
 
         // POST: Employee/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(EditEmployeeVM model)
         {
             try
             {
-                // TODO: Add update logic here
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                var employee = await _userManager.FindByIdAsync(model.Id);
+
+                //Mapping fields manually due tu errors in DB update. Automapper does not assing all required fields.
+                employee.Email = model.Email;
+                employee.Firstname = model.Firstname;
+                employee.Lastname = model.Lastname;
+                employee.PhoneNumber = model.PhoneNumber;
+                employee.DateOfBirth = model.DateOfBirth;
+
+                var succeded = await _employeeRepository.Update(employee);
+
+                if (!succeded)
+                {
+                    ModelState.AddModelError("", "Coś poszło nie tak, skontaktuj się z administratorem ...");
+                    return View(model);
+                }
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                ModelState.AddModelError("", "Coś poszło nie tak, skontaktuj się z administratorem ...");
+                return View(model);
+            
             }
         }
 
         // GET: Employee/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(string id)
         {
-            return View();
-        }
-
-        // POST: Employee/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
+            var user = await _userManager.FindByIdAsync(id);
+ 
+            if (user == null)
             {
-                // TODO: Add delete logic here
+                return NotFound();
+            }
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+            var deleting = await _userManager.DeleteAsync(user);
+            if (!deleting.Succeeded)
             {
-                return View();
+                return BadRequest();
             }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

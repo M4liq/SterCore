@@ -90,7 +90,7 @@ namespace leave_management
                 var result = roleManager.CreateAsync(role).Result;
             }
 
-            if (!roleManager.RoleExistsAsync("AccountingManager").Result)
+            if (!roleManager.RoleExistsAsync("Agent").Result)
             {
                 var role = new IdentityRole
                 {

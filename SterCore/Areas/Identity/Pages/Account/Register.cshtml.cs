@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 
@@ -28,19 +29,22 @@ namespace leave_management.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IOrganizationRepository _organizationRepository;
 
         public RegisterModel(
             UserManager<Employee> userManager,
             SignInManager<Employee> signInManager,
             ILogger<RegisterModel> logger,
             IEmployeeRepository employeeRepository,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IOrganizationRepository organizationRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
             _employeeRepository = employeeRepository;
+            _organizationRepository = organizationRepository;
         }
 
         [BindProperty]
@@ -48,10 +52,16 @@ namespace leave_management.Areas.Identity.Pages.Account
 
         public string ReturnUrl { get; set; }
 
+        public IEnumerable<SelectListItem> Organizations { get; set; }
+
+        [Display(Name = "Leave Type")]
+        public int OrganizationId { get; set; }
+
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public class InputModel
         {
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email Address")]
@@ -71,6 +81,17 @@ namespace leave_management.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            var organizations = await _organizationRepository.FindAll();
+
+            var organizationItems = organizations.Select(q => new SelectListItem
+            {
+                Text = q.Name,
+                Value = q.Id.ToString()
+            });
+
+
+            Organizations = organizationItems;
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -91,7 +112,9 @@ namespace leave_management.Areas.Identity.Pages.Account
                     Lastname = Input.LastName,
                     Organization = organizaiton,
                     OrganizationId = organizaiton.Id,
-                    ChangedPassword = false
+                    ChangedPassword = false,
+                    DateJoined = DateTime.Now,
+                    DateOfBirth = DateTime.Now.AddYears(-35).Date
                 };
                 
 

@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace leave_management.Controllers
 {
-    [Authorize(Roles ="Administrator, Superadministrator")]
+    [Authorize(Roles = "Administrator, Agent")]
     public class OrganizationController : Controller
     {
         private readonly IOrganizationRepository _organizationRepository;
@@ -43,7 +43,7 @@ namespace leave_management.Controllers
             {
                 return NotFound();
             }
-            var organization = _organizationRepository.FindById(id);
+            var organization = await _organizationRepository.FindById(id);
             var model = _mapper.Map<OrganizationVM>(organization);
             return View(model);
         }
@@ -122,8 +122,6 @@ namespace leave_management.Controllers
             }
         }
 
-        // POST: Organization/Disable/5
-        //[ValidateAntiForgeryToken]
         public async Task<ActionResult> Disable(int id)
         {
             try
@@ -162,7 +160,7 @@ namespace leave_management.Controllers
             try
             {
                 var success = await _organizationRepository.Exists(id);
-                if (success)
+                if (!success)
                 {
                     return NotFound();
                 }

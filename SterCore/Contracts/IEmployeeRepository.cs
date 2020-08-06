@@ -1,4 +1,5 @@
 ﻿using leave_management.Data;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,9 @@ namespace leave_management.Contracts
         Task<bool> Update(Employee entity);
         Task<bool> Delete(Employee entity);
         Task<bool> Save();
-
         Task <IEnumerable<Employee>> GetEmployeesWithSameOrigin(Organization organization);
+        Task<IEnumerable<IdentityRole>> GetAgentIdentityRoles();
+        Task<IEnumerable<IdentityRole>> GetAdministratorIdentityRoles();
     }
 }
 

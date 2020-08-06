@@ -199,7 +199,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </li>
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            if (User.IsInRole("Administrator"))
+                            if (User.IsInRole("Administrator")|| User.IsInRole("Agent")|| User.IsInRole("Employer"))
                             {
                                 <li class="nav-item has-treeview menu-open">
                                     <a href="#" class="nav-link active">
@@ -247,6 +247,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </li>
                                     </ul>
                                 </li>
+                                if (User.IsInRole("Administrator") || User.IsInRole("Agent"))
+                                {
                                 <li class="nav-item has-treeview menu-open">
                                     <a href="#" class="nav-link active">
                                         <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -264,6 +266,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </li>
                                     </ul>
                                 </li>
+                                }
 
                             }
                         }

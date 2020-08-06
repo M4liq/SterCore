@@ -12,6 +12,7 @@ using leave_management.Repository;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -53,6 +54,7 @@ namespace leave_management.Areas.Identity.Pages.Account
         public string ReturnUrl { get; set; }
 
         public IEnumerable<SelectListItem> Organizations { get; set; }
+        public IEnumerable<SelectListItem> SystemRoles { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
@@ -77,12 +79,16 @@ namespace leave_management.Areas.Identity.Pages.Account
             [Display(Name = "Organizacja")]
             public int OrganizationId { get; set; }
 
+            [Display(Name = "Rola użytkownika")]
+            public string UserRoleId { get; set; }
+
         }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var roles = await _userManager.GetRolesAsync(user);
+            
 
             if (roles.Contains("Agent") || roles.Contains("Administrator"))
             {
@@ -94,6 +100,32 @@ namespace leave_management.Areas.Identity.Pages.Account
                 });
 
                 Organizations = organizationItems;
+
+            }
+
+            if (roles.Contains("Agent"))
+            {
+                var systemRoles = await _employeeRepository.GetAgentIdentityRoles();
+                var systemRolesItems = systemRoles.Select(q => new SelectListItem
+                {
+                    Text = q.Name,
+                    Value = q.Name
+                });
+
+                SystemRoles = systemRolesItems;
+
+            }
+
+            if (roles.Contains("Administrator"))
+            {
+                var systemRoles = await _employeeRepository.GetAdministratorIdentityRoles();
+                var systemRolesItems = systemRoles.Select(q => new SelectListItem
+                {
+                    Text = q.Name,
+                    Value = q.Name
+                });
+
+                SystemRoles = systemRolesItems;
 
             }
 
@@ -134,10 +166,36 @@ namespace leave_management.Areas.Identity.Pages.Account
                     user.OrganizationId = organizaiton.Id;
                 }
 
+                if (roles.Contains("Agent"))
+                {
+                    var systemRoles = await _employeeRepository.GetAgentIdentityRoles();
+                    var systemRolesItems = systemRoles.Select(q => new SelectListItem
+                    {
+                        Text = q.Name,
+                        Value = q.Name
+                    });
+
+                    SystemRoles = systemRolesItems;
+
+                }
+
+                if (roles.Contains("Administrator"))
+                {
+                    var systemRoles = await _employeeRepository.GetAdministratorIdentityRoles();
+                    var systemRolesItems = systemRoles.Select(q => new SelectListItem
+                    {
+                        Text = q.Name,
+                        Value = q.Name
+                    });
+
+                    SystemRoles = systemRolesItems;
+
+                }
+
                 var result = await _userManager.CreateAsync(user, "P@ssword1");
                 if (result.Succeeded)
                 {
-                    _userManager.AddToRoleAsync(user, "Employee").Wait();
+                    _userManager.AddToRoleAsync(user, Input.UserRoleId).Wait();
                     _logger.LogInformation("User created a new account without password.");
 
 

@@ -1,5 +1,7 @@
 ﻿using leave_management.Contracts;
 using leave_management.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -46,6 +48,18 @@ namespace leave_management.Repository
             var employee = await _db.Employees
             .FirstOrDefaultAsync(q => q.Id == id);
             return employee;
+        }
+
+        public async Task<IEnumerable<IdentityRole>> GetAdministratorIdentityRoles()
+        {
+            var roles = await _db.Roles.ToListAsync();
+            return roles;
+        }
+
+        public async Task<IEnumerable<IdentityRole>> GetAgentIdentityRoles()
+        {
+            var roles = await _db.Roles.ToListAsync();
+            return roles.Where(q => q.Name != "Administrator");
         }
 
         public async Task<IEnumerable<Employee>> GetEmployeesWithSameOrigin(Organization organization)

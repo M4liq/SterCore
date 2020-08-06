@@ -49,15 +49,28 @@
                         <div class="input-group mb-3">
                             @Html.DropDownListFor(q => q.Input.OrganizationId, new SelectList(Model.Organizations as IEnumerable<SelectListItem>, "Value", "Text"), "Wybierz organizacje", new { @class = "form-control" })
                         </div>
-                     </div>
+                    </div>
                 }
-             }
-                        <div class="row">
-                            <button type="submit" class="btn btn-primary">Dodaj użytkownika</button>  <a class="btn btn-outline-secondary ml-2" asp-controller="Employee" asp-action="Index">Powrót do listy</a>
-                            <!-- /.col -->
-                        </div>
+            }
 
-                </form>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                if (User.IsInRole("Administrator") || User.IsInRole("Agent"))
+                {
+                    <div class="form-group">
+                        <label asp-for="Input.UserRoleId" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            @Html.DropDownListFor(q => q.Input.UserRoleId, new SelectList(Model.SystemRoles as IEnumerable<SelectListItem>, "Value", "Text"), "Wybierz rolę użytkownika", new { @class = "form-control" })
+                        </div>
+                    </div>
+                }
+            }
+            <div class="row">
+                <button type="submit" class="btn btn-primary">Dodaj użytkownika</button>  <a class="btn btn-outline-secondary ml-2" asp-controller="Employee" asp-action="Index">Powrót do listy</a>
+                <!-- /.col -->
+            </div>
+
+        </form>
             </div>
             <!-- /.form-box -->
             <!-- /.register-box -->

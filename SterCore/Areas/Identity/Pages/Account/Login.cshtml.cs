@@ -85,7 +85,14 @@ namespace leave_management.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+               
                 var user = await _userManager.FindByEmailAsync(Input.Email);
+                if(user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Niepoprawna próba logowania");
+                    return Page();
+                }
+
                 var passwordchanged = user.ChangedPassword;
 
                 if (passwordchanged != true)
@@ -108,12 +115,12 @@ namespace leave_management.Areas.Identity.Pages.Account
                 }
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
+                    _logger.LogWarning("Konto zostało zablokowane");
                     return RedirectToPage("./Lockout");
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Niepoprawna próba logowania");
                     return Page();
                 }
             }

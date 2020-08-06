@@ -25,7 +25,7 @@ namespace leave_management.Repository
 
         public async Task<bool> Delete(Employee entity)
         {
-            _db.Employees.Remove(entity);
+            _db.Employees.Remove(entity); 
             return await Save();
         }
 

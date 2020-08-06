@@ -24,19 +24,19 @@ namespace leave_management.Repository
                 return leaveAllocations.Where(q => q.EmployeeId == employeeid && q.LeaveTypeId == leavetypeid && q.Period == period).Any();
         }
 
-        public async Task<bool> Create(LeaveRequest entity)
+        public async Task<bool> Create(LeaveAllocations entity)
         {
             await _db.LeaveAllocations.AddAsync(entity);
             return await Save();
         }
 
-        public async Task<bool> Delete(LeaveRequest entity)
+        public async Task<bool> Delete(LeaveAllocations entity)
         {
             _db.LeaveAllocations.Remove(entity);
             return await Save();
         }
 
-        public async Task<ICollection<LeaveRequest>> FindAll()
+        public async Task<ICollection<LeaveAllocations>> FindAll()
         {
             var LeaveAllocations = await _db.LeaveAllocations
                 .Include(q => q.LeaveType)
@@ -45,7 +45,7 @@ namespace leave_management.Repository
             return LeaveAllocations;
         }
 
-        public async Task<LeaveRequest> FindById(int id)
+        public async Task<LeaveAllocations> FindById(int id)
         {
             var LeaveAllocation = await _db.LeaveAllocations
                 .Include(q => q.LeaveType)
@@ -54,14 +54,14 @@ namespace leave_management.Repository
             return LeaveAllocation;
         }
 
-        public async Task<ICollection<LeaveRequest>> GetLeaveAllocationsByEmployee(string id)
+        public async Task<ICollection<LeaveAllocations>> GetLeaveAllocationsByEmployee(string id)
         {
             var period = DateTime.Now.Year;
             var leaveAllocations = await FindAll();
             return leaveAllocations.Where(q => q.EmployeeId == id && q.Period == period).ToList();
         }
 
-        public async Task<LeaveRequest> GetLeaveAllocationsByEmployeeAndType(string id, int leavetypeid)
+        public async Task<LeaveAllocations> GetLeaveAllocationsByEmployeeAndType(string id, int leavetypeid)
         {
             var period = DateTime.Now.Year;
             var allocations = await FindAll();
@@ -80,7 +80,7 @@ namespace leave_management.Repository
             return changes > 0;
         }
 
-        public async Task<bool> Update(LeaveRequest entity)
+        public async Task<bool> Update(LeaveAllocations entity)
         {
             _db.LeaveAllocations.Update(entity);
             return await Save();

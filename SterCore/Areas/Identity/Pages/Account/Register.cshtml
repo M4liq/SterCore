@@ -3,52 +3,65 @@
 @{
     ViewData["Title"] = "Register";
 }
-<h1>Dodaj Pracownika </h1>
-        <hr />
-             <div class="row">
-            <div class="col-md-4">
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <form method="post">
-                    <div class="input-group mb-3">
-                        <input asp-for="Input.FirstName" class="form-control" placeholder="Imię">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-user"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-                    <div class="input-group mb-3">
-                        <input asp-for="Input.LastName" class="form-control" placeholder="Nazwisko">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-user"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
-                    <div class="input-group mb-3">
-                        <input asp-for="Input.Email" class="form-control" placeholder="Email">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                    <div class="input-group mb-3">
-                        @Html.DropDownListFor(q => q.OrganizationId, new SelectList(Model.Organizations, "Value", "Text"), "Wybierz organizacje", new { @class = "form-control" })
-                    </div>
+@using Microsoft.AspNetCore.Identity
+@using leave_management.Data
+@inject SignInManager<Employee> SignInManager
 
-                    <div class="row">
-                        <button type="submit" class="btn btn-primary">Dodaj użytkownika</button>  <a class="btn btn-outline-secondary ml-2" asp-controller="Employee" asp-action="Index">Powrót do listy</a>
-                        <!-- /.col -->
+<h1>Dodaj Pracownika </h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <form method="post">
+            <div class="input-group mb-3">
+                <input asp-for="Input.FirstName" class="form-control" placeholder="Imię">
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-user"></span>
                     </div>
+                </div>
+            </div>
+            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            <div class="input-group mb-3">
+                <input asp-for="Input.LastName" class="form-control" placeholder="Nazwisko">
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-user"></span>
+                    </div>
+                </div>
+            </div>
+            <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            <div class="input-group mb-3">
+                <input asp-for="Input.Email" class="form-control" placeholder="Email">
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-envelope"></span>
+                    </div>
+                </div>
+            </div>
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                if (User.IsInRole("Administrator") || User.IsInRole("Agent"))
+                {
+                    <div class="form-group">
+                        <label asp-for="Input.OrganizationId" class="control-label"></label>
+                        <div class="input-group mb-3">
+                            @Html.DropDownListFor(q => q.Input.OrganizationId, new SelectList(Model.Organizations as IEnumerable<SelectListItem>, "Value", "Text"), "Wybierz organizacje", new { @class = "form-control" })
+                        </div>
+                     </div>
+                }
+             }
+                        <div class="row">
+                            <button type="submit" class="btn btn-primary">Dodaj użytkownika</button>  <a class="btn btn-outline-secondary ml-2" asp-controller="Employee" asp-action="Index">Powrót do listy</a>
+                            <!-- /.col -->
+                        </div>
+
                 </form>
             </div>
             <!-- /.form-box -->
             <!-- /.register-box -->
-            </div>
+        </div>
 
 
         @section Scripts {

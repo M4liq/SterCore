@@ -64,7 +64,7 @@ namespace leave_management.Controllers
                     NumberOfDays = leavetype.DefaultDays,
                     Period = DateTime.Now.Year
                 };
-                var leaveallocation = _mapper.Map<LeaveRequest>(allocation);
+                var leaveallocation = _mapper.Map<LeaveAllocations>(allocation);
                 await _leaveallocationrepo.Create(leaveallocation);
             }
             return RedirectToAction(nameof(Index));

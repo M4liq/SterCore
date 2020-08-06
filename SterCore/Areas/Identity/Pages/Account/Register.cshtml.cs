@@ -54,9 +54,6 @@ namespace leave_management.Areas.Identity.Pages.Account
 
         public IEnumerable<SelectListItem> Organizations { get; set; }
 
-        [Display(Name = "Leave Type")]
-        public int OrganizationId { get; set; }
-
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public class InputModel
@@ -77,20 +74,28 @@ namespace leave_management.Areas.Identity.Pages.Account
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
+            [Display(Name = "Organizacja")]
+            public int OrganizationId { get; set; }
+
         }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            var organizations = await _organizationRepository.FindAll();
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var roles = await _userManager.GetRolesAsync(user);
 
-            var organizationItems = organizations.Select(q => new SelectListItem
+            if (roles.Contains("Agent") || roles.Contains("Administrator"))
             {
-                Text = q.Name,
-                Value = q.Id.ToString()
-            });
+                var organizations = await _organizationRepository.FindAll();
+                var organizationItems = organizations.Select(q => new SelectListItem
+                {
+                    Text = q.Name,
+                    Value = q.Id.ToString()
+                });
 
+                Organizations = organizationItems;
 
-            Organizations = organizationItems;
+            }
 
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -102,21 +107,32 @@ namespace leave_management.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var superior = await _userManager.GetUserAsync(HttpContext.User);
-                var superiorWithOrganization = await _employeeRepository.GetUserWithOrganizationByUserId(superior.Id);
-                var organizaiton = superiorWithOrganization.Organization;
-                //To getting Organization by Employer id and assign user to organization
+                    var superior = await _userManager.GetUserAsync(HttpContext.User);
+                    var roles = await _userManager.GetRolesAsync(superior);
+                    var superiorWithOrganization = await _employeeRepository.GetUserWithOrganizationByUserId(superior.Id);
+                    var organizaiton = superiorWithOrganization.Organization;
 
-                var user = new Employee { UserName = Input.Email, Email = Input.Email,
-                    Firstname = Input.FirstName,
-                    Lastname = Input.LastName,
-                    Organization = organizaiton,
-                    OrganizationId = organizaiton.Id,
-                    ChangedPassword = false,
-                    DateJoined = DateTime.Now,
-                    DateOfBirth = DateTime.Now.AddYears(-35).Date
-                };
-                
+                    var user = new Employee
+                    {
+                        UserName = Input.Email,
+                        Email = Input.Email,
+                        Firstname = Input.FirstName,
+                        Lastname = Input.LastName,
+                        ChangedPassword = false,
+                        DateJoined = DateTime.Now,
+                        DateOfBirth = DateTime.Now.AddYears(-35).Date
+                    };
+               
+                if (roles.Contains("Administrator")||roles.Contains("Agent"))
+                {
+                    user.Organization = await _organizationRepository.FindById(Input.OrganizationId);
+                    user.OrganizationId = Input.OrganizationId;
+                }
+                else
+                {
+                    user.Organization = organizaiton;
+                    user.OrganizationId = organizaiton.Id;
+                }
 
                 var result = await _userManager.CreateAsync(user, "P@ssword1");
                 if (result.Succeeded)
@@ -135,21 +151,35 @@ namespace leave_management.Areas.Identity.Pages.Account
 
                     await _emailSender.SendEmailAsync(
                         Input.Email,
-                        "Reset Password",
-                        $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        "Ustawienie hasła",
+                        $"Ustaw nowe hasło <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>klikając tutaj</a>.");
 
                     return RedirectToAction("Index", "Employee");
                     
                 }
+
+                if (roles.Contains("Agent") || roles.Contains("Administrator"))
+                {
+                    var organizations = await _organizationRepository.FindAll();
+                    var organizationItems = organizations.Select(q => new SelectListItem
+                    {
+                        Text = q.Name,
+                        Value = q.Id.ToString()
+                    });
+
+                    Organizations = organizationItems;
+
+                }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
 
     }
 }

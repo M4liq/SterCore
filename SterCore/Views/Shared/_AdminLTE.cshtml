@@ -197,6 +197,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="BusinessTravel" asp-action="index" class="nav-link">
+                                <i class="nav-icon fas fa-briefcase"></i>
+                                <p>
+                                    Business Travel
+                                </p>
+                            </a>
+                        </li>
                         @if (SignInManager.IsSignedIn(User))
                         {
                             if (User.IsInRole("Administrator")|| User.IsInRole("Agent")|| User.IsInRole("Employer"))

@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using leave_management.Contracts;
+using leave_management.Data;
+using leave_management.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,9 +23,11 @@ namespace leave_management.Controllers
             _mapper = mapper;
         }
         // GET: PWS
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var businnesTravels = await _repo.FindAll();
+            var model = _mapper.Map<List<BusinessTravel>, List<BusinessTravelVM>>(businnesTravels.ToList());
+            return View(model);
         }
 
         // GET: PWS/Details/5

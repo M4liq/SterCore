@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace leave_management.Contracts
 {
-    interface IBusinessTravelRepository :IRepositoryBase<BusinessTravel>
+    public interface IBusinessTravelRepository :IRepositoryBase<BusinessTravel>
     {
 
     }

@@ -159,6 +159,7 @@ namespace leave_management.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(CreateLeaveRequestVM model)
         {
+
             var leaveTypes = await _leaveTypeRepository.FindAll();
             var leaveTypeItems = leaveTypes.Select(q => new SelectListItem
             {

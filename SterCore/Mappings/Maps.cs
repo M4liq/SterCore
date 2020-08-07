@@ -16,11 +16,11 @@ namespace leave_management.Mappings
             CreateMap<LeaveRequests, LeaveRequestVM>().ReverseMap();
             CreateMap<LeaveRequests, AdministratorLeaveRequestVM>().ReverseMap();
             CreateMap<LeaveRequests, CreateLeaveRequestVM>().ReverseMap();
-            CreateMap<LeaveRequest, LeaveAllocationVM>().ReverseMap();
-            CreateMap<LeaveRequest, EditLeaveAllocationVM>().ReverseMap();
+            CreateMap<LeaveAllocations, LeaveAllocationVM>().ReverseMap();
+            CreateMap<LeaveAllocations, EditLeaveAllocationVM>().ReverseMap();
             CreateMap<Employee, EmployeeVM>().ReverseMap();
+            CreateMap<Employee, EditEmployeeVM>().ReverseMap();
             CreateMap<Organization, OrganizationVM>().ReverseMap();
-            CreateMap<Organization, OrganizationsVM>().ReverseMap();
         }
     }
 }

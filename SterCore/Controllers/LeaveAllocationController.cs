@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace leave_management.Controllers
 {
-    [Authorize(Roles = "Administrator, Employer")]
+    [Authorize(Roles = "Administrator, Employer, Agent")]
     public class LeaveAllocationController : Controller
     {
         private readonly ILeaveTypeRepository _leaverepo;
@@ -64,17 +64,10 @@ namespace leave_management.Controllers
                     NumberOfDays = leavetype.DefaultDays,
                     Period = DateTime.Now.Year
                 };
-                var leaveallocation = _mapper.Map<LeaveRequest>(allocation);
+                var leaveallocation = _mapper.Map<LeaveAllocations>(allocation);
                 await _leaveallocationrepo.Create(leaveallocation);
             }
             return RedirectToAction(nameof(Index));
-        }
-
-        public ActionResult ListEmployees()
-        {
-            var employees = _userManager.GetUsersInRoleAsync("Employee").Result;
-            var model = _mapper.Map<List<EmployeeVM>>(employees);
-            return View(model);
         }
 
         // GET: LeaveAllocation/Details/5

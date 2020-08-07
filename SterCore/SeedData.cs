@@ -31,7 +31,7 @@ namespace leave_management
             )
         { 
 
-            if(userManager.FindByNameAsync("admin@localhost.com").Result == null) 
+            if(userManager.FindByNameAsync("admin@stercore.pl").Result == null) 
             {
                 var initalOrganization = new Organization 
                 {
@@ -52,7 +52,8 @@ namespace leave_management
                     {
                         UserName = "admin@stercore.pl",
                         Email = "admin@stercore.pl",
-                        OrganizationId = initalOrganization.Id
+                        OrganizationId = initalOrganization.Id,
+                        ChangedPassword = true
                     };
 
                     if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
@@ -89,7 +90,7 @@ namespace leave_management
                 var result = roleManager.CreateAsync(role).Result;
             }
 
-            if (!roleManager.RoleExistsAsync("AccountingManager").Result)
+            if (!roleManager.RoleExistsAsync("Agent").Result)
             {
                 var role = new IdentityRole
                 {

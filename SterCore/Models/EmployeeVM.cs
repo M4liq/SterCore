@@ -9,21 +9,41 @@ namespace leave_management.Models
     public class EmployeeVM
     {
         public string Id { get; set; }
-        [Display(Name="Username")]
+        [Display(Name = "Nick")]
         public string UserName { get; set; }
-        [Display(Name = "Email Address")]
+        [Display(Name = "Adres Email")]
         public string Email { get; set; }
-        [Display(Name = "Phone Number")]
+        [Display(Name = "Numer Telefonu")]
         public string PhoneNumber { get; set; }
-        [Display(Name = "First Name")]
+        [Display(Name = "Imię")]
         public string Firstname { get; set; }
-        [Display(Name = "Last Name")]
+        [Display(Name = "Nazwisko")]
         public string Lastname { get; set; }
-        [Display(Name = "Tax ID Number")]
+        [Display(Name = "Numer Podatkowy")]
         public string TaxId { get; set; }
-        [Display(Name = "Date Of Birth")]
+        [Display(Name = "Data Urodzenia")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime DateOfBirth { get; set; }
-        [Display(Name = "Join Date")]
+        [Display(Name = "Data Dodania")]
         public DateTime DateJoined { get; set; }
+
+    }
+
+    public class EditEmployeeVM
+    {
+        public string Id { get; set; }
+        [Display(Name = "Nick")]
+        public string UserName { get; set; }
+        [Display(Name = "Adres Email")]
+        public string Email { get; set; }
+        [Display(Name = "Numer Telefonu")]
+        public string PhoneNumber { get; set; }
+        [Display(Name = "Imię")]
+        public string Firstname { get; set; }
+        [Display(Name = "Nazwisko")]
+        public string Lastname { get; set; }
+        [Display(Name = "Data urodzenia")]
+        public DateTime DateOfBirth { get; set; }
+  
     }
 }

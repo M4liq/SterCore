@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace leave_management.Controllers
 {
-    [Authorize(Roles ="Administrator")]
+    [Authorize(Roles = "Administrator, Employer, Agent")]
     public class LeaveTypesController : Controller
     {
         private readonly ILeaveTypeRepository _repo;
@@ -111,14 +111,14 @@ namespace leave_management.Controllers
                 var isSuccess = await _repo.Update(leaveType);
                 if (!isSuccess)
                 {
-                    ModelState.AddModelError("", "Something Went Wrong...");
+                    ModelState.AddModelError("", "Coś poszło nie tak skontaktuj się z administratorem...");
                     return View(model);
                 }
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                ModelState.AddModelError("", "Something Went Wrong...");
+                ModelState.AddModelError("", "Coś poszło nie tak skontaktuj się z administratorem...");
                 return View(model);
             }
         }

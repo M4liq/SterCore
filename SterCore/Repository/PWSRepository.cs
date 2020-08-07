@@ -1,5 +1,6 @@
 ﻿using leave_management.Contracts;
 using leave_management.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,39 +16,46 @@ namespace leave_management.Repository
         {
             _db = db;
         }
-        public Task<bool> Create(PWS entity)
+        public async Task<bool> Create(PWS entity)
         {
-            throw new NotImplementedException();
+            await _db.PWS.AddAsync(entity);
+            return await Save();
         }
 
-        public Task<bool> Delete(PWS entity)
+        public async Task<bool> Delete(PWS entity)
         {
-            throw new NotImplementedException();
+            _db.PWS.Remove(entity);
+            return await Save();
         }
 
-        public Task<bool> Exists(int id)
+        public async Task<bool> Exists(int id)
         {
-            throw new NotImplementedException();
+            var exists = await _db.PWS.AnyAsync(q => q.Id == id);
+            return exists;
         }
 
-        public Task<ICollection<PWS>> FindAll()
+        public async Task<ICollection<PWS>> FindAll()
         {
-            throw new NotImplementedException();
+            var PWS = await _db.PWS.ToListAsync();
+            return PWS;
         }
 
-        public Task<PWS> FindById(int id)
+        public async Task<PWS> FindById(int id)
         {
-            throw new NotImplementedException();
+            var PWS = await _db.PWS.FirstOrDefaultAsync(q => q.Id == id);
+            return PWS;
         }
 
-        public Task<bool> Save()
+        public async Task<bool> Save()
         {
-            throw new NotImplementedException();
+            var changes = await _db.SaveChangesAsync();
+            return changes > 0;
         }
 
-        public Task<bool> Update(PWS entity)
+        public async Task<bool> Update(PWS entity)
         {
-            throw new NotImplementedException();
+            _db.PWS.Update(entity);
+            return await Save();
         }
     }
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using leave_management.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +11,14 @@ namespace leave_management.Controllers
 {
     public class BusinessTravelController : Controller
     {
+        private readonly IBusinessTravelRepository _repo;
+        private readonly IMapper _mapper;
+
+        public BusinessTravelController(IBusinessTravelRepository repo, IMapper mapper)
+        {
+            _repo = repo;
+            _mapper = mapper;
+        }
         // GET: PWS
         public ActionResult Index()
         {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace leave_management.Data
 {
-    public class PWS
+    public class BusinessTravel
     {
         [Key]
         public int Id { get; set; }

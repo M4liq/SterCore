@@ -52,7 +52,7 @@ namespace leave_management
             services.AddScoped<ILeaveAllocationRepository, LeaveAllocationRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
-            services.AddScoped<IPWSRepository, PWSRepository>();
+            services.AddScoped<IBusinessTravelRepository, BusinessTravelRepository>();
 
 
             services.AddAutoMapper(typeof(Maps));

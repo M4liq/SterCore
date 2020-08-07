@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace leave_management.Models
 {
-    public class PWSVM
+    public class BusinessTravelVM
     {
         public int Id { get; set; }
         [Required]

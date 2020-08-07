@@ -1,0 +1,95 @@
+﻿@model IEnumerable<leave_management.Models.BusinessTravelVM>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DateFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateTo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DestinationCountry)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DestinationCity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PurposeOfTravel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransportVehicle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AdditionalInfo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrepaymentAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrepaymentCurrency)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DestinationCountry)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DestinationCity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PurposeOfTravel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransportVehicle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdditionalInfo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrepaymentAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrepaymentCurrency)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.Id)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

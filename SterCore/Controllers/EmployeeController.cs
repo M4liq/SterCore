@@ -7,6 +7,7 @@ using leave_management.Contracts;
 using leave_management.Data;
 using leave_management.Models;
 using leave_management.Repository;
+using leave_management.Services.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -32,10 +33,8 @@ namespace leave_management.Controllers
         // GET: Employee
         public async Task<ActionResult> Index()
         {
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-            currentUser = await _employeeRepository.GetUserWithOrganizationByUserId(currentUser.Id);
-            var organizaiton = currentUser.Organization;
-            var sameOrginEmployees = await _employeeRepository.GetEmployeesWithSameOrigin(organizaiton);
+            var organization = await _userManager.GetUserOrganization(HttpContext, _employeeRepository);
+            var sameOrginEmployees = await _employeeRepository.FindAll(organization);
 
             var model = _mapper.Map<IEnumerable<EmployeeVM>>(sameOrginEmployees);
             return View(model);

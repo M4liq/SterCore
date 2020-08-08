@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using leave_management.Contracts;
+using leave_management.Contracts.IServiecies;
 using leave_management.Data;
 using leave_management.Models;
 using leave_management.Repository;
@@ -18,18 +19,18 @@ namespace leave_management.Controllers
     [Authorize(Roles = "Administrator, Agent")]
     public class OrganizationController : Controller
     {
-        private readonly IOrganizationRepository _organizationRepository;
+        private readonly IOrganizationManager _organizationManager;
         private readonly IMapper _mapper;
-        public OrganizationController(IOrganizationRepository organizationRepository, IMapper mapper)
+        public OrganizationController(IMapper mapper, IOrganizationManager organizationManager)
         {
-            _organizationRepository = organizationRepository;
+            _organizationManager = organizationManager;
             _mapper = mapper;
         }
 
         // GET: Organization
         public async Task<ActionResult> Index()
         {
-            var organizations = await _organizationRepository.FindAll();
+            var organizations = await _organizationManager.FindAll();
             var model = _mapper.Map<List<Organization>, List<Models.OrganizationVM>>(organizations.ToList());
 
             return View(model);
@@ -38,12 +39,12 @@ namespace leave_management.Controllers
         // GET: Organization/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            var success = await _organizationRepository.Exists(id);
+            var success = await _organizationManager.Exists(id);
             if (!success)
             {
                 return NotFound();
             }
-            var organization = await _organizationRepository.FindById(id);
+            var organization = await _organizationManager.FindById(id);
             var model = _mapper.Map<OrganizationVM>(organization);
             return View(model);
         }
@@ -68,9 +69,10 @@ namespace leave_management.Controllers
                 }
 
                 var record = _mapper.Map<Organization>(model);
-                //record.DateCreated = DateTime.Now;
 
-                var isSuccess = await _organizationRepository.Create(record);
+                record.OrganizationToken = _organizationManager.GenerateToken();
+
+                var isSuccess = await _organizationManager.Create(record);
                 if (!isSuccess)
                 {
                     ModelState.AddModelError("", "Something Went Wrong...");
@@ -89,7 +91,7 @@ namespace leave_management.Controllers
         // GET: Organization/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var organization = await _organizationRepository.FindById(id);
+            var organization = await _organizationManager.FindById(id);
             var model = _mapper.Map<OrganizationVM>(organization);
             return View(model);
         }
@@ -107,7 +109,7 @@ namespace leave_management.Controllers
                 }
 
                 var record = _mapper.Map<Organization>(model);
-                var isSuccess = await _organizationRepository.Update(record);
+                var isSuccess = await _organizationManager.Update(record);
 
                 if (!isSuccess)
                 {
@@ -126,17 +128,17 @@ namespace leave_management.Controllers
         {
             try
             {
-                var success = await _organizationRepository.Exists(id);
+                var success = await _organizationManager.Exists(id);
                 if (!success)
                 {
                     return NotFound();
                 }
 
-                var organization = await _organizationRepository.FindById(id);
+                var organization = await _organizationManager.FindById(id);
 
                 organization.Disabled = true;
 
-                success = await  _organizationRepository.Update(organization);
+                success = await  _organizationManager.Update(organization);
 
                 if (!success)
                 {
@@ -159,18 +161,18 @@ namespace leave_management.Controllers
         {
             try
             {
-                var success = await _organizationRepository.Exists(id);
+                var success = await _organizationManager.Exists(id);
                 if (!success)
                 {
                     return NotFound();
                 }
 
-                var organization = await _organizationRepository.FindById(id);
+                var organization = await _organizationManager.FindById(id);
 
 
                 organization.Disabled = false;
 
-                success = await _organizationRepository.Update(organization);
+                success = await _organizationManager.Update(organization);
                 if (!success)
                 {
                     ModelState.AddModelError("", "Niepoprawna operacja włączenia organizacji.");

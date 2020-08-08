@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace leave_management.Data
 {
-    public class LeaveRequests
+    public class LeaveRequests : OrganizationResurceIdentifier
     {
-        [Key]
-        public int Id { get; set; }
-
         [ForeignKey("RequestingEmployeeId")]
         public Employee RequestingEmployee { get; set; }
         public string RequestingEmployeeId { get; set; }
@@ -28,5 +25,6 @@ namespace leave_management.Data
         public Employee ApprovedBy { get; set; }
         public string ApprovedById { get; set; }
         public string Comment { get; set; }
+
     }
 }

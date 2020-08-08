@@ -16,6 +16,8 @@ using leave_management.Contracts;
 using AutoMapper;
 using leave_management.Mappings;
 using System;
+using leave_management.Contracts.IServiecies;
+using leave_management.Services.Components;
 
 namespace leave_management
 {
@@ -48,7 +50,7 @@ namespace leave_management
             services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
             services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
             services.AddScoped<ILeaveAllocationRepository, LeaveAllocationRepository>();
-            services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+            services.AddScoped<IOrganizationManager, OrganizationManager>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             services.AddAutoMapper(typeof(Maps));
@@ -56,6 +58,13 @@ namespace leave_management
             services.AddDefaultIdentity<Employee>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(15);//You can set Time  
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -67,7 +76,7 @@ namespace leave_management
             IWebHostEnvironment env,
             UserManager<Employee> userManager,
             RoleManager<IdentityRole> roleManager,
-            IOrganizationRepository organizationRepository //This should be organization Manager
+            IOrganizationManager organizationManager
         )
         {
             if (env.IsDevelopment())
@@ -89,7 +98,9 @@ namespace leave_management
             app.UseAuthentication();
             app.UseAuthorization();
 
-            SeedData.Seed(userManager, roleManager, organizationRepository, Configuration);
+            app.UseSession();
+
+            SeedData.Seed(userManager, roleManager, organizationManager, Configuration);
 
             app.UseEndpoints(endpoints =>
             {

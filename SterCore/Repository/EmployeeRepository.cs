@@ -45,7 +45,7 @@ namespace leave_management.Repository
 
         public async Task<Employee> FindById(string id)
         {
-            var employee = await _db.Employees
+            var employee = await _db.Employees.Include(q => q.Organization)
             .FirstOrDefaultAsync(q => q.Id == id);
             return employee;
         }
@@ -62,7 +62,7 @@ namespace leave_management.Repository
             return roles.Where(q => q.Name != "Administrator");
         }
 
-        public async Task<IEnumerable<Employee>> GetEmployeesWithSameOrigin(Organization organization)
+        public async Task<IEnumerable<Employee>> FindAll(Organization organization)
         {
             var employees = await _db.Employees.Include(q => q.Organization).ToListAsync(); 
             return employees.Where(q => q.OrganizationId == organization.Id);

@@ -18,7 +18,7 @@ namespace leave_management.Contracts
         Task<bool> Update(Employee entity);
         Task<bool> Delete(Employee entity);
         Task<bool> Save();
-        Task <IEnumerable<Employee>> GetEmployeesWithSameOrigin(Organization organization);
+        Task <IEnumerable<Employee>> FindAll(Organization organization);
         Task<IEnumerable<IdentityRole>> GetAgentIdentityRoles();
         Task<IEnumerable<IdentityRole>> GetAdministratorIdentityRoles();
     }

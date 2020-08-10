@@ -13,11 +13,9 @@ namespace leave_management.Models
         public int Id { get; set; }
         [Required]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
         public DateTime DateFrom { get; set; }
         [Required]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{dd-MM-yyyy}")]
         public DateTime DateTo { get; set; }
         public string DestinationCountry { get; set; }
         public string DestinationCity { get; set; }
@@ -27,9 +25,9 @@ namespace leave_management.Models
         public int PrepaymentAmount { get; set; }
         public string PrepaymentCurrency { get; set; }
         public string ApplicationId { get; set; }
-        [Required]
+        
         public EmployeeVM Employee { get; set; }
-        public string EmployeeId { get; set; }
+        public string? EmployeeId { get; set; }
         [NotMapped]
         public IEnumerable<SelectListItem> Employees { get; set; }
     }

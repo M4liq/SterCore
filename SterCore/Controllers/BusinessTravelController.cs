@@ -31,9 +31,16 @@ namespace leave_management.Controllers
         }
 
         // GET: PWS/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View();
+            var success = await _repo.Exists(id);
+            if (!success)
+            {
+                return NotFound();
+            }
+            var businessTravel = _repo.FindById(id);
+            var model = _mapper.Map<BusinessTravelVM>(businessTravel);
+            return View(model);
         }
 
         // GET: PWS/Create
@@ -116,7 +123,14 @@ namespace leave_management.Controllers
         // GET: PWS/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            var success = await _repo.Exists(id);
+            if (!success)
+            {
+                return NotFound();
+            }
+            var businessTravel = _repo.FindById(id);
+            var model = _mapper.Map<BusinessTravelVM>(businessTravel);
+            return View(model);
         }
 
         // POST: PWS/Delete/5

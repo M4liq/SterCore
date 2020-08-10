@@ -62,6 +62,12 @@ namespace leave_management.Controllers
                 {
                     return View(model);
                 }
+                if(model.DateFrom.Date > model.DateTo.Date)
+                {
+                    ModelState.AddModelError("", "Podane daty są nieprawidłowe");
+                    return View(model);
+                }
+
                 var businessTravel = _mapper.Map<BusinessTravel>(model);
                 var isSuccess = await _repo.Create(businessTravel);
                 if (!isSuccess)

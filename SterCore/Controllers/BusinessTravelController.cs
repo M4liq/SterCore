@@ -38,7 +38,7 @@ namespace leave_management.Controllers
             {
                 return NotFound();
             }
-            var businessTravel = _repo.FindById(id);
+            var businessTravel = await _repo.FindById(id);
             var model = _mapper.Map<BusinessTravelVM>(businessTravel);
             return View(model);
         }
@@ -86,7 +86,7 @@ namespace leave_management.Controllers
             {
                 return NotFound();
             }
-            var businessTravel = _repo.FindById(id);
+            var businessTravel = await _repo.FindById(id);
             var model = _mapper.Map<BusinessTravelVM>(businessTravel);
             return View(model);
         }

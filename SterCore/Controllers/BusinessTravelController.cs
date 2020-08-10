@@ -45,11 +45,22 @@ namespace leave_management.Controllers
         // POST: PWS/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(BusinessTravelVM model)
         {
             try
             {
                 // TODO: Add insert logic here
+                if(!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                var businessTravel = _mapper.Map<BusinessTravel>(model);
+                var isSuccess = await _repo.Create(businessTravel);
+                if (!isSuccess)
+                {
+                    ModelState.AddModelError("", "Something went wrong");
+                    return View(model);
+                }
 
                 return RedirectToAction(nameof(Index));
             }
@@ -60,7 +71,7 @@ namespace leave_management.Controllers
         }
 
         // GET: PWS/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
             return View();
         }
@@ -68,7 +79,7 @@ namespace leave_management.Controllers
         // POST: PWS/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, IFormCollection collection)
         {
             try
             {
@@ -83,7 +94,7 @@ namespace leave_management.Controllers
         }
 
         // GET: PWS/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             return View();
         }

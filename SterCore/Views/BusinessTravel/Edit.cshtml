@@ -1,0 +1,83 @@
+﻿@model leave_management.Models.BusinessTravelVM
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="DateFrom" class="control-label"></label>
+                <input asp-for="DateFrom" class="form-control" />
+                <span asp-validation-for="DateFrom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateTo" class="control-label"></label>
+                <input asp-for="DateTo" class="form-control" />
+                <span asp-validation-for="DateTo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DestinationCountry" class="control-label"></label>
+                <input asp-for="DestinationCountry" class="form-control" />
+                <span asp-validation-for="DestinationCountry" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DestinationCity" class="control-label"></label>
+                <input asp-for="DestinationCity" class="form-control" />
+                <span asp-validation-for="DestinationCity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PurposeOfTravel" class="control-label"></label>
+                <input asp-for="PurposeOfTravel" class="form-control" />
+                <span asp-validation-for="PurposeOfTravel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TransportVehicle" class="control-label"></label>
+                <input asp-for="TransportVehicle" class="form-control" />
+                <span asp-validation-for="TransportVehicle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdditionalInfo" class="control-label"></label>
+                <input asp-for="AdditionalInfo" class="form-control" />
+                <span asp-validation-for="AdditionalInfo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PrepaymentAmount" class="control-label"></label>
+                <input asp-for="PrepaymentAmount" class="form-control" />
+                <span asp-validation-for="PrepaymentAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PrepaymentCurrency" class="control-label"></label>
+                <input asp-for="PrepaymentCurrency" class="form-control" />
+                <span asp-validation-for="PrepaymentCurrency" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApplicationId" class="control-label"></label>
+                <input asp-for="ApplicationId" class="form-control" />
+                <span asp-validation-for="ApplicationId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeId" class="control-label"></label>
+                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-success btn-block" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -87,16 +87,28 @@ namespace leave_management.Controllers
         // POST: PWS/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(BusinessTravelVM model)
         {
             try
             {
-                // TODO: Add update logic here
+                // TODO: Add insert logic here
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                var businessTravel = _mapper.Map<BusinessTravel>(model);
+                var isSuccess = await _repo.Update(businessTravel);
+                if (!isSuccess)
+                {
+                    ModelState.AddModelError("", "Something went wrong");
+                    return View(model);
+                }
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                ModelState.AddModelError("", "Something went wrong");
                 return View();
             }
         }

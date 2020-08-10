@@ -123,14 +123,18 @@ namespace leave_management.Controllers
         // GET: PWS/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            var success = await _repo.Exists(id);
-            if (!success)
+
+            var businessTravel = await _repo.FindById(id);
+            if (businessTravel == null)
             {
                 return NotFound();
             }
-            var businessTravel = _repo.FindById(id);
-            var model = _mapper.Map<BusinessTravelVM>(businessTravel);
-            return View(model);
+            var isSuccess = await _repo.Delete(businessTravel);
+            if (!isSuccess)
+            {
+                return BadRequest();
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: PWS/Delete/5

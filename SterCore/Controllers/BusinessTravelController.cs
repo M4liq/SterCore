@@ -66,6 +66,7 @@ namespace leave_management.Controllers
             }
             catch
             {
+                ModelState.AddModelError("", "Something went wrong");
                 return View();
             }
         }
@@ -73,7 +74,14 @@ namespace leave_management.Controllers
         // GET: PWS/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var success = await _repo.Exists(id);
+            if (!success)
+            {
+                return NotFound();
+            }
+            var businessTravel = _repo.FindById(id);
+            var model = _mapper.Map<BusinessTravelVM>(businessTravel);
+            return View(model);
         }
 
         // POST: PWS/Edit/5

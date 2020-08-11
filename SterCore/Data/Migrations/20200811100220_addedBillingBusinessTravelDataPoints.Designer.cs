@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using leave_management.Data;
 
 namespace leave_management.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200811100220_addedBillingBusinessTravelDataPoints")]
+    partial class addedBillingBusinessTravelDataPoints
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -225,8 +227,6 @@ namespace leave_management.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-<<<<<<< HEAD
-=======
             modelBuilder.Entity("leave_management.Data.BillingBusinessTravel", b =>
                 {
                     b.Property<int>("Id")
@@ -255,7 +255,6 @@ namespace leave_management.Data.Migrations
                     b.ToTable("billingBusinessTravels");
                 });
 
->>>>>>> dbset data and added migration
             modelBuilder.Entity("leave_management.Data.BusinessTravel", b =>
                 {
                     b.Property<int>("Id")
@@ -284,12 +283,6 @@ namespace leave_management.Data.Migrations
                     b.Property<string>("EmployeeId")
                         .HasColumnType("nvarchar(450)");
 
-<<<<<<< HEAD
-                    b.Property<string>("OrganizationToken")
-                        .HasColumnType("nvarchar(max)");
-
-=======
->>>>>>> dbset data and added migration
                     b.Property<int>("PrepaymentAmount")
                         .HasColumnType("int");
 
@@ -328,9 +321,6 @@ namespace leave_management.Data.Migrations
                     b.Property<int>("NumberOfDays")
                         .HasColumnType("int");
 
-                    b.Property<string>("OrganizationToken")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Period")
                         .HasColumnType("int");
 
@@ -341,57 +331,6 @@ namespace leave_management.Data.Migrations
                     b.HasIndex("LeaveTypeId");
 
                     b.ToTable("LeaveAllocations");
-                });
-
-            modelBuilder.Entity("leave_management.Data.LeaveRequests", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool?>("Approved")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ApprovedById")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool?>("Cancelled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateActioned")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateRequested")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("LeaveTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("OrganizationToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RequestingEmployeeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApprovedById");
-
-                    b.HasIndex("LeaveTypeId");
-
-                    b.HasIndex("RequestingEmployeeId");
-
-                    b.ToTable("LeaveRequests");
                 });
 
             modelBuilder.Entity("leave_management.Data.LeaveType", b =>
@@ -408,9 +347,6 @@ namespace leave_management.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OrganizationToken")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -460,8 +396,6 @@ namespace leave_management.Data.Migrations
                     b.ToTable("Organization");
                 });
 
-<<<<<<< HEAD
-=======
             modelBuilder.Entity("leave_management.Data.OrganizationResurce", b =>
                 {
                     b.Property<int>("Id")
@@ -581,7 +515,6 @@ namespace leave_management.Data.Migrations
                     b.ToTable("EmployeeVM");
                 });
 
->>>>>>> dbset data and added migration
             modelBuilder.Entity("leave_management.Data.Employee", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -607,15 +540,55 @@ namespace leave_management.Data.Migrations
                     b.Property<int>("OrganizationId")
                         .HasColumnType("int");
 
-                    b.Property<string>("OrganizationToken")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("TaxId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasIndex("OrganizationId");
 
                     b.HasDiscriminator().HasValue("Employee");
+                });
+
+            modelBuilder.Entity("leave_management.Data.LeaveRequests", b =>
+                {
+                    b.HasBaseType("leave_management.Data.OrganizationResurceIdentifier");
+
+                    b.Property<bool?>("Approved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ApprovedById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool?>("Cancelled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateActioned")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateRequested")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LeaveTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RequestingEmployeeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasIndex("ApprovedById");
+
+                    b.HasIndex("LeaveTypeId");
+
+                    b.HasIndex("RequestingEmployeeId");
+
+                    b.HasDiscriminator().HasValue("LeaveRequests");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -669,9 +642,6 @@ namespace leave_management.Data.Migrations
                         .IsRequired();
                 });
 
-<<<<<<< HEAD
-            modelBuilder.Entity("leave_management.Data.BusinessTravel", b =>
-=======
             modelBuilder.Entity("leave_management.Data.BillingBusinessTravel", b =>
                 {
                     b.HasOne("leave_management.Data.BusinessTravel", "BusinessTravel")
@@ -693,22 +663,27 @@ namespace leave_management.Data.Migrations
                 });
 
             modelBuilder.Entity("leave_management.Data.LeaveAllocations", b =>
->>>>>>> dbset data and added migration
                 {
                     b.HasOne("leave_management.Data.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId");
+
+                    b.HasOne("leave_management.Data.LeaveType", "LeaveType")
+                        .WithMany()
+                        .HasForeignKey("LeaveTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("leave_management.Data.LeaveAllocations", b =>
+            modelBuilder.Entity("leave_management.Data.OrganizationResurceIdentifier", b =>
                 {
-                    b.HasOne("leave_management.Data.Employee", "Employee")
+                    b.HasOne("leave_management.Data.OrganizationResurce", "OrganizationResurce")
                         .WithMany()
-                        .HasForeignKey("EmployeeId");
+                        .HasForeignKey("OrganizationResurceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-<<<<<<< HEAD
-                    b.HasOne("leave_management.Data.LeaveType", "LeaveType")
-=======
             modelBuilder.Entity("leave_management.Models.BusinessTravelVM", b =>
                 {
                     b.HasOne("leave_management.Models.EmployeeVM", "Employee")
@@ -719,9 +694,8 @@ namespace leave_management.Data.Migrations
             modelBuilder.Entity("leave_management.Data.Employee", b =>
                 {
                     b.HasOne("leave_management.Data.Organization", "Organization")
->>>>>>> dbset data and added migration
                         .WithMany()
-                        .HasForeignKey("LeaveTypeId")
+                        .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -741,15 +715,6 @@ namespace leave_management.Data.Migrations
                     b.HasOne("leave_management.Data.Employee", "RequestingEmployee")
                         .WithMany()
                         .HasForeignKey("RequestingEmployeeId");
-                });
-
-            modelBuilder.Entity("leave_management.Data.Employee", b =>
-                {
-                    b.HasOne("leave_management.Data.Organization", "Organization")
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

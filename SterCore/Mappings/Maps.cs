@@ -23,6 +23,7 @@ namespace leave_management.Mappings
             CreateMap<Organization, OrganizationVM>().ReverseMap();
             CreateMap<Organization, OrganizationsVM>().ReverseMap();
             CreateMap<BusinessTravel, BusinessTravelVM>().ReverseMap();
+            CreateMap<BillingBusinessTravel, BillingBusinessTravelVM>().ReverseMap();
         }
     }
 }

@@ -54,6 +54,7 @@ namespace leave_management
             services.AddScoped<IOrganizationResourceManager, OrganizationResourceManager>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IBusinessTravelRepository, BusinessTravelRepository>();
+            services.AddScoped<IBillingBusinessTravelRepository, BillingBusinessTravelRepository>();
 
 
             services.AddAutoMapper(typeof(Maps));

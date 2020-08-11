@@ -33,7 +33,7 @@ namespace leave_management.Controllers
         // GET: Employee
         public async Task<ActionResult> Index()
         {
-            var organization = await _userManager.GetUserOrganization(HttpContext, _employeeRepository);
+            var organization = await _userManager.ExtGetUserOrganization(HttpContext.User, _employeeRepository);
             var sameOrginEmployees = await _employeeRepository.FindAll(organization);
 
             var model = _mapper.Map<IEnumerable<EmployeeVM>>(sameOrginEmployees);

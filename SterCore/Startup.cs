@@ -51,7 +51,7 @@ namespace leave_management
             services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
             services.AddScoped<ILeaveAllocationRepository, LeaveAllocationRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+            services.AddScoped<IOrganizationManager, OrganizationManager>();
             services.AddScoped<IBusinessTravelRepository, BusinessTravelRepository>();
 
 

@@ -18,12 +18,14 @@ namespace leave_management.Repository
         }
         public async Task<bool> Create(BillingBusinessTravel entity)
         {
-            throw new NotImplementedException();
+            await _db.billingBusinessTravels.AddAsync(entity);
+            return await Save();
         }
 
         public async Task<bool> Delete(BillingBusinessTravel entity)
         {
-            throw new NotImplementedException();
+            _db.billingBusinessTravels.Remove(entity);
+            return await Save();
         }
 
         public async Task<bool> Exists(int id)
@@ -46,12 +48,14 @@ namespace leave_management.Repository
 
         public async Task<bool> Save()
         {
-            throw new NotImplementedException();
+            var changes = await _db.SaveChangesAsync();
+            return changes > 0;
         }
 
         public async Task<bool> Update(BillingBusinessTravel entity)
         {
-            throw new NotImplementedException();
+            _db.billingBusinessTravels.Update(entity);
+            return await Save();
         }
     }
 }

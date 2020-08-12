@@ -1,7 +1,7 @@
 ﻿using leave_management.Contracts;
-using leave_management.Contracts.IServiecies;
 using leave_management.Data;
 using leave_management.Repository;
+using leave_management.Services.Components.ORI;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -16,18 +16,20 @@ namespace leave_management
         public static void Seed(
             UserManager<Employee> userManager,
             RoleManager<IdentityRole> roleManager,
-            IOrganizationManager organizationManager,
+            IOrganizationRepository organizationRepository,
+            IOrganizationResourceManager organizationManager,
             IConfiguration configuration)
         {
             //Architecture based on events would be better
             SeedRoles(roleManager); 
-            SeedUsersAndOrganizations(userManager, organizationManager, configuration); //setting up both Users and Organizations is very messy
+            SeedUsersAndOrganizations(userManager, organizationManager, organizationRepository, configuration); //setting up both Users and Organizations is very messy
           
         }
 
         private static void  SeedUsersAndOrganizations(
-            UserManager<Employee> userManager, 
-            IOrganizationManager organizationManager, 
+            UserManager<Employee> userManager,
+            IOrganizationResourceManager organizationManager, 
+            IOrganizationRepository organizationRepository, 
             IConfiguration configuration
             )
         { 
@@ -46,7 +48,7 @@ namespace leave_management
                  
                 };
 
-                var success = organizationManager.Create(initalOrganization).Result;
+                var success = organizationRepository.Create(initalOrganization).Result;
 
                 if (success)
                 {

@@ -6,15 +6,16 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace leave_management.Services.Extensions
 {
     public static class UserManagerExtensions
     {
-        public static async Task<Organization> GetUserOrganization(this UserManager<Employee> userManager, HttpContext context, IEmployeeRepository employeeRepository)
+        public static async Task<Organization> ExtGetUserOrganization(this UserManager<Employee> userManager, ClaimsPrincipal userPrincipal, IEmployeeRepository employeeRepository)
         {
-            var user = await userManager.GetUserAsync(context.User);
+            var user = await userManager.GetUserAsync(userPrincipal);
             var employee = await employeeRepository.FindById(user.Id);
             return employee.Organization;
         }

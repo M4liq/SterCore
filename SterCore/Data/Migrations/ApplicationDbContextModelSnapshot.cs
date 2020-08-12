@@ -253,6 +253,9 @@ namespace leave_management.Data.Migrations
                     b.Property<string>("EmployeeId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("OrganizationToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("PrepaymentAmount")
                         .HasColumnType("int");
 
@@ -291,6 +294,9 @@ namespace leave_management.Data.Migrations
                     b.Property<int>("NumberOfDays")
                         .HasColumnType("int");
 
+                    b.Property<string>("OrganizationToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Period")
                         .HasColumnType("int");
 
@@ -301,6 +307,57 @@ namespace leave_management.Data.Migrations
                     b.HasIndex("LeaveTypeId");
 
                     b.ToTable("LeaveAllocations");
+                });
+
+            modelBuilder.Entity("leave_management.Data.LeaveRequests", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool?>("Approved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ApprovedById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool?>("Cancelled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateActioned")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateRequested")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LeaveTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OrganizationToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequestingEmployeeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApprovedById");
+
+                    b.HasIndex("LeaveTypeId");
+
+                    b.HasIndex("RequestingEmployeeId");
+
+                    b.ToTable("LeaveRequests");
                 });
 
             modelBuilder.Entity("leave_management.Data.LeaveType", b =>
@@ -317,6 +374,9 @@ namespace leave_management.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrganizationToken")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -366,125 +426,6 @@ namespace leave_management.Data.Migrations
                     b.ToTable("Organization");
                 });
 
-            modelBuilder.Entity("leave_management.Data.OrganizationResurce", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("OrganizationToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("OrganizationResurce");
-                });
-
-            modelBuilder.Entity("leave_management.Data.OrganizationResurceIdentifier", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OrganizationResurceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrganizationResurceId");
-
-                    b.ToTable("OrganizationResurceIdentifier");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("OrganizationResurceIdentifier");
-                });
-
-            modelBuilder.Entity("leave_management.Models.BusinessTravelVM", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AdditionalInfo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ApplicationId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateTo")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DestinationCity")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DestinationCountry")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmployeeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("PrepaymentAmount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PrepaymentCurrency")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PurposeOfTravel")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TransportVehicle")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("BusinessTravelVM");
-                });
-
-            modelBuilder.Entity("leave_management.Models.EmployeeVM", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("DateJoined")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Firstname")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Lastname")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TaxId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EmployeeVM");
-                });
-
             modelBuilder.Entity("leave_management.Data.Employee", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -510,55 +451,15 @@ namespace leave_management.Data.Migrations
                     b.Property<int>("OrganizationId")
                         .HasColumnType("int");
 
+                    b.Property<string>("OrganizationToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("TaxId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasIndex("OrganizationId");
 
                     b.HasDiscriminator().HasValue("Employee");
-                });
-
-            modelBuilder.Entity("leave_management.Data.LeaveRequests", b =>
-                {
-                    b.HasBaseType("leave_management.Data.OrganizationResurceIdentifier");
-
-                    b.Property<bool?>("Approved")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ApprovedById")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool?>("Cancelled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateActioned")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateRequested")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("LeaveTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RequestingEmployeeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasIndex("ApprovedById");
-
-                    b.HasIndex("LeaveTypeId");
-
-                    b.HasIndex("RequestingEmployeeId");
-
-                    b.HasDiscriminator().HasValue("LeaveRequests");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -632,31 +533,6 @@ namespace leave_management.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("leave_management.Data.OrganizationResurceIdentifier", b =>
-                {
-                    b.HasOne("leave_management.Data.OrganizationResurce", "OrganizationResurce")
-                        .WithMany()
-                        .HasForeignKey("OrganizationResurceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("leave_management.Models.BusinessTravelVM", b =>
-                {
-                    b.HasOne("leave_management.Models.EmployeeVM", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId");
-                });
-
-            modelBuilder.Entity("leave_management.Data.Employee", b =>
-                {
-                    b.HasOne("leave_management.Data.Organization", "Organization")
-                        .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("leave_management.Data.LeaveRequests", b =>
                 {
                     b.HasOne("leave_management.Data.Employee", "ApprovedBy")
@@ -672,6 +548,15 @@ namespace leave_management.Data.Migrations
                     b.HasOne("leave_management.Data.Employee", "RequestingEmployee")
                         .WithMany()
                         .HasForeignKey("RequestingEmployeeId");
+                });
+
+            modelBuilder.Entity("leave_management.Data.Employee", b =>
+                {
+                    b.HasOne("leave_management.Data.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

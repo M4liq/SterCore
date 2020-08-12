@@ -14,5 +14,6 @@ namespace leave_management.Contracts
         Task<bool> Update(T entity);
         Task<bool> Delete(T entity);
         Task<bool> Save();
+        void SetToken(T entity);
     }
 }

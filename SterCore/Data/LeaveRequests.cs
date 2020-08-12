@@ -1,4 +1,5 @@
-﻿using System;
+﻿using leave_management.Services.Components.ORI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

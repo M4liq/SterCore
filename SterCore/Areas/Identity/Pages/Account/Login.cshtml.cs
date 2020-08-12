@@ -17,6 +17,7 @@ using System.Text;
 using leave_management.Services.Extensions;
 using leave_management.Data.Migrations;
 using leave_management.Contracts;
+using Microsoft.AspNetCore.Http;
 
 namespace leave_management.Areas.Identity.Pages.Account
 {
@@ -111,11 +112,9 @@ namespace leave_management.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    var organizationToken = _employeeRepository.GetUserWithOrganizationByUserId(user.Id).Result.Organization.OrganizationToken;
+                    var organizationToken = _employeeRepository.FindById(user.Id).Result.Organization.OrganizationToken;
 
                     HttpContext.Session.ExtSet("organizationToken", organizationToken);
-
-                    var test = HttpContext.Session.ExtGet<string>("organizationToken");
 
                     _logger.LogInformation("User logged in.");
 

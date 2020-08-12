@@ -14,6 +14,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20200808132146_AddedOrganizationResurceAndOrganizationToken.cs" />
+    <Compile Remove="Data\Migrations\20200808132146_AddedOrganizationResurceAndOrganizationToken.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200808132600_FixInOrganizationREsurceIdentifier.cs" />
+    <Compile Remove="Data\Migrations\20200808132600_FixInOrganizationREsurceIdentifier.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200811104920_add-migration AddingBusinessTravel.cs" />
+    <Compile Remove="Data\Migrations\20200811104920_add-migration AddingBusinessTravel.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200811114814_TestingOrganizationResource.cs" />
+    <Compile Remove="Data\Migrations\20200811114814_TestingOrganizationResource.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200811114946_TestingOrganizationResource.cs" />
+    <Compile Remove="Data\Migrations\20200811114946_TestingOrganizationResource.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200811121435_add-migration TestingTokenBasedResurceAccess.cs" />
+    <Compile Remove="Data\Migrations\20200811121435_add-migration TestingTokenBasedResurceAccess.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200811122559_testingOrganizationResourceIdentyfier.cs" />
+    <Compile Remove="Data\Migrations\20200811122559_testingOrganizationResourceIdentyfier.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="bundleconfig.json" />
   </ItemGroup>
 

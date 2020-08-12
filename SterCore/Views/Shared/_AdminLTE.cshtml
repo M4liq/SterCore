@@ -206,9 +206,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="BillingBusinessTravel" asp-action="index" class="nav-link">
+                                <i class="nav-icon fas fa-briefcase"></i>
+                                <p>
+                                    Billings
+                                </p>
+                            </a>
+                        </li>
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            if (User.IsInRole("Administrator")|| User.IsInRole("Agent")|| User.IsInRole("Employer"))
+                            if (User.IsInRole("Administrator") || User.IsInRole("Agent") || User.IsInRole("Employer"))
                             {
                                 <li class="nav-item has-treeview menu-open">
                                     <a href="#" class="nav-link active">
@@ -258,23 +266,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </li>
                                 if (User.IsInRole("Administrator") || User.IsInRole("Agent"))
                                 {
-                                <li class="nav-item has-treeview menu-open">
-                                    <a href="#" class="nav-link active">
-                                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                                        <p>
-                                            Organizacje
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview">
-                                        <li class="nav-item">
-                                            <a asp-controller="Organization" asp-action="Index" class="nav-link">
-                                                <i class="fas fa-list nav-icon"></i>
-                                                <p>Zarządzaj organizacjami</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
+                                    <li class="nav-item has-treeview menu-open">
+                                        <a href="#" class="nav-link active">
+                                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                                            <p>
+                                                Organizacje
+                                                <i class="right fas fa-angle-left"></i>
+                                            </p>
+                                        </a>
+                                        <ul class="nav nav-treeview">
+                                            <li class="nav-item">
+                                                <a asp-controller="Organization" asp-action="Index" class="nav-link">
+                                                    <i class="fas fa-list nav-icon"></i>
+                                                    <p>Zarządzaj organizacjami</p>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
                                 }
 
                             }

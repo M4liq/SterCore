@@ -51,6 +51,7 @@ namespace leave_management
             services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
             services.AddScoped<ILeaveAllocationRepository, LeaveAllocationRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IAuthorizedOrganizationRepository, AuthorizedOrganizationRepository>();
             services.AddScoped<IOrganizationResourceManager, OrganizationResourceManager>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IBusinessTravelRepository, BusinessTravelRepository>();
@@ -80,7 +81,9 @@ namespace leave_management
             UserManager<Employee> userManager,
             RoleManager<IdentityRole> roleManager,
             IOrganizationResourceManager organizationManager,
-            IOrganizationRepository organizationRepository
+            IOrganizationRepository organizationRepository,
+            IAuthorizedOrganizationRepository authorizedOrganizationRepository
+
         )
         {
             if (env.IsDevelopment())
@@ -104,7 +107,7 @@ namespace leave_management
 
             app.UseSession();
 
-            SeedData.Seed(userManager, roleManager, organizationRepository, organizationManager, Configuration);
+            SeedData.Seed(userManager, roleManager, organizationRepository, organizationManager, authorizedOrganizationRepository, Configuration);
 
             app.UseEndpoints(endpoints =>
             {

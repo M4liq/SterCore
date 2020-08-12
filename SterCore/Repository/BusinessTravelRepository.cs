@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace leave_management.Repository
 {
-    //Implementing ORI to do
     public class BusinessTravelRepository : IBusinessTravelRepository
     {
         private readonly ApplicationDbContext _db;
@@ -84,12 +83,6 @@ namespace leave_management.Repository
         {
             var changes = await _db.SaveChangesAsync();
             return changes > 0;
-        }
-
-        public void SetToken(BusinessTravel entity)
-        {
-            var token = _organizationManager.GetOrganizationToken();
-            entity.OrganizationToken = token;
         }
 
         public async Task<bool> Update(BusinessTravel entity)

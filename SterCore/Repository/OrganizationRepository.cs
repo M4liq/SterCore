@@ -16,7 +16,9 @@ namespace leave_management.Repository
         private readonly ApplicationDbContext _db;
         private readonly IOrganizationResourceManager _organizationManager;
 
-        public OrganizationRepository(ApplicationDbContext db, IOrganizationResourceManager organizationManager)
+        public OrganizationRepository(ApplicationDbContext db, 
+            IOrganizationResourceManager organizationManager
+            )
         {
             _db = db;
             _organizationManager = organizationManager;
@@ -50,11 +52,13 @@ namespace leave_management.Repository
             //ORI getting token to find organization scope
             var organizationToken = _organizationManager.GetOrganizationToken();
 
-            //ORI Filtring organizations by their tokens to get scope
+            //ORI Filtring leave types by their tokens to get scope
             var organizations = _db.Organization
-                .Where(q => q.OrganizationToken == organizationToken);
+                .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == organizationToken);
 
-            return await organizations.ToListAsync(); ;
+            return await organizations.ToListAsync();
+
+
         }
 
         public async Task<Organization> FindById(int id)
@@ -104,6 +108,14 @@ namespace leave_management.Repository
         public void SetToken(Organization entity)
         {
             entity.OrganizationToken = _organizationManager.GetOrganizationToken();
+        }
+
+        public async Task<Organization> GetOrganizationByToken(string token)
+        {
+            var organization = _db.Organization
+            .Where(q => q.OrganizationToken == token);
+
+            return await organization.FirstOrDefaultAsync();
         }
     }
 }

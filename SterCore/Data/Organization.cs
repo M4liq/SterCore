@@ -22,5 +22,9 @@ namespace leave_management.Data
         public bool? Disabled { get; set; }
         public string ZipCode { get; set; }
         public string OrganizationToken { get; set; }
+
+        [ForeignKey("AuthorizedOrganizationId")]
+        public AuthorizedOrganizations AuthorizedOrganizations { get; set; }
+        public int AuthorizedOrganizationId { get; set; }
     }
 }

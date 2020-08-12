@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using leave_management.Data;
 
-namespace leave_management.Data.Migrations
+namespace leave_management.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200811160049_TestingOrganizationResourceIdentiyfierFull")]
-    partial class TestingOrganizationResourceIdentiyfierFull
+    [Migration("20200812113918_AddingAuthorizedOrganizationTable")]
+    partial class AddingAuthorizedOrganizationTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -225,6 +225,26 @@ namespace leave_management.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("leave_management.Data.AuthorizedOrganizations", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuthorizedOrganizationToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("AuthorizedOrganizations");
                 });
 
             modelBuilder.Entity("leave_management.Data.BusinessTravel", b =>
@@ -511,6 +531,15 @@ namespace leave_management.Data.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("leave_management.Data.AuthorizedOrganizations", b =>
+                {
+                    b.HasOne("leave_management.Data.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

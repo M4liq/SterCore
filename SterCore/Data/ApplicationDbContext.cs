@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using leave_management.Models;
+using System.Net;
 
 namespace leave_management.Data
 {
@@ -20,5 +21,6 @@ namespace leave_management.Data
         public DbSet<LeaveAllocations> LeaveAllocations { get; set; }
         public DbSet<Organization> Organization { get; set; }
         public DbSet<BusinessTravel> BusinessTravel { get; set; }
+        public DbSet<AuthorizedOrganizations> AuthorizedOrganizations { get; set; }
     }
 }

@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace leave_management.Repository
 {
-    //Implementing ORI to do
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly ApplicationDbContext _db;

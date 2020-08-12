@@ -104,10 +104,5 @@ namespace leave_management.Repository
             return await Save();
         }
 
-        public void SetToken(LeaveType entity)
-        {
-            var token = _organizationManager.GetOrganizationToken();
-            entity.OrganizationToken = token;
-        }
     }
 }

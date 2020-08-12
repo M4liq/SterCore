@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using leave_management.Data;
 
-namespace leave_management.Data.Migrations
+namespace leave_management.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200811124115_TestingOrganizationResourceIdentiyfier")]
-    partial class TestingOrganizationResourceIdentiyfier
+    [Migration("20200812103348_AddTableAuthorizedUsers2")]
+    partial class AddTableAuthorizedUsers2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -227,6 +227,23 @@ namespace leave_management.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("leave_management.Data.AuthorizedOrganizations", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.ToTable("AuthorizedOrganizations");
+                });
+
             modelBuilder.Entity("leave_management.Data.BusinessTravel", b =>
                 {
                     b.Property<int>("Id")
@@ -295,6 +312,9 @@ namespace leave_management.Data.Migrations
 
                     b.Property<int>("NumberOfDays")
                         .HasColumnType("int");
+
+                    b.Property<string>("OrganizationToken")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Period")
                         .HasColumnType("int");
@@ -450,6 +470,9 @@ namespace leave_management.Data.Migrations
                     b.Property<int>("OrganizationId")
                         .HasColumnType("int");
 
+                    b.Property<string>("OrganizationToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("TaxId")
                         .HasColumnType("nvarchar(max)");
 
@@ -505,6 +528,15 @@ namespace leave_management.Data.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("leave_management.Data.AuthorizedOrganizations", b =>
+                {
+                    b.HasOne("leave_management.Data.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

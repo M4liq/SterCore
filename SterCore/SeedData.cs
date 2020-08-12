@@ -18,11 +18,12 @@ namespace leave_management
             RoleManager<IdentityRole> roleManager,
             IOrganizationRepository organizationRepository,
             IOrganizationResourceManager organizationManager,
+            IAuthorizedOrganizationRepository authorizedOrganizationRepository,
             IConfiguration configuration)
         {
             //Architecture based on events would be better
             SeedRoles(roleManager); 
-            SeedUsersAndOrganizations(userManager, organizationManager, organizationRepository, configuration); //setting up both Users and Organizations is very messy
+            SeedUsersAndOrganizations(userManager, organizationManager, organizationRepository, authorizedOrganizationRepository, configuration); //setting up both Users and Organizations is very messy
           
         }
 
@@ -30,12 +31,14 @@ namespace leave_management
             UserManager<Employee> userManager,
             IOrganizationResourceManager organizationManager, 
             IOrganizationRepository organizationRepository, 
+            IAuthorizedOrganizationRepository authorizedOrganizationRepository,
             IConfiguration configuration
             )
         { 
 
             if(userManager.FindByNameAsync("admin@stercore.pl").Result == null) 
             {
+                var organizationToken = organizationManager.GenerateToken();
                 var initalOrganization = new Organization 
                 {
                     Name = "Westapp",
@@ -44,13 +47,22 @@ namespace leave_management
                     Street = "Wiśniowa",
                     HouseNumber = "11",
                     City = "Lubliniec",
-                    OrganizationToken = organizationManager.GenerateToken()
+                    OrganizationToken = organizationToken 
                  
                 };
 
-                var success = organizationRepository.Create(initalOrganization).Result;
+                var initalAuthorizedOrganization = new AuthorizedOrganizations
+                {
+                    AuthorizedOrganizationToken = organizationToken
+                };
 
-                if (success)
+                //To do implement organization to authorized organizations
+                var successOrg = organizationRepository.Create(initalOrganization).Result;
+                var organizationId = organizationRepository.GetOrganizationByToken(organizationToken).Result;
+
+                var successAuthOrg = authorizedOrganizationRepository.Create(initalAuthorizedOrganization).Result;
+
+                if (successOrg && successAuthOrg)
                 {
                     var user = new Employee
                     {

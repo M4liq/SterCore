@@ -123,7 +123,17 @@ namespace leave_management.Controllers
         // GET: BillingBusinessTravel/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            var businessTravel = await _repo.FindById(id);
+            if (businessTravel == null)
+            {
+                return NotFound();
+            }
+            var isSuccess = await _repo.Delete(businessTravel);
+            if (!isSuccess)
+            {
+                return BadRequest();
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: BillingBusinessTravel/Delete/5

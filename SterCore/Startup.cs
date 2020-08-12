@@ -16,8 +16,8 @@ using leave_management.Contracts;
 using AutoMapper;
 using leave_management.Mappings;
 using System;
-using leave_management.Contracts.IServiecies;
 using leave_management.Services.Components;
+using leave_management.Services.Components.ORI;
 
 namespace leave_management
 {
@@ -51,6 +51,7 @@ namespace leave_management
             services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
             services.AddScoped<ILeaveAllocationRepository, LeaveAllocationRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IOrganizationResourceManager, OrganizationResourceManager>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IBusinessTravelRepository, BusinessTravelRepository>();
 
@@ -78,7 +79,8 @@ namespace leave_management
             IWebHostEnvironment env,
             UserManager<Employee> userManager,
             RoleManager<IdentityRole> roleManager,
-            IOrganizationManager organizationManager
+            IOrganizationResourceManager organizationManager,
+            IOrganizationRepository organizationRepository
         )
         {
             if (env.IsDevelopment())
@@ -102,7 +104,7 @@ namespace leave_management
 
             app.UseSession();
 
-            SeedData.Seed(userManager, roleManager, organizationManager, Configuration);
+            SeedData.Seed(userManager, roleManager, organizationRepository, organizationManager, Configuration);
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,7 +1,7 @@
 ﻿using leave_management.Contracts;
 using leave_management.Data;
+using leave_management.Services.Components;
 using leave_management.Services.Components.ORI;
-using leave_management.Services.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,28 +11,28 @@ using System.Threading.Tasks;
 
 namespace leave_management.Repository
 {
-    public class LeaveTypeRepository : ILeaveTypeRepository
+    public class OrganizationRepository : IOrganizationRepository
     {
         private readonly ApplicationDbContext _db;
         private readonly IOrganizationResourceManager _organizationManager;
 
-        public LeaveTypeRepository(ApplicationDbContext db, IOrganizationResourceManager organizationManager)
+        public OrganizationRepository(ApplicationDbContext db, IOrganizationResourceManager organizationManager)
         {
             _db = db;
             _organizationManager = organizationManager;
-        } 
 
-        public async Task<bool> Create(LeaveType entity)
+        }
+
+        public async Task<bool> Create(Organization entity)
         {
-
             //ORI separating data beetween organizations
-            entity.OrganizationToken = _organizationManager.GetOrganizationToken();
+            entity.OrganizationToken = _organizationManager.GenerateToken();
 
-            await _db.LeaveTypes.AddAsync(entity); 
+            await _db.Organization.AddAsync(entity);
             return await Save();
         }
 
-        public async Task<bool> Delete(LeaveType entity)
+        public async Task<bool> Delete(Organization entity)
         {
             //ORI checking if data is from appropirate organization scope
             if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
@@ -40,49 +40,46 @@ namespace leave_management.Repository
                 throw new UnauthorizedAccessException();
             }
 
-            _db.LeaveTypes.Remove(entity);
+            _db.Organization.Remove(entity);
             return await Save();
+
         }
 
-        public async Task<ICollection<LeaveType>> FindAll()
+        public async Task<ICollection<Organization>> FindAll()
         {
             //ORI getting token to find organization scope
             var organizationToken = _organizationManager.GetOrganizationToken();
 
-            //ORI Filtring leave types by their tokens to get scope
-            var leaveTypes = _db.LeaveTypes
+            //ORI Filtring organizations by their tokens to get scope
+            var organizations = _db.Organization
                 .Where(q => q.OrganizationToken == organizationToken);
 
-            return await leaveTypes.ToListAsync(); 
+            return await organizations.ToListAsync(); ;
         }
 
-        public async Task<LeaveType> FindById(int id)
+        public async Task<Organization> FindById(int id)
         {
             //ORI getting token to find organization scope
             var organizationToken = _organizationManager.GetOrganizationToken();
 
-            var leaveType = _db.LeaveTypes
+            var organization = _db.Organization
 
-                //ORI Filtring organizations by their tokens to get scope
+            //ORI Filtring organizations by their tokens to get scope
                 .Where(q => q.OrganizationToken == organizationToken);
-                
-            return await leaveType.FirstOrDefaultAsync(q => q.Id == id); ;
-        }
+             
 
-        public ICollection<LeaveType> GetEmployeesByLeaveType(int id)
-        {
-            throw new NotImplementedException();
+            return await organization.FirstOrDefaultAsync(q => q.Id == id); 
         }
 
         public async Task<bool> Exists(int id)
         {
             var organizationToken = _organizationManager.GetOrganizationToken();
+            var exists = await _db.Organization
 
-            var exists = await _db.LeaveTypes
-
-                //ORI Filtring leave types by their tokens to get scope
+            //ORI Filtring organizations by their tokens to get scope
                 .Where(q => q.OrganizationToken == organizationToken)
                 .AnyAsync(q => q.Id == id);
+
             return exists;
         }
 
@@ -92,7 +89,7 @@ namespace leave_management.Repository
             return changes > 0;
         }
 
-        public async Task<bool> Update(LeaveType entity)
+        public async Task<bool> Update(Organization entity)
         {
             //ORI checking if data is from appropirate organization scope
             if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
@@ -100,14 +97,13 @@ namespace leave_management.Repository
                 throw new UnauthorizedAccessException();
             }
 
-            _db.LeaveTypes.Update(entity);
+            _db.Organization.Update(entity);
             return await Save();
         }
 
-        public void SetToken(LeaveType entity)
+        public void SetToken(Organization entity)
         {
-            var token = _organizationManager.GetOrganizationToken();
-            entity.OrganizationToken = token;
+            entity.OrganizationToken = _organizationManager.GetOrganizationToken();
         }
     }
 }

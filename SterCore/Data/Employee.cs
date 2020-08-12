@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using leave_management.Services.Components.ORI;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -19,5 +20,6 @@ namespace leave_management.Data
         public int OrganizationId { get; set; }
         public bool Deleted { get; set; }
         public bool ChangedPassword { get; set; }
+        public string OrganizationToken { get; set; }
     }
 }

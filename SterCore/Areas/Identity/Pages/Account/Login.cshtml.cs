@@ -14,6 +14,10 @@ using Microsoft.Extensions.Logging;
 using leave_management.Data;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
+using leave_management.Services.Extensions;
+using leave_management.Data.Migrations;
+using leave_management.Contracts;
+using Microsoft.AspNetCore.Http;
 
 namespace leave_management.Areas.Identity.Pages.Account
 {
@@ -24,16 +28,19 @@ namespace leave_management.Areas.Identity.Pages.Account
         private readonly SignInManager<Employee> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IEmployeeRepository _employeeRepository;
 
         public LoginModel(SignInManager<Employee> signInManager, 
             ILogger<LoginModel> logger,
             UserManager<Employee> userManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IEmployeeRepository employee)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            _employeeRepository = employee;
         }
 
         [BindProperty]
@@ -105,6 +112,10 @@ namespace leave_management.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                    var organizationToken = _employeeRepository.FindById(user.Id).Result.Organization.OrganizationToken;
+
+                    HttpContext.Session.ExtSet("organizationToken", organizationToken);
+
                     _logger.LogInformation("User logged in.");
 
                     return LocalRedirect(returnUrl);

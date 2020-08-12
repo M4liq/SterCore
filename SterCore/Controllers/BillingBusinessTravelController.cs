@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using leave_management.Contracts;
+using leave_management.Data;
+using leave_management.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,19 +22,21 @@ namespace leave_management.Controllers
             _mapper = mapper;
         }
         // GET: BillingBusinessTravel
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var billingBusinessTravels = await _repo.FindAll();
+            var model = _mapper.Map<List<BillingBusinessTravel>, List<BillingBusinessTravelVM>>(billingBusinessTravels.ToList());
+            return View(model);
         }
 
         // GET: BillingBusinessTravel/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
             return View();
         }
 
         // GET: BillingBusinessTravel/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
             return View();
         }
@@ -40,7 +44,7 @@ namespace leave_management.Controllers
         // POST: BillingBusinessTravel/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(IFormCollection collection)
         {
             try
             {
@@ -55,7 +59,7 @@ namespace leave_management.Controllers
         }
 
         // GET: BillingBusinessTravel/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
             return View();
         }
@@ -63,7 +67,7 @@ namespace leave_management.Controllers
         // POST: BillingBusinessTravel/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, IFormCollection collection)
         {
             try
             {
@@ -78,7 +82,7 @@ namespace leave_management.Controllers
         }
 
         // GET: BillingBusinessTravel/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             return View();
         }
@@ -86,7 +90,7 @@ namespace leave_management.Controllers
         // POST: BillingBusinessTravel/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id, IFormCollection collection)
         {
             try
             {

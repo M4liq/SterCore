@@ -36,7 +36,7 @@ namespace leave_management.Controllers
         }
 
         // GET: BillingBusinessTravel/Create
-        public async Task<ActionResult> Create()
+        public ActionResult Create()
         {
             return View();
         }
@@ -44,16 +44,29 @@ namespace leave_management.Controllers
         // POST: BillingBusinessTravel/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(IFormCollection collection)
+        public async Task<ActionResult> Create(BillingBusinessTravelVM model)
         {
             try
             {
                 // TODO: Add insert logic here
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                var billingBusinessTravel = _mapper.Map<BillingBusinessTravel>(model);
+                var isSuccess = await _repo.Create(billingBusinessTravel);
+                if (!isSuccess)
+                {
+                    ModelState.AddModelError("", "Something went wrong");
+                    return View(model);
+                }
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                ModelState.AddModelError("", "Something went wrong");
                 return View();
             }
         }

@@ -41,8 +41,7 @@ namespace leave_management.Models
         public string ApplicationId { get; set; }
         
         public EmployeeVM Employee { get; set; }
-        public string? EmployeeId { get; set; }
-        [NotMapped]
+        public string EmployeeId { get; set; }
         public IEnumerable<SelectListItem> Employees { get; set; }
     }
 }

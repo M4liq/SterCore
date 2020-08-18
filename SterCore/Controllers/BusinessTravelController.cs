@@ -8,7 +8,9 @@ using leave_management.Data;
 using leave_management.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
@@ -16,10 +18,12 @@ namespace leave_management.Controllers
     {
         private readonly IBusinessTravelRepository _repo;
         private readonly IMapper _mapper;
+        private readonly UserManager<Employee> _userManager;
 
-        public BusinessTravelController(IBusinessTravelRepository repo, IMapper mapper)
+        public BusinessTravelController(IBusinessTravelRepository repo, UserManager<Employee> userManager, IMapper mapper)
         {
             _repo = repo;
+            _userManager = userManager;
             _mapper = mapper;
         }
         // GET: PWS
@@ -44,10 +48,21 @@ namespace leave_management.Controllers
         }
 
         // GET: PWS/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            //to do wyciagniecie employee i wrzucic model do view
-            return View();
+            var employees = await _userManager.GetUsersInRoleAsync("Employee");
+            var employeesItems = employees.Select(q => new SelectListItem
+            {
+                Text = q.Firstname + " " + q.Lastname,
+                Value = q.Id.ToString()
+            });
+            var model = new BusinessTravelVM
+            {
+                Employees = employeesItems
+            };
+
+
+            return View(model);
         }
 
         // POST: PWS/Create

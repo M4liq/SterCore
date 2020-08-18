@@ -61,6 +61,7 @@ namespace leave_management.Repository
 
             //ORI filtering by token
             var BusinessTravel = await _db.BusinessTravel
+                .Include(q => q.Employee)
                 .Where(q => q.OrganizationToken == organizationToken)
                 .ToListAsync();
             return BusinessTravel;

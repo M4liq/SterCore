@@ -37,6 +37,7 @@ namespace leave_management.Models
         public int PrepaymentAmount { get; set; }
         [Display(Name = "Waluta zaliczki")]
         public string PrepaymentCurrency { get; set; }
+        [Display(Name = "NumerPWS")]
         public string ApplicationId { get; set; }
         
         public EmployeeVM Employee { get; set; }

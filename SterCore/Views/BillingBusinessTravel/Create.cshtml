@@ -1,4 +1,4 @@
-﻿@model leave_management.Models.BillingBusinessTravelVM
+﻿@model leave_management.Models.CreateBillingBusinessTravelVM
 
 @{
     ViewData["Title"] = "Create";
@@ -13,12 +13,15 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="EmployeeId" class="control-label"></label>
-                <input asp-for="EmployeeId" class="form-control" />
+                @Html.DropDownListFor(q => q.EmployeeId, new SelectList(Model.Employees, "Value", "Text"), "Wybór pracownika", new { @class = "form-control" })
+                @*<select asp-for="Employees" class="form-control" />*@
                 <span asp-validation-for="EmployeeId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="BusinessTravelId" class="control-label"></label>
-                <input asp-for="BusinessTravelId" class="form-control" />
+                @Html.DropDownListFor(q => q.BusinessTravelId, new SelectList(Model.BusinessTravels, "Value", "Text"), "Wybór polecenia służbowego", new { @class = "form-control" })
+
+                @*<select asp-for="BusinessTravels" class="form-control" />*@
                 <span asp-validation-for="BusinessTravelId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -32,7 +35,7 @@
                 </label>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary btn-block" />
             </div>
         </form>
     </div>

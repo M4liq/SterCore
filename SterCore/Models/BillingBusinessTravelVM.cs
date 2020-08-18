@@ -27,6 +27,7 @@ namespace leave_management.Models
         public int Id { get; set; }
         public EmployeeVM Employee { get; set; }
         public IEnumerable<SelectListItem> Employees { get; set; }
+        [Required]
         public string EmployeeId { get; set; }
         public BusinessTravelVM BusinessTravel { get; set; }
         public IEnumerable<SelectListItem> BusinessTravels { get; set; }

@@ -7,24 +7,38 @@ using leave_management.Contracts;
 using leave_management.Data;
 using leave_management.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
     public class BillingBusinessTravelController : Controller
     {
-        private readonly IBillingBusinessTravelRepository _repo;
+        private readonly IBillingBusinessTravelRepository _billingBusinessTravelRepo;
+        private readonly IBusinessTravelRepository _businessTravelRepo;
+        private readonly IEmployeeRepository _employeeRepo;
+        private readonly UserManager<Employee> _userManager;
         private readonly IMapper _mapper;
 
-        public BillingBusinessTravelController(IBillingBusinessTravelRepository repo, IMapper mapper)
-        {
-            _repo = repo;
+
+        public BillingBusinessTravelController(IBillingBusinessTravelRepository repo, 
+            IEmployeeRepository employeeRepo,
+            IBusinessTravelRepository businessTravelRepo, 
+            UserManager<Employee> userManager, 
+            IMapper mapper
+            )
+        { 
+            _billingBusinessTravelRepo = repo;
+            _businessTravelRepo = businessTravelRepo;
+            _employeeRepo = employeeRepo;
+            _userManager = userManager;
             _mapper = mapper;
         }
         // GET: BillingBusinessTravel
         public async Task<ActionResult> Index()
         {
-            var billingBusinessTravels = await _repo.FindAll();
+            var billingBusinessTravels = await _billingBusinessTravelRepo.FindAll();
             var model = _mapper.Map<List<BillingBusinessTravel>, List<BillingBusinessTravelVM>>(billingBusinessTravels.ToList());
             return View(model);
         }
@@ -32,21 +46,41 @@ namespace leave_management.Controllers
         // GET: BillingBusinessTravel/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            var success = await _repo.Exists(id);
+            var success = await _billingBusinessTravelRepo.Exists(id);
             if (!success)
             {
                 return NotFound();
             }
-            var BillingBusinessTravel = await _repo.FindById(id);
+            var BillingBusinessTravel = await _billingBusinessTravelRepo.FindById(id);
             var model = _mapper.Map<BillingBusinessTravelVM>(BillingBusinessTravel);
             return View(model);
         }
 
         // GET: BillingBusinessTravel/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
+            var employees = await _userManager.GetUsersInRoleAsync("Employee");
 
-            return View();
+            //var employees = _employeeRepo.FindAll().Result;
+            
+            var employeesItems = employees.Select(q => new SelectListItem
+            {
+                Text = q.Firstname + " " + q.Lastname,
+                Value = q.Id.ToString()
+            });
+            var businessTravels = _businessTravelRepo.FindAll().Result;
+            var businessTravelsItems = businessTravels.Select(q => new SelectListItem
+            {
+                Text = q.ApplicationId.ToString(),
+                Value = q.Id.ToString()
+            });
+            var model = new CreateBillingBusinessTravelVM
+            {
+                Employees = employeesItems,
+                BusinessTravels = businessTravelsItems
+            };
+
+            return View(model);
         }
 
         // POST: BillingBusinessTravel/Create
@@ -63,7 +97,7 @@ namespace leave_management.Controllers
                 }
 
                 var billingBusinessTravel = _mapper.Map<BillingBusinessTravel>(model);
-                var isSuccess = await _repo.Create(billingBusinessTravel);
+                var isSuccess = await _billingBusinessTravelRepo.Create(billingBusinessTravel);
                 if (!isSuccess)
                 {
                     ModelState.AddModelError("", "Something went wrong");
@@ -82,12 +116,12 @@ namespace leave_management.Controllers
         // GET: BillingBusinessTravel/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var success = await _repo.Exists(id);
+            var success = await _billingBusinessTravelRepo.Exists(id);
             if (!success)
             {
                 return NotFound();
             }
-            var BillingBusinessTravel = await _repo.FindById(id);
+            var BillingBusinessTravel = await _billingBusinessTravelRepo.FindById(id);
             var model = _mapper.Map<BillingBusinessTravelVM>(BillingBusinessTravel);
             return View(model);
         }
@@ -105,7 +139,7 @@ namespace leave_management.Controllers
                     return View(model);
                 }
                 var BillingBusinessTravel = _mapper.Map<BillingBusinessTravel>(model);
-                var isSuccess = await _repo.Update(BillingBusinessTravel);
+                var isSuccess = await _billingBusinessTravelRepo.Update(BillingBusinessTravel);
                 if (!isSuccess)
                 {
                     ModelState.AddModelError("", "Something went wrong");
@@ -124,12 +158,12 @@ namespace leave_management.Controllers
         // GET: BillingBusinessTravel/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            var businessTravel = await _repo.FindById(id);
+            var businessTravel = await _billingBusinessTravelRepo.FindById(id);
             if (businessTravel == null)
             {
                 return NotFound();
             }
-            var isSuccess = await _repo.Delete(businessTravel);
+            var isSuccess = await _billingBusinessTravelRepo.Delete(businessTravel);
             if (!isSuccess)
             {
                 return BadRequest();

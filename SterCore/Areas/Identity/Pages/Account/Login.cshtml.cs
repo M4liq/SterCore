@@ -15,7 +15,6 @@ using leave_management.Data;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using leave_management.Services.Extensions;
-using leave_management.Data.Migrations;
 using leave_management.Contracts;
 using Microsoft.AspNetCore.Http;
 

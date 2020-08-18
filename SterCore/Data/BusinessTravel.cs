@@ -10,6 +10,9 @@ namespace leave_management.Data
 {
     public class BusinessTravel : OrganizationResurceIdentifier
     {
+        [Key]
+        public int Id { get; set; }
+        public DateTime? DateCreated { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
         public string DestinationCountry { get; set; }

@@ -13,6 +13,9 @@ namespace leave_management.Models
         public int Id { get; set; }
         [Required]
         [DataType(DataType.Date)]
+        public DateTime DateCreated { get; set; }
+        [Required]
+        [DataType(DataType.Date)]
         public DateTime DateFrom { get; set; }
         [Required]
         [DataType(DataType.Date)]

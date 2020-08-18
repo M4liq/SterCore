@@ -36,7 +36,9 @@ namespace leave_management.Repository
 
         public async Task<ICollection<BillingBusinessTravel>> FindAll()
         {
-            var BillingBusinessTravel = await _db.billingBusinessTravels.ToListAsync();
+            var BillingBusinessTravel = await _db.billingBusinessTravels
+                .Include(q => q.Employee)
+                .ToListAsync();
             return BillingBusinessTravel;
         }
 

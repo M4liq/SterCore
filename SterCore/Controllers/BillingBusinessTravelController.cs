@@ -174,7 +174,7 @@ namespace leave_management.Controllers
         // POST: BillingBusinessTravel/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {

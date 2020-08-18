@@ -45,6 +45,7 @@ namespace leave_management.Controllers
         // GET: BillingBusinessTravel/Create
         public ActionResult Create()
         {
+
             return View();
         }
 

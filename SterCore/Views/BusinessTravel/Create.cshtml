@@ -1,26 +1,36 @@
 ﻿@model leave_management.Models.BusinessTravelVM
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Utwórz delegację";
 }
 
-<h1>Create</h1>
+<h1>Utwórz delegację</h1>
 
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    
+    <div class="col-md-6 offset-3">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group date">
-                <label asp-for="DateFrom" class="control-label"></label>
-                <input asp-for="DateFrom" value="@DateTime.Now.Date" type="text" class="form-control dateFrom" />
-                <span asp-validation-for="DateFrom" class="text-danger"></span>
+           
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group date">
+                        <label asp-for="DateFrom" class="control-label"></label>
+                        <input asp-for="DateFrom" value="@DateTime.Now.Date" type="text" class="form-control dateFrom" />
+                        <span asp-validation-for="DateFrom" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="DateTo" class="control-label"></label>
+                        <input asp-for="DateTo" value="@DateTime.Now.Date" type="text" class="form-control dateTo" />
+                        <span asp-validation-for="DateTo" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="DateTo" class="control-label"></label>
-                <input asp-for="DateTo" value="@DateTime.Now.Date" type="text" class="form-control dateTo" />
-                <span asp-validation-for="DateTo" class="text-danger"></span>
-            </div>
+            
+            
             <div class="form-group">
                 <label asp-for="DestinationCountry" class="control-label"></label>
                 <input asp-for="DestinationCountry" class="form-control" />
@@ -67,14 +77,14 @@
                 <span asp-validation-for="EmployeeId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Utwórz delegację" class="btn btn-success btn-block" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-alt-circle-left"></i> Back to List</a>
 </div>
 
 @section Scripts {

@@ -41,7 +41,7 @@ namespace leave_management.Models
         [Required]
         [Display(Name = "NumerPWS")]
         public string ApplicationId { get; set; }
-        
+        [Display(Name = "Pracownik")]
         public EmployeeVM Employee { get; set; }
         [Required]
         public string EmployeeId { get; set; }

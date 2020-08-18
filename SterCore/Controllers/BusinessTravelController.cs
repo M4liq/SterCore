@@ -101,7 +101,7 @@ namespace leave_management.Controllers
         }
 
         // GET: PWS/Edit/5
-        public async Task<ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(int id, string employeeId)
         {
             var success = await _repo.Exists(id);
             if (!success)
@@ -110,6 +110,7 @@ namespace leave_management.Controllers
             }
             var businessTravel = await _repo.FindById(id);
             var model = _mapper.Map<BusinessTravelVM>(businessTravel);
+            model.EmployeeId = employeeId;
             return View(model);
         }
 

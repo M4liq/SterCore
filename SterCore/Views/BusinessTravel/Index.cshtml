@@ -7,11 +7,20 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-success" asp-action="Create"><i class="fa fa-plus"></i>Utwórz delegację</a>
 </p>
 <table id="tblData" class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ApplicationId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employee)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.DateFrom)
             </th>
@@ -19,38 +28,27 @@
                 @Html.DisplayNameFor(model => model.DateTo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DestinationCountry)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.DestinationCity)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PurposeOfTravel)
+                Rozl.?
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TransportVehicle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AdditionalInfo)
-            </th>
-            @*<th>
-                @Html.DisplayNameFor(model => model.PrepaymentAmount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PrepaymentCurrency)
-            </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.ApplicationId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Employee)
-            </th>
-            <th></th>
+
+            <th>Akcje</th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.Firstname) @Html.DisplayFor(modelItem => item.Employee.Lastname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateCreated)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateFrom)
             </td>
@@ -58,32 +56,13 @@
                 @Html.DisplayFor(modelItem => item.DateTo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DestinationCountry)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.DestinationCity)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PurposeOfTravel)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TransportVehicle)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AdditionalInfo)
-            </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => item.PrepaymentAmount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PrepaymentCurrency)
-            </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Employee.Id)
-            </td>
+
+            <th>
+                Rozl.? Placeholder
+            </th>
+
             <td>
                 <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">
                     <i class="fa fa-pencil-alt" aria-hidden="true"></i>

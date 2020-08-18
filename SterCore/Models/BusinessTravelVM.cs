@@ -25,6 +25,7 @@ namespace leave_management.Models
         public DateTime DateTo { get; set; }
         [Display(Name = "Kraj docelowy")]
         public string DestinationCountry { get; set; }
+        [Required]
         [Display(Name = "Miejsce docelowe")]
         public string DestinationCity { get; set; }
         [Display(Name = "Cel podróży")]
@@ -37,10 +38,12 @@ namespace leave_management.Models
         public int PrepaymentAmount { get; set; }
         [Display(Name = "Waluta zaliczki")]
         public string PrepaymentCurrency { get; set; }
+        [Required]
         [Display(Name = "NumerPWS")]
         public string ApplicationId { get; set; }
         
         public EmployeeVM Employee { get; set; }
+        [Required]
         public string EmployeeId { get; set; }
         public IEnumerable<SelectListItem> Employees { get; set; }
     }

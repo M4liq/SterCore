@@ -13,19 +13,29 @@ namespace leave_management.Models
         public int Id { get; set; }
         [Required]
         [DataType(DataType.Date)]
+        [Display(Name = "Data Zlecenia")]
         public DateTime DateCreated { get; set; }
         [Required]
         [DataType(DataType.Date)]
+        [Display(Name = "Data od")]
         public DateTime DateFrom { get; set; }
         [Required]
         [DataType(DataType.Date)]
+        [Display(Name = "Data do")]
         public DateTime DateTo { get; set; }
+        [Display(Name = "Kraj docelowy")]
         public string DestinationCountry { get; set; }
+        [Display(Name = "Miejsce docelowe")]
         public string DestinationCity { get; set; }
+        [Display(Name = "Cel podróży")]
         public string PurposeOfTravel { get; set; }
+        [Display(Name = "Środek transportu")]
         public string TransportVehicle { get; set; }
+        [Display(Name = "Uwagi")]
         public string AdditionalInfo { get; set; }
+        [Display(Name = "Kwota zaliczki")]
         public int PrepaymentAmount { get; set; }
+        [Display(Name = "Waluta zaliczki")]
         public string PrepaymentCurrency { get; set; }
         public string ApplicationId { get; set; }
         

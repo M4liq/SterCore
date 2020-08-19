@@ -14,34 +14,39 @@ namespace leave_management.Controllers
 {
     public class MedicalCheckUpController : Controller
     {
+        private readonly IMedicalCheckUpRepository _medicalCheckUpRepository;
         private readonly ITypeOfMedicalCheckUpRepository _typeOfMedicalCheckUpRepo;
         private readonly IEmployeeRepository _employeeRepo;
         private readonly IMapper _mapper;
 
 
-        public MedicalCheckUpController(ITypeOfMedicalCheckUpRepository typeOfMedicalCheckUpRepo,
+        public MedicalCheckUpController(IMedicalCheckUpRepository medicalCheckUpRepository,
+            ITypeOfMedicalCheckUpRepository typeOfMedicalCheckUpRepo,
             IEmployeeRepository employeeRepo,
             IMapper mapper
             )
         {
+            _medicalCheckUpRepository = medicalCheckUpRepository;
             _typeOfMedicalCheckUpRepo = typeOfMedicalCheckUpRepo;
             _employeeRepo = employeeRepo;
             _mapper = mapper;
         }
         // GET: MedicalCheckUp
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var medicalCheckUps = await _medicalCheckUpRepository.FindAll();
+            var model = _mapper.Map<List<MedicalCheckUp>, List<MedicalCheckUpVM>>(medicalCheckUps.ToList());
+            return View(model);
         }
 
         // GET: MedicalCheckUp/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
             return View();
         }
 
         // GET: MedicalCheckUp/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
             return View();
         }
@@ -49,7 +54,7 @@ namespace leave_management.Controllers
         // POST: MedicalCheckUp/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(IFormCollection collection)
         {
             try
             {
@@ -64,7 +69,7 @@ namespace leave_management.Controllers
         }
 
         // GET: MedicalCheckUp/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
             return View();
         }
@@ -72,7 +77,7 @@ namespace leave_management.Controllers
         // POST: MedicalCheckUp/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, IFormCollection collection)
         {
             try
             {
@@ -87,7 +92,7 @@ namespace leave_management.Controllers
         }
 
         // GET: MedicalCheckUp/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             return View();
         }
@@ -95,7 +100,7 @@ namespace leave_management.Controllers
         // POST: MedicalCheckUp/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id, IFormCollection collection)
         {
             try
             {

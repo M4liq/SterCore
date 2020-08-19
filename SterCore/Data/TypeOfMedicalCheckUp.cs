@@ -7,8 +7,13 @@ using System.Threading.Tasks;
 
 namespace leave_management.Data
 {
-    public class TypeOfMedicalCheckUp : OrganizationResurceIdentifier
+    public class TypeOfMedicalCheckUp
     {
+        public TypeOfMedicalCheckUp(string name, int value)
+        {
+            this.name = name;
+            this.value = value;
+        }
         [Key]
         public int Id { get; set; }
         public string name { get; set; }

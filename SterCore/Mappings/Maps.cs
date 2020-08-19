@@ -24,6 +24,7 @@ namespace leave_management.Mappings
             CreateMap<Organization, OrganizationsVM>().ReverseMap();
             CreateMap<BusinessTravel, BusinessTravelVM>().ReverseMap();
             CreateMap<BillingBusinessTravel, BillingBusinessTravelVM>().ReverseMap();
+            CreateMap<MedicalCheckUp, MedicalCheckUpVM>().ReverseMap();
         }
     }
 }

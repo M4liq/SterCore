@@ -18,12 +18,13 @@ namespace leave_management
             RoleManager<IdentityRole> roleManager,
             IOrganizationRepository organizationRepository,
             IOrganizationResourceManager organizationManager,
+            ITypeOfMedicalCheckUpRepository typeOfMedicalCheckUp,
             IConfiguration configuration)
         {
             //Architecture based on events would be better
             SeedRoles(roleManager); 
             SeedUsersAndOrganizations(userManager, organizationManager, organizationRepository, configuration); //setting up both Users and Organizations is very messy
-          
+            SeedMedicalCheckUpTypes(typeOfMedicalCheckUp);
         }
 
         private static void  SeedUsersAndOrganizations(
@@ -119,6 +120,27 @@ namespace leave_management
                 };
                 var result = roleManager.CreateAsync(role).Result;
             }
+        }
+
+        private static void SeedMedicalCheckUpTypes(ITypeOfMedicalCheckUpRepository typeOfMedicalCheckUp)
+        {
+            if (typeOfMedicalCheckUp.FindAll().Result.Count==0)
+            {
+                List<TypeOfMedicalCheckUp> entity = new List<TypeOfMedicalCheckUp>();
+                entity.Add(new TypeOfMedicalCheckUp("Badanie lekarskie wstępne", 200));
+                entity.Add(new TypeOfMedicalCheckUp("Badanie lekarskie okresowe", 201));
+                entity.Add(new TypeOfMedicalCheckUp("Badanie lekarskie kontrolne", 202));
+                entity.Add(new TypeOfMedicalCheckUp("Badanie lekarskie końcowe", 203));
+                entity.Add(new TypeOfMedicalCheckUp("Badanie psychotechniczne", 204));
+                entity.Add(new TypeOfMedicalCheckUp("Badanie sanitarno-epidemiologiczne terminowe", 205));
+                entity.Add(new TypeOfMedicalCheckUp("Badanie sanitarno-epidemiologiczne bezterminowe", 206));
+                foreach (var item in entity)
+                {
+                    var result = typeOfMedicalCheckUp.Create(item).Result;
+                }
+            }
+            
+            
         }
     }
 }

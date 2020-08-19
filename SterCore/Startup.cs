@@ -55,6 +55,8 @@ namespace leave_management
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IBusinessTravelRepository, BusinessTravelRepository>();
             services.AddScoped<IBillingBusinessTravelRepository, BillingBusinessTravelRepository>();
+            services.AddScoped<IMedicalCheckUpRepository, MedicalCheckUpRepository>();
+            services.AddScoped<ITypeOfMedicalCheckUpRepository, TypeOfMedicalCheckUpRepository>();
 
 
             services.AddAutoMapper(typeof(Maps));
@@ -81,7 +83,8 @@ namespace leave_management
             UserManager<Employee> userManager,
             RoleManager<IdentityRole> roleManager,
             IOrganizationResourceManager organizationManager,
-            IOrganizationRepository organizationRepository
+            IOrganizationRepository organizationRepository,
+            ITypeOfMedicalCheckUpRepository typeOfMedicalCheckUpRepository
         )
         {
             if (env.IsDevelopment())
@@ -105,7 +108,7 @@ namespace leave_management
 
             app.UseSession();
 
-            SeedData.Seed(userManager, roleManager, organizationRepository, organizationManager, Configuration);
+            SeedData.Seed(userManager, roleManager, organizationRepository, organizationManager, typeOfMedicalCheckUpRepository, Configuration);
 
             app.UseEndpoints(endpoints =>
             {

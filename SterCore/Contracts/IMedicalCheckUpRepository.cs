@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace leave_management.Contracts
 {
-    interface IMedicalCheckUpRepository :IRepositoryBase<MedicalCheckUp>
+    public interface IMedicalCheckUpRepository :IRepositoryBase<MedicalCheckUp>
     {
     }
 }

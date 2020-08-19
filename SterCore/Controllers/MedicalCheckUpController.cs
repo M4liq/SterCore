@@ -2,13 +2,32 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using leave_management.Contracts;
+using leave_management.Data;
+using leave_management.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace leave_management.Controllers
 {
     public class MedicalCheckUpController : Controller
     {
+        private readonly ITypeOfMedicalCheckUpRepository _typeOfMedicalCheckUpRepo;
+        private readonly IEmployeeRepository _employeeRepo;
+        private readonly IMapper _mapper;
+
+
+        public MedicalCheckUpController(ITypeOfMedicalCheckUpRepository typeOfMedicalCheckUpRepo,
+            IEmployeeRepository employeeRepo,
+            IMapper mapper
+            )
+        {
+            _typeOfMedicalCheckUpRepo = typeOfMedicalCheckUpRepo;
+            _employeeRepo = employeeRepo;
+            _mapper = mapper;
+        }
         // GET: MedicalCheckUp
         public ActionResult Index()
         {

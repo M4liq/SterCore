@@ -9,6 +9,7 @@ using leave_management.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
@@ -17,18 +18,21 @@ namespace leave_management.Controllers
         private readonly IMedicalCheckUpRepository _medicalCheckUpRepository;
         private readonly ITypeOfMedicalCheckUpRepository _typeOfMedicalCheckUpRepo;
         private readonly IEmployeeRepository _employeeRepo;
+        private readonly UserManager<Employee> _userManager;
         private readonly IMapper _mapper;
 
 
         public MedicalCheckUpController(IMedicalCheckUpRepository medicalCheckUpRepository,
             ITypeOfMedicalCheckUpRepository typeOfMedicalCheckUpRepo,
             IEmployeeRepository employeeRepo,
+            UserManager<Employee> userManager,
             IMapper mapper
             )
         {
             _medicalCheckUpRepository = medicalCheckUpRepository;
             _typeOfMedicalCheckUpRepo = typeOfMedicalCheckUpRepo;
             _employeeRepo = employeeRepo;
+            _userManager = userManager;
             _mapper = mapper;
         }
         // GET: MedicalCheckUp
@@ -65,7 +69,33 @@ namespace leave_management.Controllers
         // GET: MedicalCheckUp/Create
         public async Task<ActionResult> Create()
         {
-            return View();
+            var employees = await _userManager.GetUsersInRoleAsync("Employee");
+            var employeesItems = employees.Select(q => new SelectListItem
+            {
+                Text = q.Firstname + " " + q.Lastname,
+                Value = q.Id.ToString()
+            });
+
+            var TypeOfMedicalCheckUps = _typeOfMedicalCheckUpRepo.FindAll().Result;
+            var TypeOfMedicalCheckUpsItems = TypeOfMedicalCheckUps.Select(q => new SelectListItem
+            {
+                Text = q.name.ToString(),
+                Value = q.Id.ToString()
+            });
+            var SelectListItemTrue = new SelectListItem("Tak", "true");
+            var SelectListItemFalse = new SelectListItem("Nie", "false");
+            List<SelectListItem> SelectListWithTrueOrFalse = new List<SelectListItem>();
+            SelectListWithTrueOrFalse.Add(SelectListItemTrue);
+            SelectListWithTrueOrFalse.Add(SelectListItemFalse);
+
+            var model = new CreateMedicalCheckUpVM
+            {
+                Employees = employeesItems,
+                TypeOfMedicalCheckUps = TypeOfMedicalCheckUpsItems,
+                isDisplayedToSupervisors = SelectListWithTrueOrFalse,
+                isDisplayedToEmployees = SelectListWithTrueOrFalse
+            };
+            return View(model);
         }
 
         // POST: MedicalCheckUp/Create

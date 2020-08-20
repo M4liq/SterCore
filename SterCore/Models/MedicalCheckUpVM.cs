@@ -37,15 +37,22 @@ namespace leave_management.Models
     {
         public int Id { get; set; }
         [Required]
+        [Display(Name = "Data Badania")]
         public DateTime DateOfMedicalExamination { get; set; }
+        [Display(Name = "Ważne do")]
         public DateTime ValidUntil { get; set; }
+        [Display(Name = "Uwagi")]
         public string Comment { get; set; }
+        [Display(Name = "Pokaż Pracownikowi")]
         public bool IsDisplayedToEmployee { get; set; }
+        [Display(Name = "Pokaż Przełożonemu")]
         public bool IsDisplayedToSupervisor { get; set; }
         public EmployeeVM Employee { get; set; }
         [Required]
+        [Display(Name = "Osoba")]
         public string EmployeeId { get; set; }
         [Required]
+        [Display(Name = "Rodzaj Badania")]
         public int TypeOfMedicalCheckUpId { get; set; }
         public IEnumerable<SelectListItem> Employees { get; set; }
         public IEnumerable<SelectListItem> TypeOfMedicalCheckUps { get; set; }

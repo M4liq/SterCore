@@ -48,7 +48,7 @@ namespace leave_management.Controllers
                     Comment = item.Comment,
                     DateOfMedicalExamination = item.DateOfMedicalExamination,
                     ValidUntil = item.ValidUntil,
-                    EmployeeFullName = _employeeRepo.FindById(item.EmployeeId).Result.Lastname + _employeeRepo.FindById(item.EmployeeId).Result.Firstname,
+                    EmployeeFullName = _employeeRepo.FindById(item.EmployeeId).Result.Lastname + " " + _employeeRepo.FindById(item.EmployeeId).Result.Firstname,
                     TypeOfMedicalCheckUpName = _typeOfMedicalCheckUpRepo.FindById(item.TypeOfMedicalCheckUpId).Result.name,
                     EmployeeId=item.EmployeeId,
                     TypeOfMedicalCheckUpId = item.TypeOfMedicalCheckUpId,
@@ -101,16 +101,29 @@ namespace leave_management.Controllers
         // POST: MedicalCheckUp/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(IFormCollection collection)
+        public async Task<ActionResult> Create(CreateMedicalCheckUpVM model)
         {
             try
             {
                 // TODO: Add insert logic here
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                var medicalCheckUp = _mapper.Map<MedicalCheckUp>(model);
+                var isSuccess = await _medicalCheckUpRepository.Create(medicalCheckUp);
+                if (!isSuccess)
+                {
+                    ModelState.AddModelError("", "Something went wrong");
+                    return View(model);
+                }
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                ModelState.AddModelError("", "Something went wrong");
                 return View();
             }
         }

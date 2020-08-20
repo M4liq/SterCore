@@ -12,8 +12,10 @@ namespace leave_management.Models
         public int Id { get; set; }
         [Required]
         [Display(Name = "Data Badania")]
+        [DataType(DataType.Date)]
         public DateTime DateOfMedicalExamination { get; set; }
         [Display(Name = "Ważne do")]
+        [DataType(DataType.Date)]
         public DateTime ValidUntil { get; set; }
         [Display(Name = "Uwagi")]
         public string Comment { get; set; }
@@ -37,9 +39,11 @@ namespace leave_management.Models
     {
         public int Id { get; set; }
         [Required]
+        [DataType(DataType.Date)]
         [Display(Name = "Data Badania")]
         public DateTime DateOfMedicalExamination { get; set; }
         [Display(Name = "Ważne do")]
+        [DataType(DataType.Date)]
         public DateTime ValidUntil { get; set; }
         [Display(Name = "Uwagi")]
         public string Comment { get; set; }

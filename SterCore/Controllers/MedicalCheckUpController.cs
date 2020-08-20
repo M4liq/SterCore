@@ -184,7 +184,17 @@ namespace leave_management.Controllers
         // GET: MedicalCheckUp/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            var medicalCheckUp = await _medicalCheckUpRepository.FindById(id);
+            if (medicalCheckUp == null)
+            {
+                return NotFound();
+            }
+            var isSuccess = await _medicalCheckUpRepository.Delete(medicalCheckUp);
+            if (!isSuccess)
+            {
+                return BadRequest();
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: MedicalCheckUp/Delete/5

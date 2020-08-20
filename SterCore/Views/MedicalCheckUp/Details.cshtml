@@ -1,7 +1,7 @@
 ﻿@model leave_management.Models.MedicalCheckUpVM
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Szczegóły badania lekarskiego";
 }
 
 <h1>Szczegóły badania lekarskiego</h1>
@@ -56,5 +56,5 @@
 </div>
 <div>
     <a class="btn btn-block btn-warning" asp-action="Edit" asp-route-id="@Model.Id" asp-route-employeeId="@Model.EmployeeId" asp-route-typeOfMedicalCheckUpId="@Model.TypeOfMedicalCheckUpId"><i class="fa fa-pencil"></i>Edit</a>
-    <a class="btn btn-block btn-primary" asp-action="Index">Back to List</a>
+    <a class="btn btn-block btn-primary" asp-action="Index"> <i class="fa fa-arrow-alt-circle-left"></i> Powrót do podsumowania</a>
 </div>

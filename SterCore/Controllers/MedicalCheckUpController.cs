@@ -45,6 +45,7 @@ namespace leave_management.Controllers
             {
                 model.Add(new MedicalCheckUpVM
                 {
+                    Id = item.Id,
                     Comment = item.Comment,
                     DateOfMedicalExamination = item.DateOfMedicalExamination,
                     ValidUntil = item.ValidUntil,
@@ -129,24 +130,53 @@ namespace leave_management.Controllers
         }
 
         // GET: MedicalCheckUp/Edit/5
-        public async Task<ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(int id, int typeOfMedicalCheckUpId, string employeeId)
         {
-            return View();
+            var success = await _medicalCheckUpRepository.Exists(id);
+            if (!success)
+            {
+                return NotFound();
+            }
+            var SelectListItemTrue = new SelectListItem("Tak", "true");
+            var SelectListItemFalse = new SelectListItem("Nie", "false");
+            List<SelectListItem> SelectListWithTrueOrFalse = new List<SelectListItem>();
+            SelectListWithTrueOrFalse.Add(SelectListItemTrue);
+            SelectListWithTrueOrFalse.Add(SelectListItemFalse);
+
+            var medicalCheckUp = await _medicalCheckUpRepository.FindById(id);
+            var model = _mapper.Map<EditMedicalCheckUpVM>(medicalCheckUp);
+            model.EmployeeId = employeeId;
+            model.TypeOfMedicalCheckUpId = typeOfMedicalCheckUpId;
+            model.isDisplayedToSupervisors = SelectListWithTrueOrFalse;
+            model.isDisplayedToEmployees = SelectListWithTrueOrFalse;
+            return View(model);
         }
 
         // POST: MedicalCheckUp/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(EditMedicalCheckUpVM model)
         {
             try
             {
-                // TODO: Add update logic here
+                // TODO: Add insert logic here
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                var medicalCheckUp = _mapper.Map<MedicalCheckUp>(model);
+                var isSuccess = await _medicalCheckUpRepository.Update(medicalCheckUp);
+                if (!isSuccess)
+                {
+                    ModelState.AddModelError("", "Something went wrong");
+                    return View(model);
+                }
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                ModelState.AddModelError("", "Something went wrong");
                 return View();
             }
         }

@@ -1,40 +1,40 @@
-﻿@model leave_management.Models.CreateMedicalCheckUpVM
+﻿@model leave_management.Models.EditMedicalCheckUpVM
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>Create</h1>
+<h1>Edytuj badanie lekarskie</h1>
 
-<h4>CreateMedicalCheckUpVM</h4>
 <hr />
 <div class="row">
     <div class="offset-md-3 col-md-6">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="EmployeeId" class="control-label"></label>
-                @Html.DropDownListFor(q => q.EmployeeId, new SelectList(Model.Employees, "Value", "Text"), "Wybierz Pracownika", new { @class = "form-control" })
-                <span asp-validation-for="EmployeeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TypeOfMedicalCheckUpId" class="control-label"></label>
-                @Html.DropDownListFor(q => q.TypeOfMedicalCheckUpId, new SelectList(Model.TypeOfMedicalCheckUps, "Value", "Text"), "Rodzaj Badania", new { @class = "form-control" })
-                <span asp-validation-for="TypeOfMedicalCheckUpId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateOfMedicalExamination" class="control-label"></label>
-                <input asp-for="DateOfMedicalExamination" value="@DateTime.Now.Date" type="text" class="form-control date-of-medical-examination" />
-                <span asp-validation-for="DateOfMedicalExamination" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ValidUntil" class="control-label"></label>
-                <input asp-for="ValidUntil" value="@DateTime.Now.Date" type="text" class="form-control date-valid-until" />
-                <span asp-validation-for="ValidUntil" class="text-danger"></span>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="EmployeeId" />
+            <input type="hidden" asp-for="TypeOfMedicalCheckUpId" />
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="DateOfMedicalExamination" class="control-label"></label>
+                        <input asp-for="DateOfMedicalExamination" value="@Model.DateOfMedicalExamination" type="text" class="form-control date-of-medical-examination" />
+                        <span asp-validation-for="DateOfMedicalExamination" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ValidUntil" class="control-label"></label>
+                        <input asp-for="ValidUntil" value="@Model.ValidUntil" type="text" class="form-control date-valid-until" />
+                        <span asp-validation-for="ValidUntil" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <label asp-for="Comment" class="control-label"></label>
-                <textarea asp-for="Comment" maxlength="300" class="form-control" ></textarea>
+                <textarea asp-for="Comment" maxlength="300" class="form-control"></textarea>
                 <span asp-validation-for="Comment" class="text-danger"></span>
             </div>
             <div class="row">
@@ -54,8 +54,9 @@
                 </div>
             </div>
 
+
             <div class="form-group">
-                <input type="submit" value="Dodaj badanie lekarskie" class="btn btn-success btn-block" />
+                <input type="submit" value="Zapisz zmiany" class="btn btn-block btn-success" />
             </div>
         </form>
     </div>
@@ -155,5 +156,4 @@
 
         });
     </script>
-
 }

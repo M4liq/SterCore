@@ -63,4 +63,31 @@ namespace leave_management.Models
         public IEnumerable<SelectListItem> isDisplayedToEmployees { get; set; }
         public IEnumerable<SelectListItem> isDisplayedToSupervisors { get; set; }
     }
+    public class EditMedicalCheckUpVM
+    {
+        public int Id { get; set; }
+        [Required]
+        [DataType(DataType.Date)]
+        [Display(Name = "Data Badania")]
+        public DateTime DateOfMedicalExamination { get; set; }
+        [Display(Name = "Ważne do")]
+        [DataType(DataType.Date)]
+        public DateTime ValidUntil { get; set; }
+        [Display(Name = "Uwagi")]
+        public string Comment { get; set; }
+        [Display(Name = "Pokaż Pracownikowi")]
+        public bool IsDisplayedToEmployee { get; set; }
+        [Display(Name = "Pokaż Przełożonemu")]
+        public bool IsDisplayedToSupervisor { get; set; }
+        public EmployeeVM Employee { get; set; }
+        [Required]
+        [Display(Name = "Osoba")]
+        public string EmployeeId { get; set; }
+        [Required]
+        [Display(Name = "Rodzaj Badania")]
+        public int TypeOfMedicalCheckUpId { get; set; }
+        public IEnumerable<SelectListItem> isDisplayedToEmployees { get; set; }
+        public IEnumerable<SelectListItem> isDisplayedToSupervisors { get; set; }
+    }
+
 }

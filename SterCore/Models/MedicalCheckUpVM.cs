@@ -14,8 +14,8 @@ namespace leave_management.Models
         public DateTime DateOfMedicalExamination { get; set; }
         public DateTime ValidUntil { get; set; }
         public string Comment { get; set; }
-        public bool isDisplayedToEmployee { get; set; }
-        public bool isDisplayedToSupervisor { get; set; }
+        public bool IsDisplayedToEmployee { get; set; }
+        public bool IsDisplayedToSupervisor { get; set; }
         public EmployeeVM Employee { get; set; }
         [Required]
         public string EmployeeId { get; set; }

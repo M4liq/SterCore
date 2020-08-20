@@ -1,0 +1,60 @@
+﻿@model leave_management.Models.MedicalCheckUpVM
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Szczegóły badania lekarskiego</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EmployeeFullName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EmployeeFullName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TypeOfMedicalCheckUpName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TypeOfMedicalCheckUpName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DateOfMedicalExamination)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DateOfMedicalExamination)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ValidUntil)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ValidUntil)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Comment)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Comment)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsDisplayedToEmployee)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsDisplayedToEmployee)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsDisplayedToSupervisor)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsDisplayedToSupervisor)
+        </dd>
+
+    </dl>
+</div>
+<div>
+    <a class="btn btn-block btn-warning" asp-action="Edit" asp-route-id="@Model.Id" asp-route-employeeId="@Model.EmployeeId" asp-route-typeOfMedicalCheckUpId="@Model.TypeOfMedicalCheckUpId"><i class="fa fa-pencil"></i>Edit</a>
+    <a class="btn btn-block btn-primary" asp-action="Index">Back to List</a>
+</div>

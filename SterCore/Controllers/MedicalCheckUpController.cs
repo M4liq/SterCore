@@ -64,7 +64,16 @@ namespace leave_management.Controllers
         // GET: MedicalCheckUp/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            return View();
+            var success = await _medicalCheckUpRepository.Exists(id);
+            if (!success)
+            {
+                return NotFound();
+            }
+            var medicalCheckUp = await _medicalCheckUpRepository.FindById(id);
+            var model = _mapper.Map<MedicalCheckUpVM>(medicalCheckUp);
+            model.EmployeeFullName = _employeeRepo.FindById(model.EmployeeId).Result.Lastname + " " + _employeeRepo.FindById(model.EmployeeId).Result.Firstname;
+            model.TypeOfMedicalCheckUpName = _typeOfMedicalCheckUpRepo.FindById(model.TypeOfMedicalCheckUpId).Result.name;
+            return View(model);
         }
 
         // GET: MedicalCheckUp/Create
@@ -111,7 +120,11 @@ namespace leave_management.Controllers
                 {
                     return View(model);
                 }
-
+                if (model.DateOfMedicalExamination.Date > model.ValidUntil.Date)
+                {
+                    ModelState.AddModelError("", "Podane daty są nieprawidłowe");
+                    return View(model);
+                }
                 var medicalCheckUp = _mapper.Map<MedicalCheckUp>(model);
                 var isSuccess = await _medicalCheckUpRepository.Create(medicalCheckUp);
                 if (!isSuccess)
@@ -162,6 +175,18 @@ namespace leave_management.Controllers
                 // TODO: Add insert logic here
                 if (!ModelState.IsValid)
                 {
+                    return View(model);
+                }
+                if (model.DateOfMedicalExamination.Date > model.ValidUntil.Date)
+                {
+                    var SelectListItemTrue = new SelectListItem("Tak", "true");
+                    var SelectListItemFalse = new SelectListItem("Nie", "false");
+                    List<SelectListItem> SelectListWithTrueOrFalse = new List<SelectListItem>();
+                    SelectListWithTrueOrFalse.Add(SelectListItemTrue);
+                    SelectListWithTrueOrFalse.Add(SelectListItemFalse);
+                    model.isDisplayedToSupervisors = SelectListWithTrueOrFalse;
+                    model.isDisplayedToEmployees = SelectListWithTrueOrFalse;
+                    ModelState.AddModelError("", "Podane daty są nieprawidłowe");
                     return View(model);
                 }
                 var medicalCheckUp = _mapper.Map<MedicalCheckUp>(model);

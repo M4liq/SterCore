@@ -15,8 +15,8 @@ namespace leave_management.Data
         public DateTime DateOfMedicalExamination{ get; set; }
         public DateTime ValidUntil{ get; set; }
         public string Comment { get; set; }
-        public bool isDisplayedToEmployee{ get; set; }
-        public bool isDisplayedToSupervisor{ get; set; }
+        public bool IsDisplayedToEmployee{ get; set; }
+        public bool IsDisplayedToSupervisor{ get; set; }
 
         [ForeignKey("EmployeeId")]
         public Employee Employee { get; set; }

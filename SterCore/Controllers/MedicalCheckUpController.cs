@@ -35,7 +35,24 @@ namespace leave_management.Controllers
         public async Task<ActionResult> Index()
         {
             var medicalCheckUps = await _medicalCheckUpRepository.FindAll();
-            var model = _mapper.Map<List<MedicalCheckUp>, List<MedicalCheckUpVM>>(medicalCheckUps.ToList());
+            var MappedModel = _mapper.Map<List<MedicalCheckUp>, List<MedicalCheckUpVM>>(medicalCheckUps.ToList());
+            var model = new List<MedicalCheckUpVM>();
+            foreach (var item in MappedModel)
+            {
+                model.Add(new MedicalCheckUpVM
+                {
+                    Comment = item.Comment,
+                    DateOfMedicalExamination = item.DateOfMedicalExamination,
+                    ValidUntil = item.ValidUntil,
+                    EmployeeFullName = _employeeRepo.FindById(item.EmployeeId).Result.Lastname + _employeeRepo.FindById(item.EmployeeId).Result.Firstname,
+                    TypeOfMedicalCheckUpName = _typeOfMedicalCheckUpRepo.FindById(item.TypeOfMedicalCheckUpId).Result.name,
+                    EmployeeId=item.EmployeeId,
+                    TypeOfMedicalCheckUpId = item.TypeOfMedicalCheckUpId,
+                    IsDisplayedToEmployee = item.IsDisplayedToEmployee,
+                    IsDisplayedToSupervisor = item.IsDisplayedToSupervisor
+                });
+            }
+
             return View(model);
         }
 

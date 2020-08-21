@@ -2,27 +2,61 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using leave_management.Contracts;
+using leave_management.Data;
+using leave_management.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Mvc.Rendering;
 namespace leave_management.Controllers
 {
     public class DocumentController : Controller
     {
-        // GET: Document
-        public ActionResult Index()
+        private readonly IDocumentsRepository _documentsRepository;
+        private readonly IEmployeeRepository _employeeRepo;
+        private readonly UserManager<Employee> _userManager;
+        private readonly IMapper _mapper;
+        public DocumentController(IDocumentsRepository documentsRepository, IEmployeeRepository employeeRepo, UserManager<Employee> userManager, IMapper mapper)
         {
-            return View();
+            _documentsRepository = documentsRepository;
+            _employeeRepo = employeeRepo;
+            _userManager = userManager;
+            _mapper = mapper;
+        }
+        // GET: Document
+        public async Task<ActionResult> Index()
+        {
+            var documents = _documentsRepository.FindAll().Result;
+            var mappedModel = _mapper.Map<List<Document>, List<DocumentVM>>(documents.ToList());
+            var model = new List<DocumentVM>();
+            var employees = await _userManager.GetUsersInRoleAsync("Employee");
+            foreach (var item in mappedModel)
+            {
+                model.Add(new DocumentVM
+                {
+                    Id = item.Id,
+                    DateCreated = item.DateCreated,
+                    DocumentName = item.DocumentName,
+                    EmployeeId = item.EmployeeId,
+                    ShowCompanyWide = item.ShowCompanyWide,
+                    ShowSelectedDepartment = item.ShowSelectedDepartment,
+                    ShowSelectedEmployee = item.ShowSelectedEmployee,
+                    EmployeeFullName = employees.FirstOrDefault(q => q.Id == item.EmployeeId).Firstname.ToString() + " " + employees.FirstOrDefault(q => q.Id == item.EmployeeId).Lastname.ToString()
+                });
+            }
+            return View(model);
         }
 
         // GET: Document/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
             return View();
         }
 
         // GET: Document/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
             return View();
         }
@@ -30,7 +64,7 @@ namespace leave_management.Controllers
         // POST: Document/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(IFormCollection collection)
         {
             try
             {
@@ -45,7 +79,7 @@ namespace leave_management.Controllers
         }
 
         // GET: Document/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
             return View();
         }
@@ -53,7 +87,7 @@ namespace leave_management.Controllers
         // POST: Document/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, IFormCollection collection)
         {
             try
             {
@@ -68,7 +102,7 @@ namespace leave_management.Controllers
         }
 
         // GET: Document/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             return View();
         }
@@ -76,7 +110,7 @@ namespace leave_management.Controllers
         // POST: Document/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id, IFormCollection collection)
         {
             try
             {

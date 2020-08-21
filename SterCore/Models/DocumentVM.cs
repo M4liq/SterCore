@@ -12,8 +12,11 @@ namespace leave_management.Models
         [Display(Name = "Dokument")]
         public string DocumentName { get; set; }
         public EmployeeVM Employee { get; set; }
-        [Display(Name = "Powiązany z pracownikiem")]
+
         public string EmployeeId { get; set; }
+        [Display(Name = "Powiązany z pracownikiem")]
+        public string EmployeeFullName { get; set; }
+
         [Display(Name = "Data utworzenia")]
         public DateTime DateCreated { get; set; }
         [Display(Name = "Pokaż wybranym pracownikom")]

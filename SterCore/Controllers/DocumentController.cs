@@ -75,16 +75,30 @@ namespace leave_management.Controllers
         // POST: Document/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(IFormCollection collection)
+        public async Task<ActionResult> Create(DocumentVM model)
         {
             try
             {
                 // TODO: Add insert logic here
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+               
+                var document = _mapper.Map<Document>(model);
+                document.DateCreated = DateTime.Now;
+                var isSuccess = await _documentsRepository.Create(document);
+                if (!isSuccess)
+                {
+                    ModelState.AddModelError("", "Something went wrong");
+                    return View(model);
+                }
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                ModelState.AddModelError("", "Something went wrong");
                 return View();
             }
         }

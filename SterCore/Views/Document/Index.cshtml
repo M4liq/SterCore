@@ -55,7 +55,7 @@
                 @Html.DisplayFor(modelItem => item.ShowCompanyWide)
             </td>
             <td>
-                <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id" asp-route-employeeId="@item.EmployeeId">
+                <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id" asp-route-employeeId="@item.EmployeeId" asp-route-dateCreated="@item.DateCreated">
                     <i class="fa fa-pencil-alt" aria-hidden="true"></i>
                 </a>
                 <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">

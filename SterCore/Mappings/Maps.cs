@@ -28,6 +28,7 @@ namespace leave_management.Mappings
             CreateMap<MedicalCheckUp, CreateMedicalCheckUpVM>().ReverseMap();
             CreateMap<MedicalCheckUp, EditMedicalCheckUpVM>().ReverseMap();
             CreateMap<Document, DocumentVM >().ReverseMap();
+            CreateMap<Document, CreateDocumentVM >().ReverseMap();
         }
     }
 }

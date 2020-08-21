@@ -83,7 +83,7 @@ namespace leave_management.Controllers
         // POST: Document/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(DocumentVM model)
+        public async Task<ActionResult> Create(CreateDocumentVM model)
         {
             try
             {
@@ -112,24 +112,45 @@ namespace leave_management.Controllers
         }
 
         // GET: Document/Edit/5
-        public async Task<ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(int id, string employeeId, DateTime dateCreated)
         {
-            return View();
+            var success = await _documentsRepository.Exists(id);
+            if (!success)
+            {
+                return NotFound();
+            }
+            var document = await _documentsRepository.FindById(id);
+            var model = _mapper.Map<CreateDocumentVM>(document);
+            model.EmployeeId = employeeId;
+            model.DateCreated = dateCreated;
+            return View(model);
         }
 
         // POST: Document/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(CreateDocumentVM model)
         {
             try
             {
-                // TODO: Add update logic here
+                // TODO: Add insert logic here
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                var document = _mapper.Map<Document>(model);
+                var isSuccess = await _documentsRepository.Update(document);
+                if (!isSuccess)
+                {
+                    ModelState.AddModelError("", "Something went wrong");
+                    return View(model);
+                }
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                ModelState.AddModelError("", "Something went wrong");
                 return View();
             }
         }

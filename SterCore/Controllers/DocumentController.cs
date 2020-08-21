@@ -52,7 +52,15 @@ namespace leave_management.Controllers
         // GET: Document/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            return View();
+            var success = await _documentsRepository.Exists(id);
+            if (!success)
+            {
+                return NotFound();
+            }
+            var document = await _documentsRepository.FindById(id);
+            var model = _mapper.Map<DocumentVM>(document);
+            model.EmployeeFullName = _employeeRepo.FindById(model.EmployeeId).Result.Lastname + " " + _employeeRepo.FindById(model.EmployeeId).Result.Firstname;
+            return View(model);
         }
 
         // GET: Document/Create

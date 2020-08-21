@@ -1,0 +1,59 @@
+﻿@model leave_management.Models.DocumentVM
+
+@{
+    ViewData["Title"] = "Szczegóły dokumentu";
+}
+
+    <h1>Szczegóły dokumentu @Model.DocumentName z dnia @Model.DateCreated</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DocumentName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DocumentName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EmployeeFullName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EmployeeFullName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateCreated)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DateCreated)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ShowSelectedEmployee)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ShowSelectedEmployee)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ShowSelectedDepartment)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ShowSelectedDepartment)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ShowCompanyWide)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ShowCompanyWide)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a class="btn btn-block btn-warning" asp-action="Edit" asp-route-id="@Model.Id" asp-route-employeeId="@Model.EmployeeId"><i class="fa fa-pencil"></i>Edytuj</a>
+    <a class="btn btn-block btn-primary" asp-action="Index"> <i class="fa fa-arrow-alt-circle-left"></i> Powrót do podsumowania</a>
+</div>

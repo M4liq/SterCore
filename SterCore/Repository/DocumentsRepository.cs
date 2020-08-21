@@ -1,5 +1,7 @@
 ﻿using leave_management.Contracts;
 using leave_management.Data;
+using leave_management.Services.Components.ORI;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,44 +11,96 @@ namespace leave_management.Repository
 {
     public class DocumentsRepository : IDocumentsRepository
     {
-        public Task<bool> Create(Document entity)
+        private readonly ApplicationDbContext _db;
+        private readonly IOrganizationResourceManager _organizationManager;
+
+        public DocumentsRepository(ApplicationDbContext db, IOrganizationResourceManager organizationManager)
         {
-            throw new NotImplementedException();
+            _db = db;
+            _organizationManager = organizationManager;
+        }
+        public async Task<bool> Create(Document entity)
+        {
+            //ORI separating data beetween organizations
+            entity.OrganizationToken = _organizationManager.GetOrganizationToken();
+
+            await _db.Documents.AddAsync(entity);
+            return await Save();
         }
 
-        public Task<bool> Delete(Document entity)
+        public async Task<bool> Delete(Document entity)
         {
-            throw new NotImplementedException();
+            //ORI checking if data is from appropirate organization scope
+            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            _db.Documents.Remove(entity);
+            return await Save();
         }
 
-        public Task<bool> Exists(int id)
+        public async Task<bool> Exists(int id)
         {
-            throw new NotImplementedException();
+            var organizationToken = _organizationManager.GetOrganizationToken();
+
+            var exists = await _db.Documents
+
+                //ORI Filtring leave types by their tokens to get scope
+                .Where(q => q.OrganizationToken == organizationToken)
+                .AnyAsync(q => q.Id == id);
+
+            return exists;
         }
 
-        public Task<ICollection<Document>> FindAll()
+        public async Task<ICollection<Document>> FindAll()
         {
-            throw new NotImplementedException();
+            //ORI getting token to find organization scope
+            var organizationToken = _organizationManager.GetOrganizationToken();
+
+            //ORI filtering by token
+            var Document = await _db.Documents    
+                .Where(q => q.OrganizationToken == organizationToken)
+                .ToListAsync();
+            return Document;
         }
 
-        public Task<Document> FindById(int id)
+        public async Task<Document> FindById(int id)
         {
-            throw new NotImplementedException();
+            //ORI getting token to find organization scope
+            var organizationToken = _organizationManager.GetOrganizationToken();
+
+            var Document = await _db.Documents
+
+                //ORI Filtring organizations by their tokens to get scope
+                .Where(q => q.OrganizationToken == organizationToken)
+                .FirstOrDefaultAsync(q => q.Id == id);
+
+            return Document;
         }
 
-        public Task<bool> Save()
+        public async Task<bool> Save()
         {
-            throw new NotImplementedException();
+            var changes = await _db.SaveChangesAsync();
+            return changes > 0;
         }
 
         public void SetToken(Document entity)
         {
-            throw new NotImplementedException();
+            var token = _organizationManager.GetOrganizationToken();
+            entity.OrganizationToken = token;
         }
 
-        public Task<bool> Update(Document entity)
+        public async Task<bool> Update(Document entity)
         {
-            throw new NotImplementedException();
+            //ORI checking if data is from appropirate organization scope
+            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            _db.Documents.Update(entity);
+            return await Save();
         }
     }
 }

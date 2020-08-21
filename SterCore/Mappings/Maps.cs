@@ -30,6 +30,7 @@ namespace leave_management.Mappings
             CreateMap<Document, DocumentVM >().ReverseMap();
             CreateMap<Document, CreateDocumentVM >().ReverseMap();
             CreateMap<Competence, CompetenceVM >().ReverseMap();
+            CreateMap<Competence, CreateCompetenceVM >().ReverseMap();
             CreateMap<CompetenceType, CompetenceTypeVM>().ReverseMap();
         }
     }

@@ -10,8 +10,6 @@ namespace leave_management.Data
 {
     public class Competence : OrganizationResurceIdentifier
     {
-        [Key]
-        public int Id { get; set; }
         [ForeignKey("EmployeeId")]
         public Employee Employee { get; set;}
         public string EmployeeId { get; set;}

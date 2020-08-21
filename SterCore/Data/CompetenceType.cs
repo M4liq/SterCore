@@ -9,9 +9,6 @@ namespace leave_management.Data
 {
     public class CompetenceType : OrganizationResurceIdentifier
     {
-        [Key]
-        public int Id { get; set; }
-
         public string name { get; set; }
     }
 }

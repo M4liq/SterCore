@@ -28,5 +28,8 @@ namespace leave_management.Data
         public DbSet<MedicalCheckUp> MedicalCheckUps { get; set; }
         public DbSet<Document> Documents { get; set; }
         public DbSet<AuthorizedOrganizations> AuthorizedOrganizations { get; set; }
+        public DbSet<Competence> Competences { get; set; }
+        public DbSet<CompetenceType> CompetenceTypes { get; set; }
+
     }
 }

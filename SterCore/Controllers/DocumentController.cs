@@ -58,7 +58,18 @@ namespace leave_management.Controllers
         // GET: Document/Create
         public async Task<ActionResult> Create()
         {
-            return View();
+            var employees = await _userManager.GetUsersInRoleAsync("Employee");
+            var employeesItems = employees.Select(q => new SelectListItem
+            {
+                Text = q.Firstname + " " + q.Lastname,
+                Value = q.Id.ToString()
+            });
+
+            var model = new CreateDocumentVM
+            {
+                Employees = employeesItems,
+            };
+            return View(model);
         }
 
         // POST: Document/Create

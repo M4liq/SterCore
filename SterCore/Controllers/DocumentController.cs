@@ -158,7 +158,17 @@ namespace leave_management.Controllers
         // GET: Document/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            var document = await _documentsRepository.FindById(id);
+            if (document == null)
+            {
+                return NotFound();
+            }
+            var isSuccess = await _documentsRepository.Delete(document);
+            if (!isSuccess)
+            {
+                return BadRequest();
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: Document/Delete/5

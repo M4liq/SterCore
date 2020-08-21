@@ -59,6 +59,8 @@ namespace leave_management
             services.AddScoped<IMedicalCheckUpRepository, MedicalCheckUpRepository>();
             services.AddScoped<ITypeOfMedicalCheckUpRepository, TypeOfMedicalCheckUpRepository>();
             services.AddScoped<IDocumentsRepository, DocumentsRepository>();
+            services.AddScoped<ICompetenceRepository, CompetenceRepository>();
+            services.AddScoped<ICompetenceTypeRepository, CompetenceTypeRepository>();
 
 
             services.AddAutoMapper(typeof(Maps));

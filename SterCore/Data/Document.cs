@@ -17,6 +17,7 @@ namespace leave_management.Data
         public Employee Employee { get; set; }
         public string EmployeeId { get; set; }
         public DateTime DateCreated { get; set; }
+        public string Description { get; set; }
         public bool ShowSelectedEmployee { get; set; }
         public bool ShowSelectedDepartment { get; set; }
         public bool ShowCompanyWide { get; set; }

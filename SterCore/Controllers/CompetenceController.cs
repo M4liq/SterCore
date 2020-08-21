@@ -57,22 +57,53 @@ namespace leave_management.Controllers
         // GET: Competence/Create
         public async Task<ActionResult> Create()
         {
-            return View();
+            var employees = await _userManager.GetUsersInRoleAsync("Employee");
+            var employeesItems = employees.Select(q => new SelectListItem
+            {
+                Text = q.Firstname + " " + q.Lastname,
+                Value = q.Id.ToString()
+            });
+            var competenceTypes = _competenceTypeRepository.FindAll().Result;
+            var competenceTypesItems = competenceTypes.Select(q => new SelectListItem
+            {
+                Text = q.name,
+                Value = q.Id.ToString()
+            });
+
+            var model = new CreateCompetenceVM
+            {
+                Employees = employeesItems,
+                CompetenceTypes = competenceTypesItems
+            };
+            return View(model);
         }
 
         // POST: Competence/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(IFormCollection collection)
+        public async Task<ActionResult> Create(CreateCompetenceVM model)
         {
             try
             {
                 // TODO: Add insert logic here
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                var competence = _mapper.Map<Competence>(model);
+                var isSuccess = await _competenceRepository.Create(competence);
+                if (!isSuccess)
+                {
+                    ModelState.AddModelError("", "Something went wrong");
+                    return View(model);
+                }
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                ModelState.AddModelError("", "Something went wrong");
                 return View();
             }
         }

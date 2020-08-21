@@ -25,5 +25,6 @@ namespace leave_management.Data
         public DbSet<BillingBusinessTravel> billingBusinessTravels { get; set; }
         public DbSet<TypeOfMedicalCheckUp> TypeOfMedicalCheckUps { get; set; }
         public DbSet<MedicalCheckUp> MedicalCheckUps { get; set; }
+        public DbSet<Document> Documents { get; set; }
     }
 }

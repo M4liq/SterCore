@@ -41,6 +41,8 @@ namespace leave_management.Models
         public IEnumerable<SelectListItem> Employees { get; set; }
         [Display(Name = "Data utworzenia")]
         public DateTime? DateCreated { get; set; }
+        [Display(Name = "Opis")]
+        public string Description { get; set; }
         [Display(Name = "Pokaż wybranym pracownikom")]
         public bool ShowSelectedEmployee { get; set; }
         [Display(Name = "Pokaż wybranym działom")]

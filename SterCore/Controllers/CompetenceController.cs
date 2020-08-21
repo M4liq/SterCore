@@ -32,6 +32,7 @@ namespace leave_management.Controllers
         public async Task<ActionResult> Index()
         {
             var competences = _competenceRepository.FindAll().Result;
+            var competenceTypes = _competenceTypeRepository.FindAll().Result;
             var mappedModel = _mapper.Map<List<Competence>, List<CompetenceVM>>(competences.ToList());
             var model = new List<CompetenceVM>();
             var employees = await _userManager.GetUsersInRoleAsync("Employee");
@@ -42,7 +43,8 @@ namespace leave_management.Controllers
                    Id = item.Id,
                    CompetenceTypeId = item.CompetenceTypeId,
                    DateValidUntil = item.DateValidUntil,
-                   EmployeeFullName = employees.FirstOrDefault(q => q.Id == item.EmployeeId).Firstname.ToString() + " " + employees.FirstOrDefault(q => q.Id == item.EmployeeId).Lastname.ToString()
+                   EmployeeFullName = employees.FirstOrDefault(q => q.Id == item.EmployeeId).Firstname.ToString() + " " + employees.FirstOrDefault(q => q.Id == item.EmployeeId).Lastname.ToString(),
+                   CompetenceName = competenceTypes.FirstOrDefault(q=>q.Id==item.CompetenceTypeId).name
                 });
             }
             return View(model);

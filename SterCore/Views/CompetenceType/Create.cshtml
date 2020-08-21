@@ -1,0 +1,31 @@
+﻿@model leave_management.Models.CompetenceTypeVM
+
+@{
+    ViewData["Title"] = "Dodaj rodzaj kompetencji";
+}
+
+    <h1>Dodaj rodzaj kompetencji</h1>
+<hr />
+<div class="row">
+    <div class="offset-md-3 col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="name" class="control-label"></label>
+                <input asp-for="name" class="form-control" />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Dodaj rodzaj kompetencji" class="btn btn-success btn-block" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-alt-circle-left"></i> Powrót do podsumowania</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

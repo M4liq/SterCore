@@ -20,15 +20,18 @@ namespace leave_management.Controllers
     {
         private readonly IOrganizationRepository _organizationRepostory;
         private readonly IMapper _mapper;
-        public OrganizationController(IMapper mapper, IOrganizationRepository organizationRepostory)
+        private readonly IEmployeeRepository _employeeRepository;
+
+        public OrganizationController(IMapper mapper, IOrganizationRepository organizationRepostory, IEmployeeRepository employeeRepository)
         {
             _organizationRepostory = organizationRepostory;
             _mapper = mapper;
+            _employeeRepository = employeeRepository;
         }
 
         // GET: Organization
         public async Task<ActionResult> Index()
-        {
+        {   
             var organizations = await _organizationRepostory.FindAll();
             var model = _mapper.Map<List<Organization>, List<Models.OrganizationVM>>(organizations.ToList());
 

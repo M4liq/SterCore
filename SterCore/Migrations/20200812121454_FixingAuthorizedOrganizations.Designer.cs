@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using leave_management.Data;
 
 namespace leave_management.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200812121454_FixingAuthorizedOrganizations")]
+    partial class FixingAuthorizedOrganizations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,37 +242,6 @@ namespace leave_management.Migrations
                     b.ToTable("AuthorizedOrganizations");
                 });
 
-            modelBuilder.Entity("leave_management.Data.BillingBusinessTravel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BusinessTravelId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("EmployeeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsPaidOut")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("OrganizationToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BusinessTravelId");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("billingBusinessTravels");
-                });
-
             modelBuilder.Entity("leave_management.Data.BusinessTravel", b =>
                 {
                     b.Property<int>("Id")
@@ -283,9 +254,6 @@ namespace leave_management.Migrations
 
                     b.Property<string>("ApplicationId")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DateCreated")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateFrom")
                         .HasColumnType("datetime2");
@@ -433,46 +401,6 @@ namespace leave_management.Migrations
                     b.ToTable("LeaveTypes");
                 });
 
-            modelBuilder.Entity("leave_management.Data.MedicalCheckUp", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateOfMedicalExamination")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EmployeeId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("OrganizationToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TypeOfMedicalCheckUpId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ValidUntil")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("isDisplayedToEmployee")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("isDisplayedToSupervisor")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("TypeOfMedicalCheckUpId");
-
-                    b.ToTable("MedicalCheckUps");
-                });
-
             modelBuilder.Entity("leave_management.Data.Organization", b =>
                 {
                     b.Property<int>("Id")
@@ -518,24 +446,6 @@ namespace leave_management.Migrations
                     b.HasIndex("AuthorizedOrganizationId");
 
                     b.ToTable("Organization");
-                });
-
-            modelBuilder.Entity("leave_management.Data.TypeOfMedicalCheckUp", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("value")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TypeOfMedicalCheckUps");
                 });
 
             modelBuilder.Entity("leave_management.Data.Employee", b =>
@@ -625,19 +535,6 @@ namespace leave_management.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("leave_management.Data.BillingBusinessTravel", b =>
-                {
-                    b.HasOne("leave_management.Data.BusinessTravel", "BusinessTravel")
-                        .WithMany()
-                        .HasForeignKey("BusinessTravelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("leave_management.Data.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId");
-                });
-
             modelBuilder.Entity("leave_management.Data.BusinessTravel", b =>
                 {
                     b.HasOne("leave_management.Data.Employee", "Employee")
@@ -680,19 +577,6 @@ namespace leave_management.Migrations
                     b.HasOne("leave_management.Data.AuthorizedOrganizations", "AuthorizedOrganizations")
                         .WithMany()
                         .HasForeignKey("AuthorizedOrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("leave_management.Data.MedicalCheckUp", b =>
-                {
-                    b.HasOne("leave_management.Data.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId");
-
-                    b.HasOne("leave_management.Data.TypeOfMedicalCheckUp", "typeOfMedicalCheckUp")
-                        .WithMany()
-                        .HasForeignKey("TypeOfMedicalCheckUpId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

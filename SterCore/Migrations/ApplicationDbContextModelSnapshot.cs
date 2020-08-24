@@ -225,6 +225,21 @@ namespace leave_management.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("leave_management.Data.AuthorizedOrganizations", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AuthorizedOrganizationToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AuthorizedOrganizations");
+                });
+
             modelBuilder.Entity("leave_management.Data.BillingBusinessTravel", b =>
                 {
                     b.Property<int>("Id")
@@ -434,6 +449,12 @@ namespace leave_management.Migrations
                     b.Property<string>("EmployeeId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("IsDisplayedToEmployee")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDisplayedToSupervisor")
+                        .HasColumnType("bit");
+
                     b.Property<string>("OrganizationToken")
                         .HasColumnType("nvarchar(max)");
 
@@ -442,12 +463,6 @@ namespace leave_management.Migrations
 
                     b.Property<DateTime>("ValidUntil")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("isDisplayedToEmployee")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("isDisplayedToSupervisor")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -464,6 +479,9 @@ namespace leave_management.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AuthorizedOrganizationId")
+                        .HasColumnType("int");
 
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
@@ -496,6 +514,8 @@ namespace leave_management.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AuthorizedOrganizationId");
 
                     b.ToTable("Organization");
                 });
@@ -664,6 +684,15 @@ namespace leave_management.Migrations
                     b.HasOne("leave_management.Data.TypeOfMedicalCheckUp", "typeOfMedicalCheckUp")
                         .WithMany()
                         .HasForeignKey("TypeOfMedicalCheckUpId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("leave_management.Data.Organization", b =>
+                {
+                    b.HasOne("leave_management.Data.AuthorizedOrganizations", "AuthorizedOrganizations")
+                        .WithMany()
+                        .HasForeignKey("AuthorizedOrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

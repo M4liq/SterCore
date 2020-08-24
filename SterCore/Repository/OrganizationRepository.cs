@@ -16,7 +16,9 @@ namespace leave_management.Repository
         private readonly ApplicationDbContext _db;
         private readonly IOrganizationResourceManager _organizationManager;
 
-        public OrganizationRepository(ApplicationDbContext db, IOrganizationResourceManager organizationManager)
+        public OrganizationRepository(ApplicationDbContext db, 
+            IOrganizationResourceManager organizationManager
+            )
         {
             _db = db;
             _organizationManager = organizationManager;
@@ -26,7 +28,21 @@ namespace leave_management.Repository
         public async Task<bool> Create(Organization entity)
         {
             //ORI separating data beetween organizations
-            entity.OrganizationToken = _organizationManager.GenerateToken();
+            var token = _organizationManager.GetOrganizationToken();
+
+            entity.OrganizationToken = _organizationManager.GenerateToken(); 
+            entity.AuthorizedOrganizationId = await _organizationManager.GetAuthorizedOrganizationId(token);
+
+            await _db.Organization.AddAsync(entity);
+            return await Save();
+        }
+
+        public async Task<bool> Create(Organization entity, string organizationToken)
+        {
+            //ORI separating data beetween organizations 
+            //Overloaded method enables creation of organization when ORI can not generate token. Token can be set manuall. Feg in Data seeding
+            entity.OrganizationToken = organizationToken;
+            entity.AuthorizedOrganizationId = await _organizationManager.GetAuthorizedOrganizationId(organizationToken);
 
             await _db.Organization.AddAsync(entity);
             return await Save();
@@ -34,13 +50,15 @@ namespace leave_management.Repository
 
         public async Task<bool> Delete(Organization entity)
         {
-            //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
-            {
-                throw new UnauthorizedAccessException();
-            }
+            var token = _organizationManager.GetOrganizationToken();
 
-            _db.Organization.Remove(entity);
+            var validate = await _db.Organization
+                .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == token)
+                .AnyAsync(q => q.Id == entity.Id);
+
+            if(validate)
+                _db.Organization.Remove(entity);
+
             return await Save();
 
         }
@@ -50,11 +68,13 @@ namespace leave_management.Repository
             //ORI getting token to find organization scope
             var organizationToken = _organizationManager.GetOrganizationToken();
 
-            //ORI Filtring organizations by their tokens to get scope
+            //ORI Filtring leave types by their tokens to get scope
             var organizations = _db.Organization
-                .Where(q => q.OrganizationToken == organizationToken);
+                .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == organizationToken);
 
-            return await organizations.ToListAsync(); ;
+            return await organizations.ToListAsync();
+
+
         }
 
         public async Task<Organization> FindById(int id)
@@ -65,7 +85,7 @@ namespace leave_management.Repository
             var organization = _db.Organization
 
             //ORI Filtring organizations by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken);
+                .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == organizationToken);
              
 
             return await organization.FirstOrDefaultAsync(q => q.Id == id); 
@@ -77,7 +97,7 @@ namespace leave_management.Repository
             var exists = await _db.Organization
 
             //ORI Filtring organizations by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
+                .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == organizationToken)
                 .AnyAsync(q => q.Id == id);
 
             return exists;
@@ -91,19 +111,19 @@ namespace leave_management.Repository
 
         public async Task<bool> Update(Organization entity)
         {
-            //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
-            {
-                throw new UnauthorizedAccessException();
-            }
 
-            _db.Organization.Update(entity);
+            var organizationToken = _organizationManager.GetOrganizationToken();
+            entity.AuthorizedOrganizationId = await _organizationManager.GetAuthorizedOrganizationId(organizationToken);
+
+            var validate = await _db.Organization
+                .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == organizationToken)
+                .AnyAsync(q => q.Id == entity.Id);
+
+            if(validate)
+                _db.Organization.Update(entity);
+
             return await Save();
         }
 
-        public void SetToken(Organization entity)
-        {
-            entity.OrganizationToken = _organizationManager.GetOrganizationToken();
-        }
     }
 }

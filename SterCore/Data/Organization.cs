@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace leave_management.Data
 {
     public class Organization
-    {   
+    {
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
@@ -22,5 +22,11 @@ namespace leave_management.Data
         public bool? Disabled { get; set; }
         public string ZipCode { get; set; }
         public string OrganizationToken { get; set; }
+
+        [ForeignKey("AuthorizedOrganizationId")]
+        public AuthorizedOrganizations AuthorizedOrganizations { get; set; }
+        public int AuthorizedOrganizationId { get; set; }
+
+
     }
 }

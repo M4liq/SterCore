@@ -134,11 +134,5 @@ namespace leave_management.Repository
             _db.LeaveAllocations.Update(entity);
             return await Save();
         }
-
-        public void SetToken(LeaveAllocations entity)
-        {
-            var token = _organizationManager.GetOrganizationToken();
-            entity.OrganizationToken = token;
-        }
     }
 }

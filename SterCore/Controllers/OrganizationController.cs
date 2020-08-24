@@ -20,15 +20,18 @@ namespace leave_management.Controllers
     {
         private readonly IOrganizationRepository _organizationRepostory;
         private readonly IMapper _mapper;
-        public OrganizationController(IMapper mapper, IOrganizationRepository organizationRepostory)
+        private readonly IEmployeeRepository _employeeRepository;
+
+        public OrganizationController(IMapper mapper, IOrganizationRepository organizationRepostory, IEmployeeRepository employeeRepository)
         {
             _organizationRepostory = organizationRepostory;
             _mapper = mapper;
+            _employeeRepository = employeeRepository;
         }
 
         // GET: Organization
         public async Task<ActionResult> Index()
-        {
+        {   
             var organizations = await _organizationRepostory.FindAll();
             var model = _mapper.Map<List<Organization>, List<Models.OrganizationVM>>(organizations.ToList());
 
@@ -61,7 +64,6 @@ namespace leave_management.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -71,7 +73,7 @@ namespace leave_management.Controllers
                 var isSuccess = await _organizationRepostory.Create(record);
                 if (!isSuccess)
                 {
-                    ModelState.AddModelError("", "Something Went Wrong...");
+                    ModelState.AddModelError("", "Coś poszło nie tak. Skontaktuj się z Administratorem...");
                     return View(model);
                 }
 
@@ -79,7 +81,7 @@ namespace leave_management.Controllers
             }
             catch
             {
-                ModelState.AddModelError("", "Something Went Wrong...");
+                ModelState.AddModelError("", "Coś poszło nie tak. Skontaktuj się z Administratorem...");
                 return View(model);
             }
         }
@@ -116,6 +118,7 @@ namespace leave_management.Controllers
             }
             catch
             {
+                ModelState.AddModelError("", "Błąd podczas zapisu, skontaktuj się z administratorem");
                 return View(model);
             }
         }

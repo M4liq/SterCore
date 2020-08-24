@@ -110,7 +110,13 @@ namespace leave_management
 
             app.UseSession();
 
-            SeedData.Seed(userManager, roleManager, organizationRepository, organizationManager, authorizedOrganizationRepository, Configuration);
+            SeedData.Seed(userManager, 
+                roleManager, 
+                organizationRepository, 
+                organizationManager, 
+                authorizedOrganizationRepository, 
+                typeOfMedicalCheckUpRepository,
+                Configuration);
 
             app.UseEndpoints(endpoints =>
             {

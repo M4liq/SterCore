@@ -39,7 +39,16 @@ namespace leave_management
 
             if(userManager.FindByNameAsync("admin@stercore.pl").Result == null) 
             {
+
                 var organizationToken = organizationManager.GenerateToken();
+
+                var initalAuthorizedOrganization = new AuthorizedOrganizations
+                {
+                    AuthorizedOrganizationToken = organizationToken
+                };
+
+                var successAuthOrg = authorizedOrganizationRepository.Create(initalAuthorizedOrganization).Result;
+
                 var initalOrganization = new Organization 
                 {
                     Name = "Westapp",
@@ -48,22 +57,14 @@ namespace leave_management
                     Street = "Wiśniowa",
                     HouseNumber = "11",
                     City = "Lubliniec",
-                    OrganizationToken = organizationToken 
-                 
+                    OrganizationToken = organizationToken       
                 };
 
-                var initalAuthorizedOrganization = new AuthorizedOrganizations
-                {
-                    AuthorizedOrganizationToken = organizationToken
-                };
 
-                //To do implement organization to authorized organizations
-                var successOrg = organizationRepository.Create(initalOrganization).Result;
-                var organizationId = organizationRepository.GetOrganizationByToken(organizationToken).Result;
+                var successOrg = organizationRepository.Create(initalOrganization, organizationToken).Result;
 
-                var successAuthOrg = authorizedOrganizationRepository.Create(initalAuthorizedOrganization).Result;
 
-                if (successOrg && successAuthOrg)
+                if (successOrg)
                 {
                     var user = new Employee
                     {
@@ -132,11 +133,6 @@ namespace leave_management
                 };
                 var result = roleManager.CreateAsync(role).Result;
             }
-        }
-
-        internal static void Seed(UserManager<Employee> userManager, RoleManager<IdentityRole> roleManager, IOrganizationRepository organizationRepository, IOrganizationResourceManager organizationManager, IAuthorizedOrganizationRepository authorizedOrganizationRepository, IConfiguration configuration)
-        {
-            throw new NotImplementedException();
         }
 
         private static void SeedMedicalCheckUpTypes(ITypeOfMedicalCheckUpRepository typeOfMedicalCheckUp)

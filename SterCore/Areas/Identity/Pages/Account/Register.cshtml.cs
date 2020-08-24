@@ -143,6 +143,7 @@ namespace leave_management.Areas.Identity.Pages.Account
             {
                     var superior = await _userManager.GetUserAsync(HttpContext.User);
                     var roles = await _userManager.GetRolesAsync(superior);
+
                     var superiorWithOrganization = await _employeeRepository.FindById(superior.Id);
                     var organizaiton = superiorWithOrganization.Organization;
 

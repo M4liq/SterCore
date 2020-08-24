@@ -16,12 +16,15 @@ namespace leave_management.Services.Components
     public class OrganizationResourceManager : IOrganizationResourceManager
     {
         private readonly IHttpContextAccessor _session;
+        private readonly ApplicationDbContext _db;
 
-        public OrganizationResourceManager(IHttpContextAccessor session)
+        public OrganizationResourceManager(IHttpContextAccessor session, ApplicationDbContext db)
         {
             _session = session;
+            _db = db;
         }
 
+        //OrganizationrResource Interface
         public string GenerateToken()
         {
             Guid g = Guid.NewGuid();
@@ -31,11 +34,18 @@ namespace leave_management.Services.Components
 
             return GuidString;
         }
-            
+
+        public async Task<int> GetAuthorizedOrganizationId(string token)
+        {
+            var authorizedOrganization = await _db.AuthorizedOrganizations.Where(q => q.AuthorizedOrganizationToken == token).FirstOrDefaultAsync();
+            return authorizedOrganization.Id;
+        }
+
         public string GetOrganizationToken()
         {
             return _session.ExtGet<string>("organizationToken");
         }
+
 
     }
 }

@@ -10,6 +10,8 @@ namespace leave_management.Services.Components.ORI
             public string GenerateToken();
 
             public string GetOrganizationToken();
+
+            public Task<int> GetAuthorizedOrganizationId(string token);
         }
 
 }

@@ -8,6 +8,6 @@ namespace leave_management.Contracts
 {
     public interface IOrganizationRepository : IRepositoryBase<Organization>
     {
-        public Task<Organization> GetOrganizationByToken(string token);
+        public Task<bool> Create(Organization organization, string organizationToken);
     }
 }

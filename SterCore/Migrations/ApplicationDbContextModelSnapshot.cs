@@ -449,6 +449,12 @@ namespace leave_management.Migrations
                     b.Property<string>("EmployeeId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("IsDisplayedToEmployee")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDisplayedToSupervisor")
+                        .HasColumnType("bit");
+
                     b.Property<string>("OrganizationToken")
                         .HasColumnType("nvarchar(max)");
 
@@ -457,12 +463,6 @@ namespace leave_management.Migrations
 
                     b.Property<DateTime>("ValidUntil")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("isDisplayedToEmployee")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("isDisplayedToSupervisor")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -675,15 +675,6 @@ namespace leave_management.Migrations
                         .HasForeignKey("RequestingEmployeeId");
                 });
 
-            modelBuilder.Entity("leave_management.Data.Organization", b =>
-                {
-                    b.HasOne("leave_management.Data.AuthorizedOrganizations", "AuthorizedOrganizations")
-                        .WithMany()
-                        .HasForeignKey("AuthorizedOrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("leave_management.Data.MedicalCheckUp", b =>
                 {
                     b.HasOne("leave_management.Data.Employee", "Employee")
@@ -693,6 +684,15 @@ namespace leave_management.Migrations
                     b.HasOne("leave_management.Data.TypeOfMedicalCheckUp", "typeOfMedicalCheckUp")
                         .WithMany()
                         .HasForeignKey("TypeOfMedicalCheckUpId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("leave_management.Data.Organization", b =>
+                {
+                    b.HasOne("leave_management.Data.AuthorizedOrganizations", "AuthorizedOrganizations")
+                        .WithMany()
+                        .HasForeignKey("AuthorizedOrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

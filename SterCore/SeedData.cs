@@ -56,8 +56,7 @@ namespace leave_management
                     TaxId = "5751900764",
                     Street = "Wiśniowa",
                     HouseNumber = "11",
-                    City = "Lubliniec",
-                    OrganizationToken = organizationToken       
+                    City = "Lubliniec",   
                 };
 
 
@@ -71,6 +70,7 @@ namespace leave_management
                         UserName = "admin@stercore.pl",
                         Email = "admin@stercore.pl",
                         OrganizationId = initalOrganization.Id,
+                        OrganizationToken = organizationToken, //adding organization token, cause it is not handled by user manager
                         ChangedPassword = true
                     };
 

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace leave_management.Migrations
 {
-    public partial class AddTableAuthorizedUsers : Migration
+    public partial class OrganizationListFix : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,6 +19,19 @@ namespace leave_management.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AuthorizedOrganizations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AuthorizedOrganizationToken = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuthorizedOrganizations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -38,25 +51,17 @@ namespace leave_management.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Organization",
+                name: "TypeOfMedicalCheckUps",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    Code = table.Column<string>(nullable: true),
-                    TaxId = table.Column<string>(nullable: true),
-                    Street = table.Column<string>(nullable: true),
-                    City = table.Column<string>(nullable: true),
-                    HouseNumber = table.Column<string>(nullable: true),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    Disabled = table.Column<bool>(nullable: true),
-                    ZipCode = table.Column<string>(nullable: true),
-                    OrganizationToken = table.Column<string>(nullable: true)
+                    name = table.Column<string>(nullable: true),
+                    value = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Organization", x => x.Id);
+                    table.PrimaryKey("PK_TypeOfMedicalCheckUps", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -76,6 +81,35 @@ namespace leave_management.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Organization",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    Code = table.Column<string>(nullable: true),
+                    TaxId = table.Column<string>(nullable: true),
+                    Street = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: true),
+                    HouseNumber = table.Column<string>(nullable: true),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    Disabled = table.Column<bool>(nullable: true),
+                    ZipCode = table.Column<string>(nullable: true),
+                    OrganizationToken = table.Column<string>(nullable: true),
+                    AuthorizedOrganizationId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Organization", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Organization_AuthorizedOrganizations_AuthorizedOrganizationId",
+                        column: x => x.AuthorizedOrganizationId,
+                        principalTable: "AuthorizedOrganizations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -115,25 +149,6 @@ namespace leave_management.Migrations
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Organization_OrganizationId",
-                        column: x => x.OrganizationId,
-                        principalTable: "Organization",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AuthorizedUsers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrganizationId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AuthorizedUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AuthorizedUsers_Organization_OrganizationId",
                         column: x => x.OrganizationId,
                         principalTable: "Organization",
                         principalColumn: "Id",
@@ -232,6 +247,7 @@ namespace leave_management.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrganizationToken = table.Column<string>(nullable: true),
+                    DateCreated = table.Column<DateTime>(nullable: true),
                     DateFrom = table.Column<DateTime>(nullable: false),
                     DateTo = table.Column<DateTime>(nullable: false),
                     DestinationCountry = table.Column<string>(nullable: true),
@@ -326,6 +342,67 @@ namespace leave_management.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "MedicalCheckUps",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrganizationToken = table.Column<string>(nullable: true),
+                    DateOfMedicalExamination = table.Column<DateTime>(nullable: false),
+                    ValidUntil = table.Column<DateTime>(nullable: false),
+                    Comment = table.Column<string>(nullable: true),
+                    IsDisplayedToEmployee = table.Column<bool>(nullable: false),
+                    IsDisplayedToSupervisor = table.Column<bool>(nullable: false),
+                    EmployeeId = table.Column<string>(nullable: true),
+                    TypeOfMedicalCheckUpId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MedicalCheckUps", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MedicalCheckUps_AspNetUsers_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_MedicalCheckUps_TypeOfMedicalCheckUps_TypeOfMedicalCheckUpId",
+                        column: x => x.TypeOfMedicalCheckUpId,
+                        principalTable: "TypeOfMedicalCheckUps",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "billingBusinessTravels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrganizationToken = table.Column<string>(nullable: true),
+                    EmployeeId = table.Column<string>(nullable: true),
+                    BusinessTravelId = table.Column<int>(nullable: false),
+                    Amount = table.Column<int>(nullable: false),
+                    IsPaidOut = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_billingBusinessTravels", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_billingBusinessTravels_BusinessTravel_BusinessTravelId",
+                        column: x => x.BusinessTravelId,
+                        principalTable: "BusinessTravel",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_billingBusinessTravels_AspNetUsers_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -371,9 +448,14 @@ namespace leave_management.Migrations
                 column: "OrganizationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AuthorizedUsers_OrganizationId",
-                table: "AuthorizedUsers",
-                column: "OrganizationId");
+                name: "IX_billingBusinessTravels_BusinessTravelId",
+                table: "billingBusinessTravels",
+                column: "BusinessTravelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_billingBusinessTravels_EmployeeId",
+                table: "billingBusinessTravels",
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BusinessTravel_EmployeeId",
@@ -404,6 +486,21 @@ namespace leave_management.Migrations
                 name: "IX_LeaveRequests_RequestingEmployeeId",
                 table: "LeaveRequests",
                 column: "RequestingEmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MedicalCheckUps_EmployeeId",
+                table: "MedicalCheckUps",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MedicalCheckUps_TypeOfMedicalCheckUpId",
+                table: "MedicalCheckUps",
+                column: "TypeOfMedicalCheckUpId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Organization_AuthorizedOrganizationId",
+                table: "Organization",
+                column: "AuthorizedOrganizationId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -424,10 +521,7 @@ namespace leave_management.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "AuthorizedUsers");
-
-            migrationBuilder.DropTable(
-                name: "BusinessTravel");
+                name: "billingBusinessTravels");
 
             migrationBuilder.DropTable(
                 name: "LeaveAllocations");
@@ -436,16 +530,28 @@ namespace leave_management.Migrations
                 name: "LeaveRequests");
 
             migrationBuilder.DropTable(
+                name: "MedicalCheckUps");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "BusinessTravel");
 
             migrationBuilder.DropTable(
                 name: "LeaveTypes");
 
             migrationBuilder.DropTable(
+                name: "TypeOfMedicalCheckUps");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
                 name: "Organization");
+
+            migrationBuilder.DropTable(
+                name: "AuthorizedOrganizations");
         }
     }
 }

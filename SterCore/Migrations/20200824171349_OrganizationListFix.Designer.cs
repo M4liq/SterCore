@@ -10,8 +10,8 @@ using leave_management.Data;
 namespace leave_management.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200824133023_FetchingDataFromLesiu")]
-    partial class FetchingDataFromLesiu
+    [Migration("20200824171349_OrganizationListFix")]
+    partial class OrganizationListFix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

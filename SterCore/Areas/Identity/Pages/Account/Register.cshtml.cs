@@ -10,6 +10,7 @@ using leave_management.Contracts;
 using leave_management.Data;
 using leave_management.Repository;
 using leave_management.Services.Components;
+using leave_management.Services.Components.ORI;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -31,7 +32,8 @@ namespace leave_management.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly IOrganizationRepository _organizationRepostory;
+        private readonly IOrganizationRepository _organizationRepository;
+        private readonly IOrganizationResourceManager _organizationResourceManager;
 
         public RegisterModel(
             UserManager<Employee> userManager,
@@ -39,14 +41,16 @@ namespace leave_management.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmployeeRepository employeeRepository,
             IEmailSender emailSender,
-            IOrganizationRepository organizationRepostory)
+            IOrganizationRepository organizationRepository,
+            IOrganizationResourceManager organizationResourceManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            _organizationRepostory = organizationRepostory;
+            _organizationResourceManager = organizationResourceManager;
             _employeeRepository = employeeRepository;
+            _organizationRepository = organizationRepository;
         }
 
         [BindProperty]
@@ -93,7 +97,7 @@ namespace leave_management.Areas.Identity.Pages.Account
 
             if (roles.Contains("Agent") || roles.Contains("Administrator"))
             {
-                var organizations = await _organizationRepostory.FindAll();
+                var organizations = await _organizationRepository.FindAll();
                 var organizationItems = organizations.Select(q => new SelectListItem
                 {
                     Text = q.Name,
@@ -143,30 +147,29 @@ namespace leave_management.Areas.Identity.Pages.Account
             {
                     var superior = await _userManager.GetUserAsync(HttpContext.User);
                     var roles = await _userManager.GetRolesAsync(superior);
+                    var organization = await _organizationResourceManager.GetCurrentOrganization();
 
-                    var superiorWithOrganization = await _employeeRepository.FindById(superior.Id);
-                    var organizaiton = superiorWithOrganization.Organization;
-
-                    var user = new Employee
-                    {
-                        UserName = Input.Email,
-                        Email = Input.Email,
-                        Firstname = Input.FirstName,
-                        Lastname = Input.LastName,
-                        ChangedPassword = false,
-                        DateJoined = DateTime.Now,
-                        DateOfBirth = DateTime.Now.AddYears(-35).Date
+                var user = new Employee
+                {
+                    UserName = Input.Email,
+                    Email = Input.Email,
+                    Firstname = Input.FirstName,
+                    Lastname = Input.LastName,
+                    ChangedPassword = false,
+                    DateJoined = DateTime.Now,
+                    DateOfBirth = DateTime.Now.AddYears(-35).Date,
+                    OrganizationToken = _organizationResourceManager.GetOrganizationToken()                      
                     };
                
                 if (roles.Contains("Administrator")||roles.Contains("Agent"))
                 {
-                    user.Organization = await _organizationRepostory.FindById(Input.OrganizationId);
+                    user.Organization = await _organizationRepository.FindById(Input.OrganizationId);
                     user.OrganizationId = Input.OrganizationId;
                 }
                 else
                 {
-                    user.Organization = organizaiton;
-                    user.OrganizationId = organizaiton.Id;
+                    user.Organization = organization;
+                    user.OrganizationId = organization.Id;
                 }
 
                 if (roles.Contains("Agent"))
@@ -221,7 +224,7 @@ namespace leave_management.Areas.Identity.Pages.Account
 
                 if (roles.Contains("Agent") || roles.Contains("Administrator"))
                 {
-                    var organizations = await _organizationRepostory.FindAll();
+                    var organizations = await _organizationRepository.FindAll();
                     var organizationItems = organizations.Select(q => new SelectListItem
                     {
                         Text = q.Name,

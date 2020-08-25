@@ -111,7 +111,7 @@ namespace leave_management.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    var organizationToken = _employeeRepository.FindById(user.Id).Result.Organization.OrganizationToken;
+                    var organizationToken = _employeeRepository.FindById(user.Id, true).Result.Organization.OrganizationToken;
 
                     HttpContext.Session.ExtSet("organizationToken", organizationToken);
 
@@ -119,6 +119,7 @@ namespace leave_management.Areas.Identity.Pages.Account
 
                     return LocalRedirect(returnUrl);
                 }
+
                 if (result.RequiresTwoFactor)
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });

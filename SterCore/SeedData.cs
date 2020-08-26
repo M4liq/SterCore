@@ -18,12 +18,13 @@ namespace leave_management
             RoleManager<IdentityRole> roleManager,
             IOrganizationRepository organizationRepository,
             IOrganizationResourceManager organizationManager,
+            IAuthorizedOrganizationRepository authorizedOrganizationRepository,
             ITypeOfMedicalCheckUpRepository typeOfMedicalCheckUp,
             IConfiguration configuration)
         {
             //Architecture based on events would be better
             SeedRoles(roleManager); 
-            SeedUsersAndOrganizations(userManager, organizationManager, organizationRepository, configuration); //setting up both Users and Organizations is very messy
+            SeedUsersAndOrganizations(userManager, organizationManager, organizationRepository, authorizedOrganizationRepository, configuration); //setting up both Users and Organizations is very messy
             SeedMedicalCheckUpTypes(typeOfMedicalCheckUp);
         }
 
@@ -31,12 +32,23 @@ namespace leave_management
             UserManager<Employee> userManager,
             IOrganizationResourceManager organizationManager, 
             IOrganizationRepository organizationRepository, 
+            IAuthorizedOrganizationRepository authorizedOrganizationRepository,
             IConfiguration configuration
             )
         { 
 
             if(userManager.FindByNameAsync("admin@stercore.pl").Result == null) 
             {
+
+                var organizationToken = organizationManager.GenerateToken();
+
+                var initalAuthorizedOrganization = new AuthorizedOrganizations
+                {
+                    AuthorizedOrganizationToken = organizationToken
+                };
+
+                var successAuthOrg = authorizedOrganizationRepository.Create(initalAuthorizedOrganization).Result;
+
                 var initalOrganization = new Organization 
                 {
                     Name = "Westapp",
@@ -44,20 +56,21 @@ namespace leave_management
                     TaxId = "5751900764",
                     Street = "Wiśniowa",
                     HouseNumber = "11",
-                    City = "Lubliniec",
-                    OrganizationToken = organizationManager.GenerateToken()
-                 
+                    City = "Lubliniec",   
                 };
 
-                var success = organizationRepository.Create(initalOrganization).Result;
 
-                if (success)
+                var successOrg = organizationRepository.Create(initalOrganization, organizationToken).Result;
+
+
+                if (successOrg)
                 {
                     var user = new Employee
                     {
                         UserName = "admin@stercore.pl",
                         Email = "admin@stercore.pl",
                         OrganizationId = initalOrganization.Id,
+                        OrganizationToken = organizationToken, //adding organization token, cause it is not handled by user manager
                         ChangedPassword = true
                     };
 

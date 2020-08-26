@@ -19,7 +19,7 @@ namespace leave_management.Models
         public string Street { get; set; }
         [Display(Name = "Miasto")]
         public string City { get; set; }
-        [Display(Name = "Miasto")]
+        [Display(Name = "Numer Domu")]
         public string HouseNumber { get; set; }
         [Display(Name = "Data utworzenia")]
         public DateTime DateCreated { get; set; }
@@ -27,6 +27,7 @@ namespace leave_management.Models
         public bool? Disabled { get; set; }
         [Display(Name = "Kod pocztowy")]
         public string ZipCode { get; set; }
+        public int AuthorizedOrganizationId { get; set; }
     }
 
     public class OrganizationsVM

@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using leave_management.Models;
+using System.Net;
 using leave_management.Services.Components.ORI;
 
 namespace leave_management.Data
@@ -26,5 +27,6 @@ namespace leave_management.Data
         public DbSet<TypeOfMedicalCheckUp> TypeOfMedicalCheckUps { get; set; }
         public DbSet<MedicalCheckUp> MedicalCheckUps { get; set; }
         public DbSet<Document> Documents { get; set; }
+        public DbSet<AuthorizedOrganizations> AuthorizedOrganizations { get; set; }
     }
 }

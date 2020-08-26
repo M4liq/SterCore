@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace leave_management.Contracts
 {
-    public interface IOrganizationRepository : IRepositoryBase<Organization>
+    public interface IAuthorizedOrganizationRepository : IRepositoryBase<AuthorizedOrganizations>
     {
-        public Task<bool> Create(Organization organization, string organizationToken);
     }
 }

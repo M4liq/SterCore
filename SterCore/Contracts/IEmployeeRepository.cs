@@ -11,6 +11,7 @@ namespace leave_management.Contracts
     {
         Task<ICollection<Employee>> FindAll();
         Task<Employee> FindById(string id);
+        Task<Employee> FindById(string id, bool disableORI);
         Task<bool> Exists(string id);
         Task<bool> Create(Employee entity);
         Task<bool> Update(Employee entity);

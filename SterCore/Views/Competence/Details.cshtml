@@ -1,0 +1,35 @@
+﻿@model leave_management.Models.CompetenceVM
+
+@{
+    ViewData["Title"] = "Szczegóły przypisanej kompetencji";
+}
+
+    <h1>Szczegóły przypisanej kompetencji</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EmployeeFullName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EmployeeFullName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CompetenceName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CompetenceName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateValidUntil)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DateValidUntil)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a class="btn btn-block btn-warning" asp-action="Edit" asp-route-id="@Model.Id" asp-route-employeeId="@Model.EmployeeId"><i class="fa fa-pencil"></i>Edytuj</a>
+    <a class="btn btn-block btn-primary" asp-action="Index"> <i class="fa fa-arrow-alt-circle-left"></i> Powrót do podsumowania</a>
+</div>

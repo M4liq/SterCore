@@ -53,7 +53,17 @@ namespace leave_management.Controllers
         // GET: Competence/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            return View();
+            var success = await _competenceRepository.Exists(id);
+            if (!success)
+            {
+                return NotFound();
+            }
+            var competence = await _competenceRepository.FindById(id);
+            var competenceTypes = _competenceTypeRepository.FindAll().Result;
+            var model = _mapper.Map<CompetenceVM>(competence);
+            model.EmployeeFullName = _employeeRepo.FindById(model.EmployeeId).Result.Lastname + " " + _employeeRepo.FindById(model.EmployeeId).Result.Firstname;
+            model.CompetenceName = competenceTypes.FirstOrDefault(q => q.Id == competence.CompetenceTypeId).name;
+            return View(model);
         }
 
         // GET: Competence/Create

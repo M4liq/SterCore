@@ -151,7 +151,7 @@ namespace leave_management.Areas.Identity.Pages.Account
 
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+                ModelState.AddModelError(string.Empty, "Email weryfikacyjny został wysłany. Sprawdź swoją skrzynkę e-mail.");
             }
 
             var userId = await _userManager.GetUserIdAsync(user);
@@ -166,7 +166,7 @@ namespace leave_management.Areas.Identity.Pages.Account
                 "Confirm your email",
                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-            ModelState.AddModelError(string.Empty, "Verification email sent. Please check your email.");
+            ModelState.AddModelError(string.Empty, "Email weryfikacyjny został wysłany. Sprawdź swoją skrzynkę e-mail.");
             return Page();
         }
     }

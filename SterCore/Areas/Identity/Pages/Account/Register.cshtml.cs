@@ -157,19 +157,21 @@ namespace leave_management.Areas.Identity.Pages.Account
                     Lastname = Input.LastName,
                     ChangedPassword = false,
                     DateJoined = DateTime.Now,
-                    DateOfBirth = DateTime.Now.AddYears(-35).Date,
-                    OrganizationToken = _organizationResourceManager.GetOrganizationToken()                      
+                    DateOfBirth = DateTime.Now.AddYears(-35).Date,                    
                     };
                
                 if (roles.Contains("Administrator")||roles.Contains("Agent"))
                 {
-                    user.Organization = await _organizationRepository.FindById(Input.OrganizationId);
+                    var userOrganization = await _organizationRepository.FindById(Input.OrganizationId);
+                    user.Organization = userOrganization;
                     user.OrganizationId = Input.OrganizationId;
+                    user.OrganizationToken = userOrganization.OrganizationToken;
                 }
                 else
                 {
                     user.Organization = organization;
                     user.OrganizationId = organization.Id;
+                    user.OrganizationToken = organization.OrganizationToken;
                 }
 
                 if (roles.Contains("Agent"))
@@ -201,6 +203,9 @@ namespace leave_management.Areas.Identity.Pages.Account
                 var result = await _userManager.CreateAsync(user, "P@ssword1");
                 if (result.Succeeded)
                 {
+                    if (Input.UserRoleId == null)
+                        Input.UserRoleId = "Employee";
+
                     _userManager.AddToRoleAsync(user, Input.UserRoleId).Wait();
                     _logger.LogInformation("User created a new account without password.");
 

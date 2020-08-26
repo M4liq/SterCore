@@ -155,7 +155,6 @@ namespace leave_management.Repository
 
             if (_organizationManager.HasPrivilegeGranted())
             {
-                //TO DO, there's a bug with a setting authorizedOrganizationId. It equals 0 when is edited by admin 
                 _db.Organization.Update(entity);
                 return await Save();
             }

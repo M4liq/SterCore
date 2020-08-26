@@ -119,8 +119,8 @@ namespace leave_management.Repository
         {
             //ORI not included 
 
-            var roles = await _db.Roles.ToListAsync();
-            return roles.Where(q => q.Name != "Administrator");
+            var roles = await _db.Roles.Where(q => q.Name != "Agent" && q.Name != "Administrator").ToListAsync();
+            return roles;
         }
 
         public async Task<bool> Save()

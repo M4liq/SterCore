@@ -27,6 +27,7 @@ namespace leave_management.Models
         public bool? Disabled { get; set; }
         [Display(Name = "Kod pocztowy")]
         public string ZipCode { get; set; }
+        public int AuthorizedOrganizationId { get; set; }
     }
 
     public class OrganizationsVM

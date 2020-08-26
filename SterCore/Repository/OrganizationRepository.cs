@@ -29,9 +29,23 @@ namespace leave_management.Repository
         {
             //ORI separating data beetween organizations
             var token = _organizationManager.GetOrganizationToken();
-
             entity.OrganizationToken = _organizationManager.GenerateToken(); 
-            entity.AuthorizedOrganizationId = await _organizationManager.GetAuthorizedOrganizationId(token);
+
+            var authorizedOrganizationId = await _organizationManager.GetAuthorizedOrganizationId(token);
+
+            //If our organization is not setted as authorized organization our organization must be set as superior organization 
+            //for created organization otherwise getting access to created organization would be impossible 
+            if (authorizedOrganizationId == -1)
+            {
+                var authorize = new AuthorizedOrganizations
+                {
+                    AuthorizedOrganizationToken = token
+                };
+
+                entity.AuthorizedOrganizations = authorize;
+            }
+            else
+                entity.AuthorizedOrganizationId = authorizedOrganizationId;
 
             await _db.Organization.AddAsync(entity);
             return await Save();
@@ -39,6 +53,7 @@ namespace leave_management.Repository
 
         public async Task<bool> Create(Organization entity, string organizationToken)
         {
+
             //ORI separating data beetween organizations 
             //Overloaded method enables creation of organization when ORI can not generate token. Token can be set manuall. Feg in Data seeding
             entity.OrganizationToken = organizationToken;
@@ -50,8 +65,16 @@ namespace leave_management.Repository
 
         public async Task<bool> Delete(Organization entity)
         {
-            var token = _organizationManager.GetOrganizationToken();
 
+            //Allow administrator deleting all organizations 
+
+            if (_organizationManager.HasPrivilegeGranted())
+            {
+                _db.Organization.Remove(entity);
+                return await Save();
+            }
+
+            var token = _organizationManager.GetOrganizationToken();
             var validate = await _db.Organization
                 .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == token)
                 .AnyAsync(q => q.Id == entity.Id);
@@ -65,6 +88,12 @@ namespace leave_management.Repository
 
         public async Task<ICollection<Organization>> FindAll()
         {
+            //Allow administrator accessing all organizations
+            if (_organizationManager.HasPrivilegeGranted())
+            {
+                return await _db.Organization.ToListAsync();
+            }
+
             //ORI getting token to find organization scope
             var organizationToken = _organizationManager.GetOrganizationToken();
 
@@ -79,6 +108,12 @@ namespace leave_management.Repository
 
         public async Task<Organization> FindById(int id)
         {
+            //Allow administrator accessing all organizations
+            if (_organizationManager.HasPrivilegeGranted())
+            {
+                return await _db.Organization.FirstOrDefaultAsync(q => q.Id == id);
+            }
+
             //ORI getting token to find organization scope
             var organizationToken = _organizationManager.GetOrganizationToken();
 
@@ -93,6 +128,12 @@ namespace leave_management.Repository
 
         public async Task<bool> Exists(int id)
         {
+            //Allow administrator accessing all organizations
+            if (_organizationManager.HasPrivilegeGranted())
+            {
+                return await _db.Organization.AnyAsync(q => q.Id == id); ;
+            }
+
             var organizationToken = _organizationManager.GetOrganizationToken();
             var exists = await _db.Organization
 
@@ -111,6 +152,12 @@ namespace leave_management.Repository
 
         public async Task<bool> Update(Organization entity)
         {
+
+            if (_organizationManager.HasPrivilegeGranted())
+            {
+                _db.Organization.Update(entity);
+                return await Save();
+            }
 
             var organizationToken = _organizationManager.GetOrganizationToken();
             entity.AuthorizedOrganizationId = await _organizationManager.GetAuthorizedOrganizationId(organizationToken);

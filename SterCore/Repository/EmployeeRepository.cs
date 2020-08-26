@@ -83,6 +83,30 @@ namespace leave_management.Repository
             return employee;
         }
 
+        public async Task<Employee> FindById(string id, bool disableORI)
+        {
+            if(disableORI)
+            {
+                var employee = await _db.Employees.Include(q => q.Organization)
+                    .FirstOrDefaultAsync(q => q.Id == id);
+                return employee;
+            }
+            else
+            {
+                //ORI getting token to find organization scope
+                var organizationToken = _organizationManager.GetOrganizationToken();
+
+                var employee = await _db.Employees.Include(q => q.Organization)
+
+                    //ORI Filtring organizations by their tokens to get scope
+                    .Where(q => q.OrganizationToken == organizationToken)
+
+                    .FirstOrDefaultAsync(q => q.Id == id);
+                return employee;
+            }
+
+        }
+
         public async Task<IEnumerable<IdentityRole>> GetAdministratorIdentityRoles()
         {   
             //ORI not included 
@@ -95,8 +119,8 @@ namespace leave_management.Repository
         {
             //ORI not included 
 
-            var roles = await _db.Roles.ToListAsync();
-            return roles.Where(q => q.Name != "Administrator");
+            var roles = await _db.Roles.Where(q => q.Name != "Agent" && q.Name != "Administrator").ToListAsync();
+            return roles;
         }
 
         public async Task<bool> Save()

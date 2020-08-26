@@ -43,7 +43,7 @@
                 @Html.DisplayFor(modelItem => item.EmployeeFullName)
             </td>
             <td>
-                <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id" asp-route-typeOfMedicalCheckUpId="@item.TypeOfMedicalCheckUpId" asp-route-employeeId="@item.EmployeeId">
+                <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id" asp-route-typeOfMedicalCheckUpId="@item.TypeOfMedicalCheckUpId" asp-route-employeeId="@item.EmployeeId" asp-route-organizationToken="@item.OrganizationToken">
                     <i class="fa fa-pencil-alt" aria-hidden="true"></i>
                 </a>
                 <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">

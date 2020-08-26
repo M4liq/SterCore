@@ -56,7 +56,8 @@ namespace leave_management.Controllers
                     EmployeeId = item.EmployeeId,
                     TypeOfMedicalCheckUpId = item.TypeOfMedicalCheckUpId,
                     IsDisplayedToEmployee = item.IsDisplayedToEmployee,
-                    IsDisplayedToSupervisor = item.IsDisplayedToSupervisor
+                    IsDisplayedToSupervisor = item.IsDisplayedToSupervisor,
+                    OrganizationToken = item.OrganizationToken
                 });
             }
 
@@ -145,7 +146,7 @@ namespace leave_management.Controllers
         }
 
         // GET: MedicalCheckUp/Edit/5
-        public async Task<ActionResult> Edit(int id, int typeOfMedicalCheckUpId, string employeeId)
+        public async Task<ActionResult> Edit(int id, int typeOfMedicalCheckUpId, string employeeId, string organizationToken)
         {
             var success = await _medicalCheckUpRepository.Exists(id);
             if (!success)
@@ -164,6 +165,7 @@ namespace leave_management.Controllers
             model.TypeOfMedicalCheckUpId = typeOfMedicalCheckUpId;
             model.isDisplayedToSupervisors = SelectListWithTrueOrFalse;
             model.isDisplayedToEmployees = SelectListWithTrueOrFalse;
+            model.OrganizationToken = organizationToken;
             return View(model);
         }
 

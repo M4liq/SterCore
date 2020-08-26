@@ -32,6 +32,8 @@ namespace leave_management.Models
         public int TypeOfMedicalCheckUpId { get; set; }
         [Display(Name = "Rodzaj badania")]
         public string TypeOfMedicalCheckUpName { get; set; }
+        public string OrganizationToken { get; set; }
+
 
 
     }
@@ -88,6 +90,7 @@ namespace leave_management.Models
         public int TypeOfMedicalCheckUpId { get; set; }
         public IEnumerable<SelectListItem> isDisplayedToEmployees { get; set; }
         public IEnumerable<SelectListItem> isDisplayedToSupervisors { get; set; }
+        public string OrganizationToken { get; set; }
     }
 
 }

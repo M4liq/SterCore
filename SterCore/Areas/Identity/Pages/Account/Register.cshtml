@@ -40,18 +40,6 @@
                 </div>
             </div>
             <span asp-validation-for="Input.Email" class="text-danger"></span>
-            @if (SignInManager.IsSignedIn(User))
-            {
-                if (User.IsInRole("Administrator") || User.IsInRole("Agent"))
-                {
-                    <div class="form-group">
-                        <label asp-for="Input.OrganizationId" class="control-label"></label>
-                        <div class="input-group mb-3">
-                            @Html.DropDownListFor(q => q.Input.OrganizationId, new SelectList(Model.Organizations as IEnumerable<SelectListItem>, "Value", "Text"), "Wybierz organizacje", new { @class = "form-control" })
-                        </div>
-                    </div>
-                }
-            }
 
             @if (SignInManager.IsSignedIn(User))
             {

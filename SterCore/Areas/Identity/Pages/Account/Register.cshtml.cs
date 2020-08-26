@@ -94,21 +94,6 @@ namespace leave_management.Areas.Identity.Pages.Account
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var roles = await _userManager.GetRolesAsync(user);
             
-
-            if (roles.Contains("Agent") || roles.Contains("Administrator"))
-            {
-                var organizations = await _organizationRepository.FindAll();
-                var organizationItems = organizations.Select(q => new SelectListItem
-                {
-                    Text = q.Name,
-                    Value = q.Id.ToString()
-                });
-
-                Organizations = organizationItems;
-
-            }
-
-
             if (roles.Contains("Agent"))
             {
                 var systemRoles = await _employeeRepository.GetAgentIdentityRoles();
@@ -157,22 +142,13 @@ namespace leave_management.Areas.Identity.Pages.Account
                     Lastname = Input.LastName,
                     ChangedPassword = false,
                     DateJoined = DateTime.Now,
-                    DateOfBirth = DateTime.Now.AddYears(-35).Date,                    
-                    };
-               
-                if (roles.Contains("Administrator")||roles.Contains("Agent"))
-                {
-                    var userOrganization = await _organizationRepository.FindById(Input.OrganizationId);
-                    user.Organization = userOrganization;
-                    user.OrganizationId = Input.OrganizationId;
-                    user.OrganizationToken = userOrganization.OrganizationToken;
-                }
-                else
-                {
-                    user.Organization = organization;
-                    user.OrganizationId = organization.Id;
-                    user.OrganizationToken = organization.OrganizationToken;
-                }
+                    DateOfBirth = DateTime.Now.AddYears(-35).Date,
+                    Organization = organization,
+                    OrganizationId = organization.Id,
+                    OrganizationToken = organization.OrganizationToken
+            };
+
+
 
                 if (roles.Contains("Agent"))
                 {

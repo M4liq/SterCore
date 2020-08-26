@@ -111,12 +111,20 @@ namespace leave_management.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    var organizationToken = _employeeRepository.FindById(user.Id, true).Result.Organization.OrganizationToken;
-
-                    HttpContext.Session.ExtSet("organizationToken", organizationToken);
+                    var organization =  _employeeRepository.FindById(user.Id, true).Result.Organization;
 
                     _logger.LogInformation("User logged in.");
 
+                    if (_userManager.GetRolesAsync(user).Result.Contains("Administrator") ||
+                        _userManager.GetRolesAsync(user).Result.Contains("Agent"))
+                    {
+                        HttpContext.Session.ExtSet("organizationToken", organization.OrganizationToken);
+                        HttpContext.Session.ExtSet<string>("organizationName", organization.Name);
+                        return RedirectToPage("./ChangeOrganizationView");
+                    }
+
+                    HttpContext.Session.ExtSet<string>("organizationName", organization.Name);
+                    HttpContext.Session.ExtSet("organizationToken", organization.OrganizationToken);
                     return LocalRedirect(returnUrl);
                 }
 

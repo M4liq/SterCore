@@ -99,7 +99,7 @@ namespace leave_management.Repository
                 throw new UnauthorizedAccessException();
             }
 
-            _db.Documents.Update(entity);
+           _db.Documents.Update(entity);
             return await Save();
         }
     }

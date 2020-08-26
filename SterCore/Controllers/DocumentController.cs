@@ -112,7 +112,7 @@ namespace leave_management.Controllers
         }
 
         // GET: Document/Edit/5
-        public async Task<ActionResult> Edit(int id, string employeeId, DateTime dateCreated)
+        public async Task<ActionResult> Edit(int id, string employeeId, string organizationToken, DateTime dateCreated)
         {
             var success = await _documentsRepository.Exists(id);
             if (!success)
@@ -123,6 +123,7 @@ namespace leave_management.Controllers
             var model = _mapper.Map<CreateDocumentVM>(document);
             model.EmployeeId = employeeId;
             model.DateCreated = dateCreated;
+            model.OrganizationToken = organizationToken;
             return View(model);
         }
 

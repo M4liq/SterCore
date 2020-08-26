@@ -27,6 +27,7 @@ namespace leave_management.Models
         public bool ShowSelectedDepartment { get; set; }
         [Display(Name = "Pokaż całej firmie")]
         public bool ShowCompanyWide { get; set; }
+        public string OrganizationToken { get; set; }
     }
     public class CreateDocumentVM
     {
@@ -51,5 +52,6 @@ namespace leave_management.Models
         public bool ShowSelectedDepartment { get; set; }
         [Display(Name = "Pokaż całej firmie")]
         public bool ShowCompanyWide { get; set; }
+        public string OrganizationToken { get; set; }
     }
 }

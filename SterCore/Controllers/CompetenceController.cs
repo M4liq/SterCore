@@ -43,8 +43,10 @@ namespace leave_management.Controllers
                    Id = item.Id,
                    CompetenceTypeId = item.CompetenceTypeId,
                    DateValidUntil = item.DateValidUntil,
+                   OrganizationToken = item.OrganizationToken,
                    EmployeeFullName = employees.FirstOrDefault(q => q.Id == item.EmployeeId).Firstname.ToString() + " " + employees.FirstOrDefault(q => q.Id == item.EmployeeId).Lastname.ToString(),
                    CompetenceName = competenceTypes.FirstOrDefault(q=>q.Id==item.CompetenceTypeId).name
+                   
                 });
             }
             return View(model);
@@ -121,7 +123,7 @@ namespace leave_management.Controllers
         }
 
         // GET: Competence/Edit/5
-        public async Task<ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(int id, string organizationToken, string employeeId)
         {
             var success = await _competenceRepository.Exists(id);
             if (!success)
@@ -132,6 +134,7 @@ namespace leave_management.Controllers
             var model = _mapper.Map<CreateCompetenceVM>(competence);
             model.EmployeeId = competence.EmployeeId;
             model.CompetenceTypeId = competence.CompetenceTypeId;
+            model.OrganizationToken = organizationToken;
             return View(model);
         }
 

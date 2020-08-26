@@ -20,6 +20,8 @@ namespace leave_management.Models
         public string CompetenceName{ get; set; }
         [Display(Name = "Ważne do")]
         public DateTime DateValidUntil { get; set; }
+        public string OrganizationToken { get; set; }
+
     }
     public class CreateCompetenceVM
     {
@@ -37,5 +39,7 @@ namespace leave_management.Models
         public IEnumerable<SelectListItem> CompetenceTypes { get; set; }
         [Display(Name = "Ważne do")]
         public DateTime DateValidUntil { get; set; }
+        public string OrganizationToken { get; set; }
+
     }
 }

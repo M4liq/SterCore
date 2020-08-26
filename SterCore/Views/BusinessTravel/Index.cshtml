@@ -64,7 +64,7 @@
             </th>
 
             <td>
-                <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id" asp-route-employeeId="@item.EmployeeId"><i class="fa fa-pencil-alt" aria-hidden="true"></i></a>
+                <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id" asp-route-employeeId="@item.EmployeeId" asp-route-organizationToken="@item.OrganizationToken"><i class="fa fa-pencil-alt" aria-hidden="true"></i></a>
 
 
                 <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">

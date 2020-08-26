@@ -19,6 +19,7 @@ namespace leave_management.Models
         public int Amount { get; set; }
         [Display(Name = "Czy wypłacono kwotę?")]
         public bool IsPaidOut { get; set; }
+        public string OrganizationToken { get; set; }
 
     }
 
@@ -36,5 +37,6 @@ namespace leave_management.Models
         public int Amount { get; set; }
         [Display(Name = "Czy wypłacono kwotę?")]
         public bool IsPaidOut { get; set; }
+        public string OrganizationToken { get; set; }
     }
 }

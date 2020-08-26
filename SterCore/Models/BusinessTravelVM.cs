@@ -45,6 +45,7 @@ namespace leave_management.Models
         public EmployeeVM Employee { get; set; }
         [Required]
         public string EmployeeId { get; set; }
+        public string OrganizationToken { get; set; }
         public IEnumerable<SelectListItem> Employees { get; set; }
     }
 }

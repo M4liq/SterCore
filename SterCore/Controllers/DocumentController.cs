@@ -43,7 +43,8 @@ namespace leave_management.Controllers
                     ShowCompanyWide = item.ShowCompanyWide,
                     ShowSelectedDepartment = item.ShowSelectedDepartment,
                     ShowSelectedEmployee = item.ShowSelectedEmployee,
-                    EmployeeFullName = employees.FirstOrDefault(q => q.Id == item.EmployeeId).Firstname.ToString() + " " + employees.FirstOrDefault(q => q.Id == item.EmployeeId).Lastname.ToString()
+                    EmployeeFullName = employees.FirstOrDefault(q => q.Id == item.EmployeeId).Firstname.ToString() + " " + employees.FirstOrDefault(q => q.Id == item.EmployeeId).Lastname.ToString(),
+                    OrganizationToken = item.OrganizationToken
                 });
             }
             return View(model);

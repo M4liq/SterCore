@@ -123,22 +123,43 @@ namespace leave_management.Controllers
         // GET: Competence/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var success = await _competenceRepository.Exists(id);
+            if (!success)
+            {
+                return NotFound();
+            }
+            var competence = await _competenceRepository.FindById(id);
+            var model = _mapper.Map<CreateCompetenceVM>(competence);
+            model.EmployeeId = competence.EmployeeId;
+            model.CompetenceTypeId = competence.CompetenceTypeId;
+            return View(model);
         }
 
         // POST: Competence/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(CreateCompetenceVM model)
         {
             try
             {
-                // TODO: Add update logic here
+                // TODO: Add insert logic here
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                var competence = _mapper.Map<Competence>(model);
+                var isSuccess = await _competenceRepository.Update(competence);
+                if (!isSuccess)
+                {
+                    ModelState.AddModelError("", "Something went wrong");
+                    return View(model);
+                }
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                ModelState.AddModelError("", "Something went wrong");
                 return View();
             }
         }

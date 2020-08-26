@@ -76,7 +76,7 @@ namespace leave_management.Repository
 
             var token = _organizationManager.GetOrganizationToken();
             var validate = await _db.Organization
-                .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == token)
+                .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == token || q.OrganizationToken == token)
                 .AnyAsync(q => q.Id == entity.Id);
 
             if(validate)
@@ -99,7 +99,7 @@ namespace leave_management.Repository
 
             //ORI Filtring leave types by their tokens to get scope
             var organizations = _db.Organization
-                .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == organizationToken);
+                .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == organizationToken || q.OrganizationToken == organizationToken);
 
             return await organizations.ToListAsync();
 
@@ -120,7 +120,7 @@ namespace leave_management.Repository
             var organization = _db.Organization
 
             //ORI Filtring organizations by their tokens to get scope
-                .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == organizationToken);
+                .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == organizationToken || q.OrganizationToken == organizationToken);
              
 
             return await organization.FirstOrDefaultAsync(q => q.Id == id); 
@@ -138,7 +138,7 @@ namespace leave_management.Repository
             var exists = await _db.Organization
 
             //ORI Filtring organizations by their tokens to get scope
-                .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == organizationToken)
+                .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == organizationToken || q.OrganizationToken == organizationToken)
                 .AnyAsync(q => q.Id == id);
 
             return exists;
@@ -163,7 +163,7 @@ namespace leave_management.Repository
             entity.AuthorizedOrganizationId = await _organizationManager.GetAuthorizedOrganizationId(organizationToken);
 
             var validate = await _db.Organization
-                .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == organizationToken)
+                .Where(q => q.AuthorizedOrganizations.AuthorizedOrganizationToken == organizationToken || q.OrganizationToken == organizationToken)
                 .AnyAsync(q => q.Id == entity.Id);
 
             if(validate)

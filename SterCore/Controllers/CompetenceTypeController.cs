@@ -34,7 +34,14 @@ namespace leave_management.Controllers
         // GET: CompetenceType/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            return View();
+            var success = await _competenceTypeRepository.Exists(id);
+            if (!success)
+            {
+                return NotFound();
+            }
+            var comptenceType = await _competenceTypeRepository.FindById(id);
+            var model = _mapper.Map<CompetenceTypeVM>(comptenceType);
+            return View(model);
         }
 
         // GET: CompetenceType/Create

@@ -126,7 +126,17 @@ namespace leave_management.Controllers
         // GET: CompetenceType/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            var competenceType = await _competenceTypeRepository.FindById(id);
+            if (competenceType == null)
+            {
+                return NotFound();
+            }
+            var isSuccess = await _competenceTypeRepository.Delete(competenceType);
+            if (!isSuccess)
+            {
+                return BadRequest();
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: CompetenceType/Delete/5

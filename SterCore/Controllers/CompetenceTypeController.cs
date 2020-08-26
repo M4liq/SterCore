@@ -82,7 +82,7 @@ namespace leave_management.Controllers
         }
 
         // GET: CompetenceType/Edit/5
-        public async Task<ActionResult> Edit(int id)
+        public async Task<ActionResult> Edit(int id, string organizationToken)
         {
             var success = await _competenceTypeRepository.Exists(id);
             if (!success)
@@ -91,6 +91,7 @@ namespace leave_management.Controllers
             }
             var competenceType = await _competenceTypeRepository.FindById(id);
             var model = _mapper.Map<CompetenceTypeVM>(competenceType);
+            model.OrganizationToken = organizationToken;
             return View(model);
         }
 

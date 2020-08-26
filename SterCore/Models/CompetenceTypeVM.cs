@@ -11,5 +11,6 @@ namespace leave_management.Models
         public int Id { get; set; }
         [Display(Name = "Nazwa kompetencji")]
         public string name { get; set; }
+        public string OrganizationToken { get; set; }
     }
 }

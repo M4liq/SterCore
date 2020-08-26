@@ -1,5 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using leave_management.Data
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @inject SignInManager<Employee> SignInManager
 @inject UserManager<Employee> UserManager
 <!DOCTYPE html>
@@ -160,7 +162,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <a href="#" class="brand-link">
                 @*<img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
                     style="opacity: .8">*@
-                <span class="brand-text font-weight-light">Leave Management</span>
+                <span class="brand-text font-weight-light">@HttpContextAccessor.HttpContext.Session.GetString("organizationName")</span>
             </a>
 
             <!-- Sidebar -->
@@ -187,7 +189,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         {
                             if (User.IsInRole("Administrator") || User.IsInRole("Agent") || User.IsInRole("Employer"))
                             {
-                                <li class="nav-item has-treeview menu-open">
+                                <li class="nav-item has-treeview">
                                     <a href="#" class="nav-link active">
                                         <i class="fas fa-user-lock nav-icon"></i>
                                         <p>
@@ -211,7 +213,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </ul>
                                 </li>
 
-                                <li class="nav-item has-treeview menu-open">
+                                <li class="nav-item has-treeview">
                                     <a href="#" class="nav-link active">
                                         <i class="fas fa-plane nav-icon"></i>
                                         <p>
@@ -252,7 +254,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="nav-item has-treeview menu-open">
+                                <li class="nav-item has-treeview">
                                     <a href="#" class="nav-link active">
                                         <i class="fas fa-building nav-icon"></i>
                                         <p>
@@ -269,7 +271,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="nav-item has-treeview menu-open">
+                                <li class="nav-item has-treeview">
                                     <a href="#" class="nav-link active">
                                         <i class="fas fa-folder-open nav-icon"></i>
                                         <p>
@@ -288,7 +290,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </li>
                                 if (User.IsInRole("Administrator") || User.IsInRole("Agent"))
                                 {
-                                    <li class="nav-item has-treeview menu-open">
+                                    <li class="nav-item has-treeview">
                                         <a href="#" class="nav-link active">
                                             <i class="fas fa-user-lock nav-icon"></i>
                                             <p>

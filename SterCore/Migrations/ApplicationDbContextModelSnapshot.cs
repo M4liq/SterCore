@@ -324,6 +324,90 @@ namespace leave_management.Migrations
                     b.ToTable("BusinessTravel");
                 });
 
+            modelBuilder.Entity("leave_management.Data.Competence", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CompetenceTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateValidUntil")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OrganizationToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompetenceTypeId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Competences");
+                });
+
+            modelBuilder.Entity("leave_management.Data.CompetenceType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("OrganizationToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CompetenceTypes");
+                });
+
+            modelBuilder.Entity("leave_management.Data.Document", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OrganizationToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ShowCompanyWide")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ShowSelectedDepartment")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ShowSelectedEmployee")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Documents");
+                });
+
             modelBuilder.Entity("leave_management.Data.LeaveAllocations", b =>
                 {
                     b.Property<int>("Id")
@@ -639,6 +723,26 @@ namespace leave_management.Migrations
                 });
 
             modelBuilder.Entity("leave_management.Data.BusinessTravel", b =>
+                {
+                    b.HasOne("leave_management.Data.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+                });
+
+            modelBuilder.Entity("leave_management.Data.Competence", b =>
+                {
+                    b.HasOne("leave_management.Data.CompetenceType", "CompetenceType")
+                        .WithMany()
+                        .HasForeignKey("CompetenceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("leave_management.Data.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+                });
+
+            modelBuilder.Entity("leave_management.Data.Document", b =>
                 {
                     b.HasOne("leave_management.Data.Employee", "Employee")
                         .WithMany()

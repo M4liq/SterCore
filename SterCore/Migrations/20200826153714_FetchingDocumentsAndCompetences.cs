@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace leave_management.Migrations
 {
-    public partial class OrganizationListFix : Migration
+    public partial class FetchingDocumentsAndCompetences : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,6 +32,20 @@ namespace leave_management.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AuthorizedOrganizations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CompetenceTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrganizationToken = table.Column<string>(nullable: true),
+                    name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CompetenceTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -272,6 +286,60 @@ namespace leave_management.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Competences",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrganizationToken = table.Column<string>(nullable: true),
+                    EmployeeId = table.Column<string>(nullable: true),
+                    CompetenceTypeId = table.Column<int>(nullable: false),
+                    DateValidUntil = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Competences", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Competences_CompetenceTypes_CompetenceTypeId",
+                        column: x => x.CompetenceTypeId,
+                        principalTable: "CompetenceTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Competences_AspNetUsers_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Documents",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrganizationToken = table.Column<string>(nullable: true),
+                    DocumentName = table.Column<string>(nullable: true),
+                    EmployeeId = table.Column<string>(nullable: true),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    ShowSelectedEmployee = table.Column<bool>(nullable: false),
+                    ShowSelectedDepartment = table.Column<bool>(nullable: false),
+                    ShowCompanyWide = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Documents", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Documents_AspNetUsers_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LeaveAllocations",
                 columns: table => new
                 {
@@ -463,6 +531,21 @@ namespace leave_management.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Competences_CompetenceTypeId",
+                table: "Competences",
+                column: "CompetenceTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Competences_EmployeeId",
+                table: "Competences",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Documents_EmployeeId",
+                table: "Documents",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LeaveAllocations_EmployeeId",
                 table: "LeaveAllocations",
                 column: "EmployeeId");
@@ -524,6 +607,12 @@ namespace leave_management.Migrations
                 name: "billingBusinessTravels");
 
             migrationBuilder.DropTable(
+                name: "Competences");
+
+            migrationBuilder.DropTable(
+                name: "Documents");
+
+            migrationBuilder.DropTable(
                 name: "LeaveAllocations");
 
             migrationBuilder.DropTable(
@@ -537,6 +626,9 @@ namespace leave_management.Migrations
 
             migrationBuilder.DropTable(
                 name: "BusinessTravel");
+
+            migrationBuilder.DropTable(
+                name: "CompetenceTypes");
 
             migrationBuilder.DropTable(
                 name: "LeaveTypes");

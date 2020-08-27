@@ -18,6 +18,12 @@ using leave_management.Mappings;
 using System;
 using leave_management.Services.Components;
 using leave_management.Services.Components.ORI;
+using leave_management.Services.Extensions;
+using leave_management.Services.DataSeeds;
+using leave_management.Services.DataSeeds.Contracts;
+using System.Collections;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
+using leave_management.Data.Seeds;
 
 namespace leave_management
 {
@@ -33,11 +39,13 @@ namespace leave_management
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {   
+
             if(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
             {
               services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                    Configuration.GetConnectionString("AzureConnection")));
+                Environment.SetEnvironmentVariable("ADMINISTRATOR_PASSWORD", Configuration["AdministratorPSWD"]);
                 services.BuildServiceProvider().GetService<ApplicationDbContext>().Database.Migrate();
             }
             else
@@ -62,6 +70,16 @@ namespace leave_management
             services.AddScoped<ICompetenceRepository, CompetenceRepository>();
             services.AddScoped<ICompetenceTypeRepository, CompetenceTypeRepository>();
 
+            //Initializind Data Seeding and Generic List required to handle Seeds
+            services.AddScoped<ISeed, Seed>();
+            services.AddScoped(typeof(IList<>), typeof(List<>));
+
+            //Place to initialize Data Seeds
+            services.AddScoped<IDataSeed, SeedRoles>();
+            services.AddScoped<IDataSeed, SeedUsersAndOrganizations>();
+            services.AddScoped<IDataSeed, SeedMedicalCheckUpTypes>();
+
+
 
             services.AddAutoMapper(typeof(Maps));
 
@@ -84,12 +102,8 @@ namespace leave_management
         public void Configure(
             IApplicationBuilder app, 
             IWebHostEnvironment env,
-            UserManager<Employee> userManager,
-            RoleManager<IdentityRole> roleManager,
-            IOrganizationResourceManager organizationManager,
-            IOrganizationRepository organizationRepository,
-            IAuthorizedOrganizationRepository authorizedOrganizationRepository,
-            ITypeOfMedicalCheckUpRepository typeOfMedicalCheckUpRepository
+            ISeed seed
+
         )
         {
             if (env.IsDevelopment())
@@ -112,14 +126,7 @@ namespace leave_management
             app.UseAuthorization();
 
             app.UseSession();
-
-            SeedData.Seed(userManager, 
-                roleManager, 
-                organizationRepository, 
-                organizationManager, 
-                authorizedOrganizationRepository, 
-                typeOfMedicalCheckUpRepository,
-                Configuration);
+            app.ExtSeed(seed);             
 
             app.UseEndpoints(endpoints =>
             {

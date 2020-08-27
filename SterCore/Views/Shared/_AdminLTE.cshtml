@@ -1,9 +1,19 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using leave_management.Data
 @using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Components 
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @inject SignInManager<Employee> SignInManager
 @inject UserManager<Employee> UserManager
+
+@if (HttpContextAccessor.HttpContext.Session.GetString("organizationToken") == null)
+{
+    SignInManager.SignOutAsync().Wait();
+
+}
+
+
+
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -175,16 +185,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
-    with font-awesome or any other icon font library -->
+                        with font-awesome or any other icon font library -->
                         <li class="nav-item">
                             <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link">
                                 <i class="nav-icon fas fa-home"></i>
                                 <p>
-                                   Strona Główna
+                                    Strona Główna
                                 </p>
                             </a>
                         </li>
-                       
+
                         @if (SignInManager.IsSignedIn(User))
                         {
                             if (User.IsInRole("Administrator") || User.IsInRole("Agent") || User.IsInRole("Employer"))

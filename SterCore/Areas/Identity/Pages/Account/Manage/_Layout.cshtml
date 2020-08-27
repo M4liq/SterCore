@@ -1,4 +1,17 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using leave_management.Data
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@inject SignInManager<Employee> SignInManager
+@inject UserManager<Employee> UserManager
+
+@if (HttpContextAccessor.HttpContext.Session.GetString("organizationToken") == null)
+{
+    SignInManager.SignOutAsync().Wait(); ;
+}
+
+
+@{
     Layout = "/Areas/Identity/Pages/_Layout.cshtml";
 }
 

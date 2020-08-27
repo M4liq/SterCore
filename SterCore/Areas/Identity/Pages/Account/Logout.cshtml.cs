@@ -33,8 +33,6 @@ namespace leave_management.Areas.Identity.Pages.Account
         {
             await _signInManager.SignOutAsync();
 
-            //httpcontext.session.extset("organizationtoken", "loggedout");
-
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {

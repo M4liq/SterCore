@@ -34,6 +34,7 @@ namespace leave_management.Areas.Identity.Pages.Account
         {
             _organizationRepository = organizationRepository;
         }
+        public string ReturnUrl { get; set; }
 
         public class InputModel
         {
@@ -45,6 +46,7 @@ namespace leave_management.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            this.ReturnUrl = returnUrl ?? Url.Content("~/");
             var organizations = await _organizationRepository.FindAll();
             var organizationItems = organizations.Select(q => new SelectListItem
             {
@@ -55,13 +57,15 @@ namespace leave_management.Areas.Identity.Pages.Account
             this.Organizations = organizationItems;
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            this.ReturnUrl = returnUrl ?? Url.Content("~/");
+
             var organization = await _organizationRepository.FindById(Input.OrganizationId);
             HttpContext.Session.ExtSet<string>("organizationToken", organization.OrganizationToken);
             HttpContext.Session.ExtSet<string>("organizationName", organization.Name);
 
-            return RedirectToAction("Index", "Home");
+            return LocalRedirect(this.ReturnUrl);
         }
     }
 }

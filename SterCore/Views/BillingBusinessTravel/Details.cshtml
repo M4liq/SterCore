@@ -1,49 +1,49 @@
 ﻿@model leave_management.Models.BillingBusinessTravelVM
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Szczegóły rozliczenia dla " + Model.ApplicationId;
 }
 
-<h1>Details</h1>
+    <h1>Szczegóły rozliczenia dla @Model.ApplicationId</h1>
 
 <div>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ApplicationId)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ApplicationId)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EmployeeId)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TypeOfBillingName)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EmployeeId)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TypeOfBillingName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BusinessTravelId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BusinessTravelId)
-        </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Amount)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Amount)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsPaidOut)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CurrencyName)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsPaidOut)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CurrencyName)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsPaid)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IsPaid)
+        </dd>
+
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" class="btn btn-warning" asp-route-id="@Model.Id">
-        <i class="fa fa-pencil-alt" aria-hidden="true"></i>Edit
-    </a>
-    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+    <a class="btn btn-block btn-warning" asp-action="Edit" asp-route-id="@Model.Id"><i class="fa fa-pencil"></i>Edytuj</a>
+    <a class="btn btn-block btn-primary" asp-action="Index"> <i class="fa fa-arrow-alt-circle-left"></i> Powrót do podsumowania</a>
+
 </div>

@@ -1,45 +1,54 @@
-﻿@model leave_management.Models.BillingBusinessTravelVM
+﻿@model leave_management.Models.CreateBillingBusinessTravelVM
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edycja rozliczenia";
 }
 
-<h1>Edit</h1>
+    <h1>Edycja rozliczenia</h1>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>        
-            <div class="form-group">
-                <label asp-for="EmployeeId" class="control-label"></label>
-                <input asp-for="EmployeeId" class="form-control" />
-                <span asp-validation-for="EmployeeId" class="text-danger"></span>
-            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="OrganizationToken" />
+
             <div class="form-group">
                 <label asp-for="BusinessTravelId" class="control-label"></label>
-                <input asp-for="BusinessTravelId" class="form-control" />
+                @Html.DropDownListFor(q => q.BusinessTravelId, new SelectList(Model.BusinessTravels, "Value", "Text"), "Wybierz kod wyjazdu służbowego", new { @class = "form-control" })
                 <span asp-validation-for="BusinessTravelId" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="TypeOfBillingId" class="control-label"></label>
+                @Html.DropDownListFor(q => q.TypeOfBillingId, new SelectList(Model.TypeOfBillings, "Value", "Text"), "Wybierz rodzaj rozliczenia", new { @class = "form-control" })
+                <span asp-validation-for="TypeOfBillingId" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="Amount" class="control-label"></label>
                 <input asp-for="Amount" class="form-control" />
                 <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsPaidOut" /> @Html.DisplayNameFor(model => model.IsPaidOut)
-                </label>
+            <div class="form-group">
+                <label asp-for="CurrencyId" class="control-label"></label>
+                @Html.DropDownListFor(q => q.CurrencyId, new SelectList(Model.Curencies, "Value", "Text"), "Wybierz walutę", new { @class = "form-control" })
+                <span asp-validation-for="CurrencyId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <label asp-for="IsPaid" class="control-label"></label>
+                <input asp-for="IsPaid" class="form-control" />
+                <span asp-validation-for="IsPaid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Zapisz zmiany" class="btn btn-block btn-success" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a class="btn btn-outline-secondary" asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-alt-circle-left"></i> Powrót do podsumowania</a>
 </div>
 
 @section Scripts {

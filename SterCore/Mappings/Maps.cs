@@ -25,6 +25,7 @@ namespace leave_management.Mappings
             CreateMap<BusinessTravel, BusinessTravelVM>().ReverseMap();
             CreateMap<BusinessTravel, CreateBusinessTravelVM>().ReverseMap();
             CreateMap<BillingBusinessTravel, BillingBusinessTravelVM>().ReverseMap();
+            CreateMap<BillingBusinessTravel, CreateBillingBusinessTravelVM>().ReverseMap();
             CreateMap<MedicalCheckUp, MedicalCheckUpVM>().ReverseMap();
             CreateMap<MedicalCheckUp, CreateMedicalCheckUpVM>().ReverseMap();
             CreateMap<MedicalCheckUp, EditMedicalCheckUpVM>().ReverseMap();

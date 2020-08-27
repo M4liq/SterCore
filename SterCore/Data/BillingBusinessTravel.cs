@@ -14,7 +14,7 @@ namespace leave_management.Data
         public BusinessTravel BusinessTravel { get; set; }
         public int BusinessTravelId { get; set; }
         public int Amount { get; set; }
-        public bool IsPaidOut { get; set; }
+        public bool IsPaid { get; set; }
 
         [ForeignKey("CurrencyId")]
         public Currency Currency { get; set; }

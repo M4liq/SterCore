@@ -17,29 +17,39 @@ namespace leave_management.Controllers
     {
         private readonly IBillingBusinessTravelRepository _billingBusinessTravelRepo;
         private readonly IBusinessTravelRepository _businessTravelRepo;
-        private readonly IEmployeeRepository _employeeRepo;
-        private readonly UserManager<Employee> _userManager;
+        private readonly ITypeOfBillingRepository _typeOfBillingRepository;
+        private readonly ICurrencyRepository _currencyRepository;
         private readonly IMapper _mapper;
 
 
         public BillingBusinessTravelController(IBillingBusinessTravelRepository repo, 
-            IEmployeeRepository employeeRepo,
-            IBusinessTravelRepository businessTravelRepo, 
-            UserManager<Employee> userManager, 
+            IBusinessTravelRepository businessTravelRepo,
+            ITypeOfBillingRepository typeOfBillingRepository,
+            ICurrencyRepository currencyRepository,
             IMapper mapper
             )
         { 
             _billingBusinessTravelRepo = repo;
             _businessTravelRepo = businessTravelRepo;
-            _employeeRepo = employeeRepo;
-            _userManager = userManager;
+            _typeOfBillingRepository = typeOfBillingRepository;
+            _currencyRepository = currencyRepository;
             _mapper = mapper;
         }
         // GET: BillingBusinessTravel
         public async Task<ActionResult> Index()
         {
             var billingBusinessTravels = await _billingBusinessTravelRepo.FindAll();
+            var currencies = _currencyRepository.FindAll().Result;
+            var typeOfBillings = _typeOfBillingRepository.FindAll().Result;
+            var businessTravels = _businessTravelRepo.FindAll().Result;
+            
             var model = _mapper.Map<List<BillingBusinessTravel>, List<BillingBusinessTravelVM>>(billingBusinessTravels.ToList());
+            foreach (var item in model)
+            {
+                item.ApplicationId = businessTravels.FirstOrDefault(q => q.Id == item.BusinessTravelId).ApplicationId;
+                item.CurrencyName = currencies.FirstOrDefault(q => q.Id==item.CurrencyId).Name;
+                item.TypeOfBillingName = typeOfBillings.FirstOrDefault(q => q.Id==item.TypeOfBillingId).Name;
+            }
             return View(model);
         }
 
@@ -52,32 +62,47 @@ namespace leave_management.Controllers
                 return NotFound();
             }
             var BillingBusinessTravel = await _billingBusinessTravelRepo.FindById(id);
+            var businessTravels = _businessTravelRepo.FindAll().Result;
+            var currencies = _currencyRepository.FindAll().Result;
+            var typeOfBillings = _typeOfBillingRepository.FindAll().Result;
+
             var model = _mapper.Map<BillingBusinessTravelVM>(BillingBusinessTravel);
+            model.CurrencyName= currencies.FirstOrDefault(q=>q.Id == model.CurrencyId).Name;
+            model.TypeOfBillingName= typeOfBillings.FirstOrDefault(q => q.Id == model.TypeOfBillingId).Name;
+            model.ApplicationId = businessTravels.FirstOrDefault(q => q.Id == model.BusinessTravelId).ApplicationId;
             return View(model);
         }
 
         // GET: BillingBusinessTravel/Create
         public async Task<ActionResult> Create()
         {
-            var employees = await _userManager.GetUsersInRoleAsync("Employee");
-
-            //var employees = _employeeRepo.FindAll().Result;
-            
-            var employeesItems = employees.Select(q => new SelectListItem
-            {
-                Text = q.Firstname + " " + q.Lastname,
-                Value = q.Id.ToString()
-            });
             var businessTravels = _businessTravelRepo.FindAll().Result;
             var businessTravelsItems = businessTravels.Select(q => new SelectListItem
             {
                 Text = q.ApplicationId.ToString(),
                 Value = q.Id.ToString()
             });
+
+            var currencies = _currencyRepository.FindAll().Result;
+            var currenciesItems = currencies.Select(q => new SelectListItem
+            {
+                Text = q.Name,
+                Value = q.Id.ToString()
+            });
+            var typeOfBillings = _typeOfBillingRepository.FindAll().Result;
+            var typeOfBillingsItems = typeOfBillings.Select(q => new SelectListItem
+            {
+                Text = q.Name,
+                Value = q.Id.ToString()
+            });
+
+
             var model = new CreateBillingBusinessTravelVM
             {
-                Employees = employeesItems,
-                BusinessTravels = businessTravelsItems
+                BusinessTravels = businessTravelsItems,
+                Curencies = currenciesItems,
+                TypeOfBillings = typeOfBillingsItems
+                
             };
 
             return View(model);
@@ -86,7 +111,7 @@ namespace leave_management.Controllers
         // POST: BillingBusinessTravel/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(BillingBusinessTravelVM model)
+        public async Task<ActionResult> Create(CreateBillingBusinessTravelVM model)
         {
             try
             {
@@ -106,10 +131,10 @@ namespace leave_management.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
                 ModelState.AddModelError("", "Something went wrong");
-                return View();
+                return View(model);
             }
         }
 
@@ -122,14 +147,37 @@ namespace leave_management.Controllers
                 return NotFound();
             }
             var BillingBusinessTravel = await _billingBusinessTravelRepo.FindById(id);
-            var model = _mapper.Map<BillingBusinessTravelVM>(BillingBusinessTravel);
+            var model = _mapper.Map<CreateBillingBusinessTravelVM>(BillingBusinessTravel);
+            var businessTravels = _businessTravelRepo.FindAll().Result;
+            var businessTravelsItems = businessTravels.Select(q => new SelectListItem
+            {
+                Text = q.ApplicationId.ToString(),
+                Value = q.Id.ToString()
+            });
+
+            var currencies = _currencyRepository.FindAll().Result;
+            var currenciesItems = currencies.Select(q => new SelectListItem
+            {
+                Text = q.Name,
+                Value = q.Id.ToString()
+            });
+            var typeOfBillings = _typeOfBillingRepository.FindAll().Result;
+            var typeOfBillingsItems = typeOfBillings.Select(q => new SelectListItem
+            {
+                Text = q.Name,
+                Value = q.Id.ToString()
+            });
+
+            model.BusinessTravels = businessTravelsItems;
+            model.Curencies = currenciesItems;
+            model.TypeOfBillings = typeOfBillingsItems;
             return View(model);
         }
 
         // POST: BillingBusinessTravel/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(BillingBusinessTravelVM model)
+        public async Task<ActionResult> Edit(CreateBillingBusinessTravelVM model)
         {
             try
             {
@@ -151,7 +199,7 @@ namespace leave_management.Controllers
             catch
             {
                 ModelState.AddModelError("", "Something went wrong");
-                return View();
+                return View(model);
             }
         }
 

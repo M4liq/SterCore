@@ -10,33 +10,47 @@ namespace leave_management.Models
     public class BillingBusinessTravelVM
     {
         public int Id { get; set; }
-        
-        public EmployeeVM Employee { get; set; }
-        public string EmployeeId { get; set; }
-        public BusinessTravelVM BusinessTravel { get; set; }
+        [Display(Name = "Kod wyjazdu służbowego")]
+
         public int BusinessTravelId { get; set; }
+        [Display(Name = "Kod wyjazdu służbowego")]
+        public string ApplicationId { get; set; }
         [Display(Name = "Kwota")]
         public int Amount { get; set; }
-        [Display(Name = "Czy wypłacono kwotę?")]
-        public bool IsPaidOut { get; set; }
-        public string OrganizationToken { get; set; }
+        [Display(Name = "Czy dokonano operację?")]
+        public bool IsPaid { get; set; }
+        [Display(Name = "Waluta")]
+        public int CurrencyId { get; set; }
+        [Display(Name = "Waluta")]
+        public string CurrencyName { get; set; }
+        [Display(Name = "Rodzaj operacji")]
+        public int TypeOfBillingId { get; set; }
+        [Display(Name = "Rodzaj operacji")]
+        public string TypeOfBillingName { get; set; }
 
     }
 
     public class CreateBillingBusinessTravelVM
     {
         public int Id { get; set; }
-        public EmployeeVM Employee { get; set; }
-        public IEnumerable<SelectListItem> Employees { get; set; }
-        [Required]
-        public string EmployeeId { get; set; }
-        public BusinessTravelVM BusinessTravel { get; set; }
-        public IEnumerable<SelectListItem> BusinessTravels { get; set; }
-        public int BusinessTravelId { get; set; }
+        [Display(Name = "Kod wyjazdu służbowego")]
+        public int ApplicationId { get; set; }
         [Display(Name = "Kwota")]
         public int Amount { get; set; }
-        [Display(Name = "Czy wypłacono kwotę?")]
-        public bool IsPaidOut { get; set; }
+        [Display(Name = "Czy dokonano operację?")]
+        public bool IsPaid { get; set; }
+        [Display(Name = "Waluta")]
+        public int CurrencyId { get; set; }
+        [Display(Name = "Rodzaj operacji")]
+        public int TypeOfBillingId { get; set; }
+        [Required]
+        [Display(Name = "Kod wyjazdu służbowego")]
+        public int BusinessTravelId { get; set; }
         public string OrganizationToken { get; set; }
+
+        public IEnumerable<SelectListItem> BusinessTravels { get; set; }
+        public IEnumerable<SelectListItem> Curencies { get; set; }
+        public IEnumerable<SelectListItem> TypeOfBillings { get; set; }
+
     }
 }

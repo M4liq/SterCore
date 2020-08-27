@@ -1,79 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using leave_management.Contracts;
 using leave_management.Data;
 using leave_management.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 
 namespace leave_management.Controllers
 {
-    public class BillingBusinessTravelController : Controller
+    public class ExpenseController : Controller
     {
-        private readonly IBillingBusinessTravelRepository _billingBusinessTravelRepo;
+        private readonly IExpenseRepository _expenseRepository;
         private readonly IBusinessTravelRepository _businessTravelRepo;
-        private readonly ITypeOfBillingRepository _typeOfBillingRepository;
         private readonly ICurrencyRepository _currencyRepository;
         private readonly IMapper _mapper;
 
 
-        public BillingBusinessTravelController(IBillingBusinessTravelRepository repo, 
+        public ExpenseController(IExpenseRepository expenseRepository,
             IBusinessTravelRepository businessTravelRepo,
-            ITypeOfBillingRepository typeOfBillingRepository,
             ICurrencyRepository currencyRepository,
             IMapper mapper
             )
-        { 
-            _billingBusinessTravelRepo = repo;
+        {
+            _expenseRepository = expenseRepository;
             _businessTravelRepo = businessTravelRepo;
-            _typeOfBillingRepository = typeOfBillingRepository;
             _currencyRepository = currencyRepository;
             _mapper = mapper;
         }
-        // GET: BillingBusinessTravel
+        // GET: Expense
         public async Task<ActionResult> Index()
         {
-            var billingBusinessTravels = await _billingBusinessTravelRepo.FindAll();
-            var currencies = _currencyRepository.FindAll().Result;
-            var typeOfBillings = _typeOfBillingRepository.FindAll().Result;
-            var businessTravels = _businessTravelRepo.FindAll().Result;
-            
-            var model = _mapper.Map<List<BillingBusinessTravel>, List<BillingBusinessTravelVM>>(billingBusinessTravels.ToList());
+            var expenses = await _expenseRepository.FindAll();
+            var currencies = await _currencyRepository.FindAll();
+            var businessTravels = await _businessTravelRepo.FindAll();
+
+            var model = _mapper.Map<List<Expense>, List<ExpenseVM>>(expenses.ToList());
             foreach (var item in model)
             {
                 item.ApplicationId = businessTravels.FirstOrDefault(q => q.Id == item.BusinessTravelId).ApplicationId;
-                item.CurrencyName = currencies.FirstOrDefault(q => q.Id==item.CurrencyId).Name;
-                item.TypeOfBillingName = typeOfBillings.FirstOrDefault(q => q.Id==item.TypeOfBillingId).Name;
+                item.CurrencyName = currencies.FirstOrDefault(q => q.Id == item.CurrencyId).Name;
             }
             return View(model);
         }
 
-        // GET: BillingBusinessTravel/Details/5
+        // GET: Expense/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            var success = await _billingBusinessTravelRepo.Exists(id);
+            var success = await _expenseRepository.Exists(id);
             if (!success)
             {
                 return NotFound();
             }
-            var BillingBusinessTravel = await _billingBusinessTravelRepo.FindById(id);
+            var expense = await _expenseRepository.FindById(id);
             var businessTravels = _businessTravelRepo.FindAll().Result;
             var currencies = _currencyRepository.FindAll().Result;
-            var typeOfBillings = _typeOfBillingRepository.FindAll().Result;
 
-            var model = _mapper.Map<BillingBusinessTravelVM>(BillingBusinessTravel);
-            model.CurrencyName= currencies.FirstOrDefault(q=>q.Id == model.CurrencyId).Name;
-            model.TypeOfBillingName= typeOfBillings.FirstOrDefault(q => q.Id == model.TypeOfBillingId).Name;
+            var model = _mapper.Map<ExpenseVM>(expense);
+            model.CurrencyName = currencies.FirstOrDefault(q => q.Id == model.CurrencyId).Name;
             model.ApplicationId = businessTravels.FirstOrDefault(q => q.Id == model.BusinessTravelId).ApplicationId;
             return View(model);
         }
 
-        // GET: BillingBusinessTravel/Create
+        // GET: Expense/Create
         public async Task<ActionResult> Create()
         {
             var businessTravels = _businessTravelRepo.FindAll().Result;
@@ -89,40 +82,30 @@ namespace leave_management.Controllers
                 Text = q.Name,
                 Value = q.Id.ToString()
             });
-            var typeOfBillings = _typeOfBillingRepository.FindAll().Result;
-            var typeOfBillingsItems = typeOfBillings.Select(q => new SelectListItem
-            {
-                Text = q.Name,
-                Value = q.Id.ToString()
-            });
 
-
-            var model = new CreateBillingBusinessTravelVM
+            var model = new CreateExpenseVM
             {
                 BusinessTravels = businessTravelsItems,
                 Curencies = currenciesItems,
-                TypeOfBillings = typeOfBillingsItems
-                
             };
 
             return View(model);
         }
 
-        // POST: BillingBusinessTravel/Create
+        // POST: Expense/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(CreateBillingBusinessTravelVM model)
+        public async Task<ActionResult> Create(CreateExpenseVM model)
         {
             try
             {
-                // TODO: Add insert logic here
                 if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
 
-                var billingBusinessTravel = _mapper.Map<BillingBusinessTravel>(model);
-                var isSuccess = await _billingBusinessTravelRepo.Create(billingBusinessTravel);
+                var expense = _mapper.Map<Expense>(model);
+                var isSuccess = await _expenseRepository.Create(expense);
                 if (!isSuccess)
                 {
                     ModelState.AddModelError("", "Something went wrong");
@@ -138,16 +121,16 @@ namespace leave_management.Controllers
             }
         }
 
-        // GET: BillingBusinessTravel/Edit/5
+        // GET: Expense/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var success = await _billingBusinessTravelRepo.Exists(id);
+            var success = await _expenseRepository.Exists(id);
             if (!success)
             {
                 return NotFound();
             }
-            var BillingBusinessTravel = await _billingBusinessTravelRepo.FindById(id);
-            var model = _mapper.Map<CreateBillingBusinessTravelVM>(BillingBusinessTravel);
+            var BillingBusinessTravel = await _expenseRepository.FindById(id);
+            var model = _mapper.Map<CreateExpenseVM>(BillingBusinessTravel);
             var businessTravels = _businessTravelRepo.FindAll().Result;
             var businessTravelsItems = businessTravels.Select(q => new SelectListItem
             {
@@ -161,23 +144,16 @@ namespace leave_management.Controllers
                 Text = q.Name,
                 Value = q.Id.ToString()
             });
-            var typeOfBillings = _typeOfBillingRepository.FindAll().Result;
-            var typeOfBillingsItems = typeOfBillings.Select(q => new SelectListItem
-            {
-                Text = q.Name,
-                Value = q.Id.ToString()
-            });
 
             model.BusinessTravels = businessTravelsItems;
             model.Curencies = currenciesItems;
-            model.TypeOfBillings = typeOfBillingsItems;
             return View(model);
         }
 
-        // POST: BillingBusinessTravel/Edit/5
+        // POST: Expense/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(CreateBillingBusinessTravelVM model)
+        public async Task<ActionResult> Edit(CreateExpenseVM model)
         {
             try
             {
@@ -186,8 +162,8 @@ namespace leave_management.Controllers
                 {
                     return View(model);
                 }
-                var BillingBusinessTravel = _mapper.Map<BillingBusinessTravel>(model);
-                var isSuccess = await _billingBusinessTravelRepo.Update(BillingBusinessTravel);
+                var expense = _mapper.Map<Expense>(model);
+                var isSuccess = await _expenseRepository.Update(expense);
                 if (!isSuccess)
                 {
                     ModelState.AddModelError("", "Something went wrong");
@@ -203,15 +179,15 @@ namespace leave_management.Controllers
             }
         }
 
-        // GET: BillingBusinessTravel/Delete/5
+        // GET: Expense/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            var billingBusinessTravel = await _billingBusinessTravelRepo.FindById(id);
-            if (billingBusinessTravel == null)
+            var expense = await _expenseRepository.FindById(id);
+            if (expense == null)
             {
                 return NotFound();
             }
-            var isSuccess = await _billingBusinessTravelRepo.Delete(billingBusinessTravel);
+            var isSuccess = await _expenseRepository.Delete(expense);
             if (!isSuccess)
             {
                 return BadRequest();
@@ -219,10 +195,10 @@ namespace leave_management.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: BillingBusinessTravel/Delete/5
+        // POST: Expense/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id, IFormCollection collection)
         {
             try
             {

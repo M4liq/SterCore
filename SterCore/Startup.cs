@@ -79,8 +79,6 @@ namespace leave_management
             services.AddScoped<IDataSeed, SeedUsersAndOrganizations>();
             services.AddScoped<IDataSeed, SeedMedicalCheckUpTypes>();
 
-
-
             services.AddAutoMapper(typeof(Maps));
 
             services.AddDefaultIdentity<Employee>()

@@ -21,61 +21,31 @@ namespace leave_management.Repository
         }
         public async Task<bool> Create(TransportVehicle entity)
         {
-            //ORI separating data beetween organizations
-            entity.OrganizationToken = _organizationManager.GetOrganizationToken();
-
             await _db.TransportVehicles.AddAsync(entity);
             return await Save();
         }
 
         public async Task<bool> Delete(TransportVehicle entity)
         {
-            //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
-            {
-                throw new UnauthorizedAccessException();
-            }
-
             _db.TransportVehicles.Remove(entity);
             return await Save();
         }
 
         public async Task<bool> Exists(int id)
         {
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var exists = await _db.TransportVehicles
-
-                //ORI Filtring leave types by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
-                .AnyAsync(q => q.Id == id);
-
+            var exists = await _db.TransportVehicles.AnyAsync(q => q.Id == id);
             return exists;
         }
 
         public async Task<ICollection<TransportVehicle>> FindAll()
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            //ORI filtering by token
-            var TransportVehicle = await _db.TransportVehicles
-                .Where(q => q.OrganizationToken == organizationToken)
-                .ToListAsync();
+            var TransportVehicle = await _db.TransportVehicles.ToListAsync();
             return TransportVehicle;
         }
 
         public async Task<TransportVehicle> FindById(int id)
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var TransportVehicle = await _db.TransportVehicles
-
-                //ORI Filtring organizations by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
-                .FirstOrDefaultAsync(q => q.Id == id);
-
+            var TransportVehicle = await _db.TransportVehicles.FirstOrDefaultAsync(q => q.Id == id);
             return TransportVehicle;
         }
 
@@ -85,20 +55,8 @@ namespace leave_management.Repository
             return changes > 0;
         }
 
-        public void SetToken(TransportVehicle entity)
-        {
-            var token = _organizationManager.GetOrganizationToken();
-            entity.OrganizationToken = token;
-        }
-
         public async Task<bool> Update(TransportVehicle entity)
         {
-            //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
-            {
-                throw new UnauthorizedAccessException();
-            }
-
             _db.TransportVehicles.Update(entity);
             return await Save();
         }

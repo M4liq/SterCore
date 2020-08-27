@@ -72,6 +72,11 @@ namespace leave_management
             services.AddScoped<IDocumentsRepository, DocumentsRepository>();
             services.AddScoped<ICompetenceRepository, CompetenceRepository>();
             services.AddScoped<ICompetenceTypeRepository, CompetenceTypeRepository>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<ICurrencyRepository, CurrencyRepository>();
+            services.AddScoped<IExpenseRepository, ExpenseRepository>();
+            services.AddScoped<ITransportVehicleRepository, TransportVehicleRepository>();
+            services.AddScoped<ITypeOfBillingRepository, TypeOfBillingRepository>();
 
             //Organization Resource Manager Initialization Fields
             services.AddScoped<IOrganizationResourceManager<LeaveType>, OrganizationResourceManager<LeaveType>>();
@@ -114,7 +119,16 @@ namespace leave_management
             IApplicationBuilder app, 
             IWebHostEnvironment env,
             ISeed seed
-
+            UserManager<Employee> userManager,
+            RoleManager<IdentityRole> roleManager,
+            IOrganizationResourceManager organizationManager,
+            IOrganizationRepository organizationRepository,
+            IAuthorizedOrganizationRepository authorizedOrganizationRepository,
+            ITypeOfMedicalCheckUpRepository typeOfMedicalCheckUpRepository,
+            ICountryRepository countryRepository,
+            ICurrencyRepository currencyRepository,
+            ITransportVehicleRepository transportVehicleRepository,
+            ITypeOfBillingRepository typeOfBillingRepository
         )
         {
             if (env.IsDevelopment())
@@ -137,7 +151,7 @@ namespace leave_management
             app.UseAuthorization();
 
             app.UseSession();
-            app.ExtSeed(seed);             
+  			app.ExtSeed(seed);             
 
             app.UseEndpoints(endpoints =>
             {

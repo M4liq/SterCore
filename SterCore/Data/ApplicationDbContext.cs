@@ -30,6 +30,11 @@ namespace leave_management.Data
         public DbSet<AuthorizedOrganizations> AuthorizedOrganizations { get; set; }
         public DbSet<Competence> Competences { get; set; }
         public DbSet<CompetenceType> CompetenceTypes { get; set; }
+        public DbSet<TransportVehicle> TransportVehicles { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<TypeOfBilling> TypeOfBillings { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
 
     }
 }

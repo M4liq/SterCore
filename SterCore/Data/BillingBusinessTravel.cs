@@ -10,16 +10,19 @@ namespace leave_management.Data
 {
     public class BillingBusinessTravel : OrganizationResurceIdentifier
     {
-        [Key]
-        public int Id { get; set; }
-        [ForeignKey("EmployeeId")]
-        public Employee Employee { get; set; }
-        public string EmployeeId { get; set; }
         [ForeignKey("BusinessTravelId")]
         public BusinessTravel BusinessTravel { get; set; }
         public int BusinessTravelId { get; set; }
         public int Amount { get; set; }
         public bool IsPaidOut { get; set; }
+
+        [ForeignKey("CurrencyId")]
+        public Currency Currency { get; set; }
+        public int CurrencyId { get; set; }
+
+        [ForeignKey("TypeOfBillingId")]
+        public TypeOfBilling TypeOfBilling { get; set; }
+        public int TypeOfBillingId { get; set; }
 
 
     }

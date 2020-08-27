@@ -10,8 +10,6 @@ namespace leave_management.Data
 {
     public class BusinessTravel : OrganizationResurceIdentifier
     {
-        [Key]
-        public int Id { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
@@ -20,13 +18,9 @@ namespace leave_management.Data
         public string PurposeOfTravel { get; set; }
         public string TransportVehicle{ get; set; }
         public string AdditionalInfo{ get; set; }
-        public int PrepaymentAmount{ get; set; }
-        public string PrepaymentCurrency{ get; set; }
         public string ApplicationId{ get; set; }
         [ForeignKey("EmployeeId")]
         public Employee Employee { get; set; }
         public string EmployeeId { get; set; }
-        
-
     }
 }

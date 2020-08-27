@@ -32,6 +32,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.EmployeeFullName)
+            </th>            
+            <th>
+                @Html.DisplayNameFor(model => model.DifferenceOfCostsAndBillings)
             </th>
             <th></th>
         </tr>
@@ -61,7 +64,11 @@
                 @Html.DisplayFor(modelItem => item.EmployeeFullName)
             </td>
             <td>
-                <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id" >
+                @Html.DisplayFor(modelItem => item.DifferenceOfCostsAndBillings)
+            </td>
+            
+            <td>
+                <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">
                     <i class="fa fa-pencil-alt" aria-hidden="true"></i>
                 </a>
                 <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">

@@ -20,16 +20,20 @@ namespace leave_management.Controllers
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ICountryRepository _countryRepository;
         private readonly ITransportVehicleRepository _transportVehicleRepository;
+        private readonly IBillingBusinessTravelRepository _billingBusinessTravelRepository;
+        private readonly IExpenseRepository _expenseRepository;
         private readonly IMapper _mapper;
         private readonly UserManager<Employee> _userManager;
 
-        public BusinessTravelController(IBusinessTravelRepository repo, UserManager<Employee> userManager, ICountryRepository countryRepository, IEmployeeRepository employeeRepository, ITransportVehicleRepository transportVehicleRepository, IMapper mapper)
+        public BusinessTravelController(IBusinessTravelRepository repo, UserManager<Employee> userManager, ICountryRepository countryRepository, IEmployeeRepository employeeRepository, ITransportVehicleRepository transportVehicleRepository, IBillingBusinessTravelRepository billingBusinessTravelRepository, IExpenseRepository expenseRepository,  IMapper mapper)
         {
             _repo = repo;
             _employeeRepository = employeeRepository;
             _countryRepository = countryRepository;
             _transportVehicleRepository = transportVehicleRepository;
             _userManager = userManager;
+            _billingBusinessTravelRepository=billingBusinessTravelRepository;
+            _expenseRepository=expenseRepository;
             _mapper = mapper;
         }
         // GET: PWS
@@ -38,11 +42,14 @@ namespace leave_management.Controllers
             var businnesTravels = await _repo.FindAll();
             var countries = _countryRepository.FindAll().Result;
             var employees = _employeeRepository.FindAll().Result;
+            var billingBusinessTravels = _billingBusinessTravelRepository.FindAll().Result;
+            var expenses = _expenseRepository.FindAll().Result;
             var model = _mapper.Map<List<BusinessTravel>, List<BusinessTravelVM>>(businnesTravels.ToList());
             foreach (var item in model)
             {
                 item.EmployeeFullName = String.Format("{0} {1}", employees.FirstOrDefault(q => q.Id == item.EmployeeId).Firstname, employees.FirstOrDefault(q => q.Id == item.EmployeeId).Lastname);
                 item.DestinationCountry = countries.FirstOrDefault(q => q.Id == item.CountryId).Name;
+                item.DifferenceOfCostsAndBillings = 30;
             }
             return View(model);
         }

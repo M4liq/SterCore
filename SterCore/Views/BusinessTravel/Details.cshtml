@@ -1,15 +1,20 @@
 ﻿@model leave_management.Models.BusinessTravelVM
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Szczegóły wyjazdu służbowego";
 }
 
-<h1>Details</h1>
+    <h1>Szczegóły wyjazdu służbowego</h1>
 
 <div>
-    <h4>BusinessTravelVM</h4>
     <hr />
     <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateCreated)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DateCreated)
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.DateFrom)
         </dt>
@@ -53,32 +58,21 @@
             @Html.DisplayFor(model => model.AdditionalInfo)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PrepaymentAmount)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PrepaymentAmount)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PrepaymentCurrency)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PrepaymentCurrency)
-        </dd>
-        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ApplicationId)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ApplicationId)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Employee)
+            @Html.DisplayNameFor(model => model.EmployeeFullName)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Employee.Id)
+            @Html.DisplayFor(model => model.EmployeeFullName)
         </dd>
+
     </dl>
 </div>
 <div>
-    <a class="btn btn-block btn-warning" asp-action="Edit" asp-route-id="@Model.Id"  asp-route-employeeId="@Model.EmployeeId" asp-route-organizationToken="@Model.OrganizationToken">Edit</a>
-    <a class="btn btn-block btn-primary" asp-action="Index">Back to List</a>
+    <a class="btn btn-block btn-warning" asp-action="Edit" asp-route-id="@Model.Id"><i class="fa fa-pencil"></i>Edytuj</a>
+    <a class="btn btn-block btn-primary" asp-action="Index"> <i class="fa fa-arrow-alt-circle-left"></i> Powrót do podsumowania</a>
 </div>

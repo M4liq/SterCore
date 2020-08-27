@@ -1,40 +1,32 @@
-﻿@model leave_management.Models.BusinessTravelVM
+﻿@model leave_management.Models.CreateBusinessTravelVM
 
 @{
-    ViewData["Title"] = "Utwórz delegację";
+    ViewData["Title"] = "Utwórz wyjazd służbowy";
 }
 
-<h1>Utwórz delegację</h1>
-
+    <h1>Utwórz wyjazd służbowy</h1>
 <hr />
 <div class="row">
-    
-    <div class="col-md-6 offset-3">
+    <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-           
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group date">
-                        <label asp-for="DateFrom" class="control-label"></label>
-                        <input asp-for="DateFrom" value="@DateTime.Now.Date" type="text" class="form-control dateFrom" />
-                        <span asp-validation-for="DateFrom" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="DateTo" class="control-label"></label>
-                        <input asp-for="DateTo" value="@DateTime.Now.Date" type="text" class="form-control dateTo" />
-                        <span asp-validation-for="DateTo" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
             
-            
+
             <div class="form-group">
-                <label asp-for="DestinationCountry" class="control-label"></label>
-                <input asp-for="DestinationCountry" class="form-control" />
-                <span asp-validation-for="DestinationCountry" class="text-danger"></span>
+                <label asp-for="DateFrom" class="control-label"></label>
+                <input asp-for="DateFrom" type="text" value="@DateTime.Now.Date" class="form-control datepicker" />
+                <span asp-validation-for="DateFrom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateTo" class="control-label"></label>
+                <input asp-for="DateTo" type="text" value="@DateTime.Now.Date" class="form-control datepicker" />
+                <span asp-validation-for="DateTo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CountryId" class="control-label"></label>
+                @Html.DropDownListFor(q => q.CountryId, new SelectList(Model.DestinationCountries, "Value", "Text"), "Wybierz kraj", new { @class = "form-control" })
+                <span asp-validation-for="CountryId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DestinationCity" class="control-label"></label>
@@ -47,9 +39,9 @@
                 <span asp-validation-for="PurposeOfTravel" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TransportVehicle" class="control-label"></label>
-                <input asp-for="TransportVehicle" class="form-control" />
-                <span asp-validation-for="TransportVehicle" class="text-danger"></span>
+                <label asp-for="TransportVehicleId" class="control-label"></label>
+                @Html.DropDownListFor(q => q.TransportVehicleId, new SelectList(Model.TransportVehicles, "Value", "Text"), "Wybierz środek transportu", new { @class = "form-control" })
+                <span asp-validation-for="TransportVehicleId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AdditionalInfo" class="control-label"></label>
@@ -57,46 +49,30 @@
                 <span asp-validation-for="AdditionalInfo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PrepaymentAmount" class="control-label"></label>
-                <input asp-for="PrepaymentAmount" class="form-control" />
-                <span asp-validation-for="PrepaymentAmount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PrepaymentCurrency" class="control-label"></label>
-                <input asp-for="PrepaymentCurrency" class="form-control" />
-                <span asp-validation-for="PrepaymentCurrency" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ApplicationId" class="control-label"></label>
-                <input asp-for="ApplicationId" class="form-control" />
-                <span asp-validation-for="ApplicationId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="EmployeeId" class="control-label"></label>
-                @Html.DropDownListFor(q => q.EmployeeId, new SelectList(Model.Employees, "Value", "Text"), "Wybór pracownika", new { @class = "form-control" })
+                @Html.DropDownListFor(q => q.EmployeeId, new SelectList(Model.Employees, "Value", "Text"), "Wybierz pracownika", new { @class = "form-control" })
                 <span asp-validation-for="EmployeeId" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <input type="submit" value="Utwórz delegację" class="btn btn-success btn-block" />
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-alt-circle-left"></i> Back to List</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
     <script>
         $(document).ready(function () {
-            $('.dateFrom').daterangepicker({
+            $('.datepicker').daterangepicker({
                 "locale": {
                     "format": "DD/MM/YYYY",
                     "separator": " - ",
@@ -136,45 +112,6 @@
                 "singleDatePicker": true
             });
 
-            $('.dateTo').daterangepicker({
-                "locale": {
-                    "format": "DD/MM/YYYY",
-                    "separator": " - ",
-                    "applyLabel": "Zatwierdź",
-                    "cancelLabel": "Anuluj",
-                    "fromLabel": "Od",
-                    "toLabel": "Do",
-                    "customRangeLabel": "Custom",
-                    "weekLabel": "Tydzień",
-                    "daysOfWeek": [
-                        "Nd",
-                        "Pn",
-                        "Wt",
-                        "Śr",
-                        "Cz",
-                        "Pt",
-                        "So"
-                    ],
-                    "monthNames": [
-                        "Styczeń",
-                        "Luty",
-                        "Marzec",
-                        "Kwiecień",
-                        "Maj",
-                        "Czerwiec",
-                        "Lipiec",
-                        "Sierpień",
-                        "Wrzesień",
-                        "Październik",
-                        "Listopad",
-                        "Grudzień"
-                    ],
-                    "firstDay": 1
-                },
-                "alwaysShowCalendars": true,
-                "showDropdowns": true,
-                "singleDatePicker": true
-            });
 
         });
     </script>

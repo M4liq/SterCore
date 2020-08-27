@@ -17,12 +17,18 @@ namespace leave_management.Controllers
     public class BusinessTravelController : Controller
     {
         private readonly IBusinessTravelRepository _repo;
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly ICountryRepository _countryRepository;
+        private readonly ITransportVehicleRepository _transportVehicleRepository;
         private readonly IMapper _mapper;
         private readonly UserManager<Employee> _userManager;
 
-        public BusinessTravelController(IBusinessTravelRepository repo, UserManager<Employee> userManager, IMapper mapper)
+        public BusinessTravelController(IBusinessTravelRepository repo, UserManager<Employee> userManager, ICountryRepository countryRepository, IEmployeeRepository employeeRepository, ITransportVehicleRepository transportVehicleRepository, IMapper mapper)
         {
             _repo = repo;
+            _employeeRepository = employeeRepository;
+            _countryRepository = countryRepository;
+            _transportVehicleRepository = transportVehicleRepository;
             _userManager = userManager;
             _mapper = mapper;
         }
@@ -30,7 +36,14 @@ namespace leave_management.Controllers
         public async Task<ActionResult> Index()
         {
             var businnesTravels = await _repo.FindAll();
+            var countries = _countryRepository.FindAll().Result;
+            var employees = _employeeRepository.FindAll().Result;
             var model = _mapper.Map<List<BusinessTravel>, List<BusinessTravelVM>>(businnesTravels.ToList());
+            foreach (var item in model)
+            {
+                item.EmployeeFullName = String.Format("{0} {1}", employees.FirstOrDefault(q => q.Id == item.EmployeeId).Firstname, employees.FirstOrDefault(q => q.Id == item.EmployeeId).Lastname);
+                item.DestinationCountry = countries.FirstOrDefault(q => q.Id == item.CountryId).Name;
+            }
             return View(model);
         }
 
@@ -43,22 +56,45 @@ namespace leave_management.Controllers
                 return NotFound();
             }
             var businessTravel = await _repo.FindById(id);
+            var countries = _countryRepository.FindAll().Result;
+            var employees = _employeeRepository.FindAll().Result;
+            var transportVehicles = _transportVehicleRepository.FindAll().Result;
             var model = _mapper.Map<BusinessTravelVM>(businessTravel);
+            model.EmployeeFullName = String.Format("{0} {1}", employees.FirstOrDefault(q => q.Id == model.EmployeeId).Firstname, employees.FirstOrDefault(q => q.Id == model.EmployeeId).Lastname);
+            model.DestinationCountry = countries.FirstOrDefault(q => q.Id == model.CountryId).Name;
+            model.TransportVehicle = transportVehicles.FirstOrDefault(q => q.Id == model.TransportVehicleId).Name;
             return View(model);
         }
 
         // GET: PWS/Create
         public async Task<ActionResult> Create()
         {
-            var employees = await _userManager.GetUsersInRoleAsync("Employee");
+            var employees = _employeeRepository.FindAll().Result;
             var employeesItems = employees.Select(q => new SelectListItem
             {
-                Text = q.Firstname + " " + q.Lastname,
+                Text = String.Format("{0} {1}", q.Firstname, q.Lastname),
                 Value = q.Id.ToString()
             });
-            var model = new BusinessTravelVM
+
+            var countries = _countryRepository.FindAll().Result;
+            var countriesItems = countries.Select(q => new SelectListItem
             {
-                Employees = employeesItems
+                Text = q.Name,
+                Value = q.Id.ToString()
+            });
+
+            var transportVehicles = _transportVehicleRepository.FindAll().Result;
+            var transportVehiclesItems = transportVehicles.Select(q => new SelectListItem
+            {
+                Text = q.Name,
+                Value = q.Value.ToString()
+            });
+
+            var model = new CreateBusinessTravelVM
+            {
+                Employees = employeesItems,
+                TransportVehicles = transportVehiclesItems,
+                DestinationCountries = countriesItems
             };
 
 
@@ -68,7 +104,7 @@ namespace leave_management.Controllers
         // POST: PWS/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(BusinessTravelVM model)
+        public async Task<ActionResult> Create(CreateBusinessTravelVM model)
         {
             try
             {
@@ -83,6 +119,10 @@ namespace leave_management.Controllers
                     return View(model);
                 }
                 model.DateCreated = DateTime.Now;
+                
+                var lastApplicationId = _repo.getLatestApplicationId().Result;
+                var applicationId = String.Format("WS{0}", lastApplicationId + 1);
+                model.ApplicationId = applicationId;
                 var businessTravel = _mapper.Map<BusinessTravel>(model);
                 var isSuccess = await _repo.Create(businessTravel);
                 if (!isSuccess)
@@ -93,15 +133,15 @@ namespace leave_management.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
-                ModelState.AddModelError("", "Something went wrong");
-                return View();
+                ModelState.AddModelError("", ex.ToString());
+                return View(model);
             }
         }
 
         // GET: PWS/Edit/5
-        public async Task<ActionResult> Edit(int id, string employeeId, string organizationToken)
+        public async Task<ActionResult> Edit(int id, string employeeId, int countryId, int transportVehicleId, string organizationToken)
         {
             var success = await _repo.Exists(id);
             if (!success)
@@ -109,9 +149,7 @@ namespace leave_management.Controllers
                 return NotFound();
             }
             var businessTravel = await _repo.FindById(id);
-            var model = _mapper.Map<BusinessTravelVM>(businessTravel);
-            model.EmployeeId = employeeId;
-            model.OrganizationToken = organizationToken;
+            var model = _mapper.Map<CreateBusinessTravelVM>(businessTravel);
             return View(model);
         }
 

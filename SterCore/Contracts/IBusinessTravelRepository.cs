@@ -8,6 +8,6 @@ namespace leave_management.Contracts
 {
     public interface IBusinessTravelRepository :IRepositoryBase<BusinessTravel>
     {
-
+        Task<int> getLatestApplicationId();
     }
 }

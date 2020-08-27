@@ -97,5 +97,20 @@ namespace leave_management.Repository
             _db.BusinessTravel.Update(entity);
             return await Save();
         }
+
+        public async Task<int> getLatestApplicationId()
+        {
+            int latestApplicationId = 1;
+            int? latestId = _db.BusinessTravel.Max(u => (int?)u.Id);
+            if (latestId.HasValue)
+            {
+                latestApplicationId = Convert.ToInt32(latestId);
+            }
+            else
+            {
+                latestApplicationId = 1;
+            }
+            return  latestApplicationId;
+        }
     }
 }

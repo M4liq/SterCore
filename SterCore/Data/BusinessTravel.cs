@@ -13,14 +13,20 @@ namespace leave_management.Data
         public DateTime? DateCreated { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
-        public string DestinationCountry { get; set; }
         public string DestinationCity { get; set; }
         public string PurposeOfTravel { get; set; }
-        public string TransportVehicle{ get; set; }
         public string AdditionalInfo{ get; set; }
         public string ApplicationId{ get; set; }
         [ForeignKey("EmployeeId")]
         public Employee Employee { get; set; }
         public string EmployeeId { get; set; }
+
+        [ForeignKey("CountryId")]
+        public Country Country { get; set; }
+        public int CountryId { get; set; }
+
+        [ForeignKey("TransportVehicleId")]
+        public TransportVehicle TransportVehicle { get; set; }
+        public int TransportVehicleId { get; set; }
     }
 }

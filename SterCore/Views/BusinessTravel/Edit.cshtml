@@ -1,10 +1,11 @@
-﻿@model leave_management.Models.BusinessTravelVM
+﻿@model leave_management.Models.CreateBusinessTravelVM
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edycja wyjazdu służbowego";
 }
 
-<h1>Edit</h1>
+    <h1>Edycja wyjazdu służbowego</h1>
+
 
 <hr />
 <div class="row">
@@ -13,22 +14,21 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="EmployeeId" />
-            <input type="hidden" asp-for="DateCreated" />
+            <input type="hidden" asp-for="CountryId" />
+            <input type="hidden" asp-for="TransportVehicleId" />
             <input type="hidden" asp-for="OrganizationToken" />
+            <input type="hidden" asp-for="DateCreated" />
+            <input type="hidden" asp-for="ApplicationId" />
+
             <div class="form-group">
                 <label asp-for="DateFrom" class="control-label"></label>
-                <input asp-for="DateFrom" class="form-control" />
+                <input asp-for="DateFrom" value="@Model.DateFrom" type="text"  class="form-control datepicker" />
                 <span asp-validation-for="DateFrom" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DateTo" class="control-label"></label>
-                <input asp-for="DateTo" class="form-control" />
+                <input asp-for="DateTo" value="@Model.DateTo" type="text" class="form-control datepicker" />
                 <span asp-validation-for="DateTo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DestinationCountry" class="control-label"></label>
-                <input asp-for="DestinationCountry" class="form-control" />
-                <span asp-validation-for="DestinationCountry" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DestinationCity" class="control-label"></label>
@@ -41,46 +41,71 @@
                 <span asp-validation-for="PurposeOfTravel" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TransportVehicle" class="control-label"></label>
-                <input asp-for="TransportVehicle" class="form-control" />
-                <span asp-validation-for="TransportVehicle" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="AdditionalInfo" class="control-label"></label>
                 <input asp-for="AdditionalInfo" class="form-control" />
                 <span asp-validation-for="AdditionalInfo" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="PrepaymentAmount" class="control-label"></label>
-                <input asp-for="PrepaymentAmount" class="form-control" />
-                <span asp-validation-for="PrepaymentAmount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PrepaymentCurrency" class="control-label"></label>
-                <input asp-for="PrepaymentCurrency" class="form-control" />
-                <span asp-validation-for="PrepaymentCurrency" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ApplicationId" class="control-label"></label>
-                <input asp-for="ApplicationId" class="form-control" />
-                <span asp-validation-for="ApplicationId" class="text-danger"></span>
-            </div>
-            @*<div class="form-group">
-                <label asp-for="EmployeeId" class="control-label"></label>
-                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
-                <span asp-validation-for="EmployeeId" class="text-danger"></span>
-            </div>*@
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-success btn-block" />
+                <input type="submit" value="Zapisz zmiany" class="btn btn-block btn-success" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-alt-circle-left"></i> Powrót do podsumowania</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.datepicker').daterangepicker({
+                "locale": {
+                    "format": "DD/MM/YYYY",
+                    "separator": " - ",
+                    "applyLabel": "Zatwierdź",
+                    "cancelLabel": "Anuluj",
+                    "fromLabel": "Od",
+                    "toLabel": "Do",
+                    "customRangeLabel": "Custom",
+                    "weekLabel": "Tydzień",
+                    "daysOfWeek": [
+                        "Nd",
+                        "Pn",
+                        "Wt",
+                        "Śr",
+                        "Cz",
+                        "Pt",
+                        "So"
+                    ],
+                    "monthNames": [
+                        "Styczeń",
+                        "Luty",
+                        "Marzec",
+                        "Kwiecień",
+                        "Maj",
+                        "Czerwiec",
+                        "Lipiec",
+                        "Sierpień",
+                        "Wrzesień",
+                        "Październik",
+                        "Listopad",
+                        "Grudzień"
+                    ],
+                    "firstDay": 1
+                },
+                "alwaysShowCalendars": true,
+                "showDropdowns": true,
+                "singleDatePicker": true
+            });
+
+
+        });
+    </script>
 }

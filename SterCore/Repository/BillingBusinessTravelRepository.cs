@@ -57,7 +57,7 @@ namespace leave_management.Repository
 
 
             var BillingBusinessTravel = await _db.billingBusinessTravels
-                .Include(q => q.Employee)
+                
                 .Include(q => q.BusinessTravel)
                 .Where(q => q.OrganizationToken == organizationToken)
                 .ToListAsync();

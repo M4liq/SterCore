@@ -8,7 +8,7 @@ using leave_management.Services.Components.ORI;
 
 namespace leave_management.Data
 {
-    public class Expense
+    public class Expense : OrganizationResurceIdentifier
     {
         public string Name { get; set; }
         public int Amount { get; set; }

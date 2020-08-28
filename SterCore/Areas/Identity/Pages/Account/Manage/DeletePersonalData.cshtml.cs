@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using leave_management.Data;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace leave_management.Areas.Identity.Pages.Account.Manage
 {
@@ -66,6 +67,9 @@ namespace leave_management.Areas.Identity.Pages.Account.Manage
                     return Page();
                 }
             }
+
+            if (user.InitialAdministrator)
+                ModelState.AddModelError("", "Nie można usunąć pierwotnego administratora");
 
             var result = await _userManager.DeleteAsync(user);
             var userId = await _userManager.GetUserIdAsync(user);

@@ -145,7 +145,8 @@ namespace leave_management.Areas.Identity.Pages.Account
                     DateOfBirth = DateTime.Now.AddYears(-35).Date,
                     Organization = organization,
                     OrganizationId = organization.Id,
-                    OrganizationToken = organization.OrganizationToken
+                    OrganizationToken = organization.OrganizationToken,
+                    InitialAdministrator = false
             };
 
 

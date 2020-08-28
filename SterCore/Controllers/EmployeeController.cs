@@ -108,6 +108,11 @@ namespace leave_management.Controllers
                 return NotFound();
             }
 
+            if (user.InitialAdministrator)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
             var deleting = await _userManager.DeleteAsync(user);
             if (!deleting.Succeeded)
             {

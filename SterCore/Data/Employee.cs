@@ -21,5 +21,6 @@ namespace leave_management.Data
         public bool Deleted { get; set; }
         public bool ChangedPassword { get; set; }
         public string OrganizationToken { get; set; }
+        public bool InitialAdministrator { get; set; }
     }
 }

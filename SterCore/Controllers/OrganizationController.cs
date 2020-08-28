@@ -69,6 +69,7 @@ namespace leave_management.Controllers
                     return View(model);
                 }
                 model.Disabled = false;
+                model.InitialOrganization = true;
 
                 var record = _mapper.Map<Organization>(model);
                 var isSuccess = await _organizationRepostory.Create(record);
@@ -137,6 +138,13 @@ namespace leave_management.Controllers
                 var organization = await _organizationRepostory.FindById(id);
 
                 organization.Disabled = true;
+
+                if (organization.InialOrganization)
+                {
+                    ModelState.AddModelError("", "Nie można wyłączyć pierwotnej organizacji.");
+                    return RedirectToAction(nameof(Index));
+                }
+
 
                 success = await  _organizationRepostory.Update(organization);
 

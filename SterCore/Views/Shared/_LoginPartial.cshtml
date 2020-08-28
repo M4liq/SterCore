@@ -12,12 +12,16 @@
                     <p>@User.Identity.Name!</p>
                 </a>
             </li>
+            if (User.IsInRole("Administrator") || User.IsInRole("Agent"))
+            {
             <li class="nav-item">
                 <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/ChangeOrganizationView">
                     <i class="fas fa-binoculars"></i>
                     <p>Zmień widok organizacji</p>
                 </a>
             </li>
+            }
+
             <li class="nav-item">
                 <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout">
                     <button type="submit" class="nav-link btn btn-link text-white">

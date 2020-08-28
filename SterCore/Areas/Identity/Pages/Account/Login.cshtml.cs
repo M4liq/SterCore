@@ -132,7 +132,7 @@ namespace leave_management.Areas.Identity.Pages.Account
 
                     HttpContext.Session.ExtSet<string>("organizationName", organization.Name);
                     HttpContext.Session.ExtSet("organizationToken", organization.OrganizationToken);
-                    return LocalRedirect(returnUrl);
+                    return RedirectToPage("/");
                 }
 
                 if (result.RequiresTwoFactor)

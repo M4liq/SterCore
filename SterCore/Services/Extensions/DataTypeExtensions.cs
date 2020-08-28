@@ -7,9 +7,10 @@ namespace leave_management.Services.Extensions
 {
     public static class DataTypeExtensions
     {
-        public static bool IsHoliday(this DateTime Day)
+        public static bool ExtIsHoliday(this DateTime Day)
         {
-            if (Day.DayOfWeek == DayOfWeek.Sunday) return true;
+            if (Day.DayOfWeek == DayOfWeek.Saturday) return true;
+            if (Day.DayOfWeek == DayOfWeek.Sunday) return true;         
             if (Day.Month == 1 && Day.Day == 1) return true; // Nowy Rok
             if (Day.Month == 1 && Day.Day == 6) return true; // Trzech Króli
             if (Day.Month == 5 && Day.Day == 1) return true; // 1 maja

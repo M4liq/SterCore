@@ -24,6 +24,8 @@ using leave_management.Services.DataSeeds.Contracts;
 using System.Collections;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using leave_management.Data.Seeds;
+using leave_management.Services.LeaveHelper.Contracts;
+using leave_management.Services.LeaveHelper;
 
 namespace leave_management
 {
@@ -78,6 +80,9 @@ namespace leave_management
             services.AddScoped<IDataSeed, SeedRoles>();
             services.AddScoped<IDataSeed, SeedUsersAndOrganizations>();
             services.AddScoped<IDataSeed, SeedMedicalCheckUpTypes>();
+
+            //Initializing LeaveHelper 
+            services.AddScoped<ILeaveHelper, LeaveHelper>();
 
             services.AddAutoMapper(typeof(Maps));
 

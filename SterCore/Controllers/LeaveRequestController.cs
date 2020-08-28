@@ -6,6 +6,8 @@ using AutoMapper;
 using leave_management.Contracts;
 using leave_management.Data;
 using leave_management.Models;
+using leave_management.Services.Extensions;
+using leave_management.Services.LeaveHelper.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -21,6 +23,7 @@ namespace leave_management.Controllers
         private readonly ILeaveRequestRepository _leaveRequestRepository;
         private readonly ILeaveTypeRepository _leaveTypeRepository;
         private readonly ILeaveAllocationRepository _leaveAllocationRepository;
+        private readonly ILeaveHelper _leaveHelper;
         private readonly IMapper _mapper;
         private readonly UserManager<Employee> _userManager;
 
@@ -28,6 +31,7 @@ namespace leave_management.Controllers
             ILeaveRequestRepository leaveRequestRepository,
             ILeaveTypeRepository leaveTypeRepository,
             ILeaveAllocationRepository leaveAllocationRepository,
+            ILeaveHelper leaveHelper,
             IMapper mapper,
             UserManager<Employee> userManager
             )
@@ -37,9 +41,10 @@ namespace leave_management.Controllers
            _leaveAllocationRepository = leaveAllocationRepository;
            _mapper = mapper;
            _userManager = userManager;
+            _leaveHelper = leaveHelper;
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Employer, Agent")]
         // GET: LeaveRequest
         public async Task<ActionResult> Index()
         {
@@ -59,7 +64,7 @@ namespace leave_management.Controllers
             return View(AdminModel);
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Employer, Agent")]
         // GET: LeaveRequest/Details/5
         public async Task<ActionResult> Details(int id)                             
         {
@@ -68,7 +73,7 @@ namespace leave_management.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Employer, Agent")]
         public async Task<ActionResult> ApproveRequest(int id)
         {
             try
@@ -78,7 +83,8 @@ namespace leave_management.Controllers
                 var employeeId = leaveRequest.RequestingEmployeeId;
                 var leaveTypeId = leaveRequest.LeaveTypeId;
                 var allocation = await _leaveAllocationRepository.GetLeaveAllocationsByEmployeeAndType(employeeId, leaveTypeId);
-                int daysRequested = (int)(leaveRequest.EndDate.Date - leaveRequest.StartDate.Date).TotalDays;
+
+                var daysRequested = _leaveHelper.CountLeaveDays(leaveRequest.StartDate, leaveRequest.EndDate);
 
                 allocation.NumberOfDays -= daysRequested;
 
@@ -105,7 +111,7 @@ namespace leave_management.Controllers
            
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator, Employer, Agent")]
         public async Task<ActionResult> RejectRequest(int id)
         {
             try
@@ -182,9 +188,12 @@ namespace leave_management.Controllers
                     return View(model);
                 }
 
-                var employee = await _userManager.GetUserAsync(User); //getting signinuser
+                var employee = await _userManager.GetUserAsync(User);
                 var allocation = await _leaveAllocationRepository.GetLeaveAllocationsByEmployeeAndType(employee.Id,model.LeaveTypeId);
-                int daysRequested = (int)(model.EndDate.Date - model.StartDate.Date).TotalDays;
+
+                //TO DO real logic of counting days
+
+                var daysRequested = _leaveHelper.CountLeaveDays(model.StartDate, model.EndDate);
 
                 if (allocation == null)
                 {

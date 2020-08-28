@@ -13,7 +13,7 @@ using leave_management.Services.Extensions;
 
 namespace leave_management.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    [Authorize]
     public class LogoutModel : PageModel
     {
         private readonly SignInManager<Employee> _signInManager;
@@ -25,23 +25,19 @@ namespace leave_management.Areas.Identity.Pages.Account
             _logger = logger;
         }
 
+        
         public void OnGet()
         {
         }
 
-        public async Task<IActionResult> OnPost(string returnUrl = null)
+        public async Task<IActionResult> OnPost()
         {
             await _signInManager.SignOutAsync();
 
             _logger.LogInformation("User logged out.");
-            if (returnUrl != null)
-            {
-                return LocalRedirect(returnUrl);
-            }
-            else
-            {
+
                 return RedirectToPage();
-            }
+
         }
     }
 }

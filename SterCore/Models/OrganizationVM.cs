@@ -24,7 +24,8 @@ namespace leave_management.Models
         [Display(Name = "Data utworzenia")]
         public DateTime DateCreated { get; set; }
         [Display(Name = "Aktywna")]
-        public bool? Disabled { get; set; }
+        public bool Disabled { get; set; }
+        public bool InitialOrganization { get; set; }
         [Display(Name = "Kod pocztowy")]
         public string ZipCode { get; set; }
         public int AuthorizedOrganizationId { get; set; }

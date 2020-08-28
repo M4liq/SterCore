@@ -26,6 +26,7 @@ namespace leave_management.Models
         public DateTime DateOfBirth { get; set; }
         [Display(Name = "Data Dodania")]
         public DateTime DateJoined { get; set; }
+        public bool InitialAdministrator { get; set; }
 
     }
 

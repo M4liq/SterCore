@@ -51,6 +51,8 @@ namespace leave_management.Data.Seeds
                     Street = "Wiśniowa",
                     HouseNumber = "11",
                     City = "Lubliniec",
+                    Disabled = false,
+                    InialOrganization = true
                 };
 
 
@@ -65,7 +67,8 @@ namespace leave_management.Data.Seeds
                         Email = "admin@stercore.pl",
                         OrganizationId = initalOrganization.Id,
                         OrganizationToken = organizationToken, //adding organization token, cause it is not handled by user manager
-                        ChangedPassword = true
+                        ChangedPassword = true,
+                        InitialAdministrator = true
                     };
 
 

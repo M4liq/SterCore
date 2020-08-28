@@ -106,12 +106,19 @@ namespace leave_management.Areas.Identity.Pages.Account
                     return RedirectToPage("./FirstRegistration");
                 }
 
+                var organization = _employeeRepository.FindById(user.Id, true).Result.Organization;
+
+                if (organization.Disabled)
+                {
+
+                    ModelState.AddModelError(string.Empty, "Twoja organizacja została tymczasowo wyłączona z systemu. Skontaktuj się z Twoim dostawcą.");
+                    return Page();
+                }
 
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
 
                 if (result.Succeeded)
                 {
-                    var organization =  _employeeRepository.FindById(user.Id, true).Result.Organization;
 
                     _logger.LogInformation("User logged in.");
 

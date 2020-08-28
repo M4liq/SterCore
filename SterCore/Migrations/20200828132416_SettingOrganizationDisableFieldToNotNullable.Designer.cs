@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using leave_management.Data;
 
 namespace leave_management.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200828132416_SettingOrganizationDisableFieldToNotNullable")]
+    partial class SettingOrganizationDisableFieldToNotNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -582,9 +584,6 @@ namespace leave_management.Migrations
                     b.Property<string>("HouseNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("InialOrganization")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -643,9 +642,6 @@ namespace leave_management.Migrations
 
                     b.Property<string>("Firstname")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("InitialAdministrator")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Lastname")
                         .HasColumnType("nvarchar(max)");

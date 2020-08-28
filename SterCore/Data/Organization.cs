@@ -19,7 +19,7 @@ namespace leave_management.Data
         public string City { get; set; }                
         public string HouseNumber { get; set; }
         public DateTime DateCreated { get; set; }
-        public bool? Disabled { get; set; }
+        public bool Disabled { get; set; }
         public string ZipCode { get; set; }
         public string OrganizationToken { get; set; }
 

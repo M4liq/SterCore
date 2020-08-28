@@ -68,6 +68,7 @@ namespace leave_management.Controllers
                 {
                     return View(model);
                 }
+                model.Disabled = false;
 
                 var record = _mapper.Map<Organization>(model);
                 var isSuccess = await _organizationRepostory.Create(record);
@@ -99,8 +100,8 @@ namespace leave_management.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(OrganizationVM model)
         {
-            //try
-            //{
+            try
+            {
                 if (!ModelState.IsValid)
                 {
                     return View(model);
@@ -115,13 +116,13 @@ namespace leave_management.Controllers
                     return View(model);
                 }
                 return RedirectToAction(nameof(Index));
-            // }
-            //catch
-            //{
-            //    ModelState.AddModelError("", "Błąd podczas zapisu, skontaktuj się z administratorem");
-            //    return View(model);
-            //}
-}
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Błąd podczas zapisu, skontaktuj się z administratorem");
+                return View(model);
+            }
+        }
 
         public async Task<ActionResult> Disable(int id)
         {

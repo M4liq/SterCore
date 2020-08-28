@@ -51,6 +51,7 @@ namespace leave_management.Data.Seeds
                     Street = "Wiśniowa",
                     HouseNumber = "11",
                     City = "Lubliniec",
+                    Disabled = false
                 };
 
 

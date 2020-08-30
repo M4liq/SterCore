@@ -2,10 +2,13 @@
 using leave_management.Data;
 using leave_management.Services.Components.ORI;
 using leave_management.Services.Extensions;
+using leave_management.Services.ORI.Contracts;
 using Microsoft.AspNetCore.Http;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,9 +17,9 @@ namespace leave_management.Repository
     public class LeaveTypeRepository : ILeaveTypeRepository
     {
         private readonly ApplicationDbContext _db;
-        private readonly IOrganizationResourceManager _organizationManager;
+        private readonly IOrganizationResourceManager<LeaveType> _organizationManager;
 
-        public LeaveTypeRepository(ApplicationDbContext db, IOrganizationResourceManager organizationManager)
+        public LeaveTypeRepository(ApplicationDbContext db, IOrganizationResourceManager<LeaveType> organizationManager)
         {
             _db = db;
             _organizationManager = organizationManager;
@@ -26,7 +29,7 @@ namespace leave_management.Repository
         {
 
             //ORI separating data beetween organizations
-            entity.OrganizationToken = _organizationManager.GetOrganizationToken();
+            _organizationManager.SetAccess(entity);
 
             await _db.LeaveTypes.AddAsync(entity); 
             return await Save();
@@ -35,7 +38,7 @@ namespace leave_management.Repository
         public async Task<bool> Delete(LeaveType entity)
         {
             //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            if (!_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }
@@ -46,26 +49,17 @@ namespace leave_management.Repository
 
         public async Task<ICollection<LeaveType>> FindAll()
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
 
-            //ORI Filtring leave types by their tokens to get scope
-            var leaveTypes = _db.LeaveTypes
-                .Where(q => q.OrganizationToken == organizationToken);
+            var leaveTypes = _organizationManager.FilterDbSetByView(_db.LeaveTypes);
 
             return await leaveTypes.ToListAsync(); 
         }
 
         public async Task<LeaveType> FindById(int id)
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
 
-            var leaveType = _db.LeaveTypes
+            var leaveType = _organizationManager.FilterDbSetByView(_db.LeaveTypes);
 
-                //ORI Filtring organizations by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken);
-                
             return await leaveType.FirstOrDefaultAsync(q => q.Id == id); ;
         }
 
@@ -76,14 +70,10 @@ namespace leave_management.Repository
 
         public async Task<bool> Exists(int id)
         {
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var exists = await _db.LeaveTypes
-
-                //ORI Filtring leave types by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
-                .AnyAsync(q => q.Id == id);
-            return exists;
+            if (await FindById(id) == null)
+                return false;
+            else
+                return true;
         }
 
         public async Task<bool> Save()
@@ -95,7 +85,7 @@ namespace leave_management.Repository
         public async Task<bool> Update(LeaveType entity)
         {
             //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            if (!_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }

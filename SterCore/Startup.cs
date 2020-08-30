@@ -57,6 +57,7 @@ namespace leave_management
                     Configuration.GetConnectionString("DefaultConnection")));
             }
 
+            //Repositories
             services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
             services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
             services.AddScoped<ILeaveAllocationRepository, LeaveAllocationRepository>();
@@ -71,6 +72,9 @@ namespace leave_management
             services.AddScoped<IDocumentsRepository, DocumentsRepository>();
             services.AddScoped<ICompetenceRepository, CompetenceRepository>();
             services.AddScoped<ICompetenceTypeRepository, CompetenceTypeRepository>();
+
+            //Organization Resource Manager Initialization Fields
+            services.AddScoped<IOrganizationResourceManager<LeaveType>, OrganizationResourceManager<LeaveType>>();
 
             //Initializind Data Seeding and Generic List required to handle Seeds
             services.AddScoped<ISeed, Seed>();

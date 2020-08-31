@@ -17,12 +17,14 @@ namespace leave_management.Controllers
     {
         private readonly IExpenseRepository _expenseRepository;
         private readonly IBusinessTravelRepository _businessTravelRepo;
+        private readonly ITypeOfBillingRepository _typeOfBillingRepository;
         private readonly ICurrencyRepository _currencyRepository;
         private readonly IMapper _mapper;
 
 
         public ExpenseController(IExpenseRepository expenseRepository,
             IBusinessTravelRepository businessTravelRepo,
+            ITypeOfBillingRepository typeOfBillingRepository,
             ICurrencyRepository currencyRepository,
             IMapper mapper
             )
@@ -30,6 +32,7 @@ namespace leave_management.Controllers
             _expenseRepository = expenseRepository;
             _businessTravelRepo = businessTravelRepo;
             _currencyRepository = currencyRepository;
+            _typeOfBillingRepository = typeOfBillingRepository;
             _mapper = mapper;
         }
         // GET: Expense
@@ -88,7 +91,7 @@ namespace leave_management.Controllers
                 BusinessTravels = businessTravelsItems,
                 Curencies = currenciesItems,
             };
-            if (businessTravelId != null)
+            if (await _typeOfBillingRepository.Exists(businessTravelId))
             {
                 model.BusinessTravelId = businessTravelId;
             }

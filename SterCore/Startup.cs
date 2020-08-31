@@ -93,6 +93,10 @@ namespace leave_management
             services.AddScoped<IDataSeed, SeedRoles>();
             services.AddScoped<IDataSeed, SeedUsersAndOrganizations>();
             services.AddScoped<IDataSeed, SeedMedicalCheckUpTypes>();
+            services.AddScoped<IDataSeed, SeedCountry>();
+            services.AddScoped<IDataSeed, SeedCurrency>();
+            services.AddScoped<IDataSeed, SeedTransportVehicle>();
+            services.AddScoped<IDataSeed, SeedTypeOfBilling>();
 
             //Initializing LeaveHelper 
             services.AddScoped<ILeaveHelper, LeaveHelper>();
@@ -119,16 +123,6 @@ namespace leave_management
             IApplicationBuilder app, 
             IWebHostEnvironment env,
             ISeed seed
-            UserManager<Employee> userManager,
-            RoleManager<IdentityRole> roleManager,
-            IOrganizationResourceManager organizationManager,
-            IOrganizationRepository organizationRepository,
-            IAuthorizedOrganizationRepository authorizedOrganizationRepository,
-            ITypeOfMedicalCheckUpRepository typeOfMedicalCheckUpRepository,
-            ICountryRepository countryRepository,
-            ICurrencyRepository currencyRepository,
-            ITransportVehicleRepository transportVehicleRepository,
-            ITypeOfBillingRepository typeOfBillingRepository
         )
         {
             if (env.IsDevelopment())

@@ -60,8 +60,8 @@ namespace leave_management.Controllers
                 return NotFound();
             }
             var expense = await _expenseRepository.FindById(id);
-            var businessTravels = _businessTravelRepo.FindAll().Result;
-            var currencies = _currencyRepository.FindAll().Result;
+            var businessTravels = await _businessTravelRepo.FindAll();
+            var currencies = await _currencyRepository.FindAll();
 
             var model = _mapper.Map<ExpenseVM>(expense);
             model.CurrencyName = currencies.FirstOrDefault(q => q.Id == model.CurrencyId).Name;
@@ -72,14 +72,14 @@ namespace leave_management.Controllers
         // GET: Expense/Create
         public async Task<ActionResult> Create(int businessTravelId)
         {
-            var businessTravels = _businessTravelRepo.FindAll().Result;
+            var businessTravels = await _businessTravelRepo.FindAll();
             var businessTravelsItems = businessTravels.Select(q => new SelectListItem
             {
                 Text = q.ApplicationId.ToString(),
                 Value = q.Id.ToString()
             });
 
-            var currencies = _currencyRepository.FindAll().Result;
+            var currencies = await _currencyRepository.FindAll();
             var currenciesItems = currencies.Select(q => new SelectListItem
             {
                 Text = q.Name,
@@ -138,14 +138,14 @@ namespace leave_management.Controllers
             }
             var BillingBusinessTravel = await _expenseRepository.FindById(id);
             var model = _mapper.Map<CreateExpenseVM>(BillingBusinessTravel);
-            var businessTravels = _businessTravelRepo.FindAll().Result;
+            var businessTravels = await _businessTravelRepo.FindAll();
             var businessTravelsItems = businessTravels.Select(q => new SelectListItem
             {
                 Text = q.ApplicationId.ToString(),
                 Value = q.Id.ToString()
             });
 
-            var currencies = _currencyRepository.FindAll().Result;
+            var currencies = await _currencyRepository.FindAll();
             var currenciesItems = currencies.Select(q => new SelectListItem
             {
                 Text = q.Name,

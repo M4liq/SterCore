@@ -26,7 +26,7 @@ namespace leave_management.Controllers
         // GET: CompetenceType
         public async Task<ActionResult> Index()
         {
-            var competences = _competenceTypeRepository.FindAll().Result;
+            var competences = await _competenceTypeRepository.FindAll();
             var model = _mapper.Map<List<CompetenceType>, List<CompetenceTypeVM>>(competences.ToList());
             return View(model);
         }

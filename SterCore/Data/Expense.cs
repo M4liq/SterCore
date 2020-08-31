@@ -12,6 +12,7 @@ namespace leave_management.Data
     {
         public string Name { get; set; }
         public int Amount { get; set; }
+        public decimal ExchangeRate { get; set; }
 
         [ForeignKey("CurrencyId")]
         public Currency Currency { get; set; }

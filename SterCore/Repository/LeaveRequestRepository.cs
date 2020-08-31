@@ -12,9 +12,9 @@ namespace leave_management.Repository
     public class LeaveRequestRepository : ILeaveRequestRepository
     {
         private readonly ApplicationDbContext _db;
-        private readonly IOrganizationResourceManager _organizationManager;
+        private readonly IOrganizationResourceManager<LeaveRequests> _organizationManager;
 
-        public LeaveRequestRepository(ApplicationDbContext db, IOrganizationResourceManager organizationManager)
+        public LeaveRequestRepository(ApplicationDbContext db, IOrganizationResourceManager<LeaveRequests> organizationManager)
         {
             _db = db;
             _organizationManager = organizationManager;
@@ -22,9 +22,7 @@ namespace leave_management.Repository
 
         public async Task<bool> Create(LeaveRequests entity)
         {
-            //ORI separating data beetween organizations
-            entity.OrganizationToken = _organizationManager.GetOrganizationToken();
-
+            _organizationManager.SetAccess(entity);
             _db.LeaveRequests.Add(entity);
             return await Save();
         }
@@ -32,7 +30,7 @@ namespace leave_management.Repository
         public async Task<bool> Delete(LeaveRequests entity)
         {
             //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            if (!_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }
@@ -46,13 +44,10 @@ namespace leave_management.Repository
             //ORI getting token to find organization scope
             var organizationToken = _organizationManager.GetOrganizationToken();
 
-            var LeaveRequests = await _db.LeaveRequests
+            var LeaveRequests = await _organizationManager.FilterDbSetByView(_db.LeaveRequests)
                 .Include(q=>q.ApprovedBy)
                 .Include(q=>q.RequestingEmployee)
                 .Include(q=>q.LeaveType)
-
-                //ORI Filtring organizations by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
                 .ToListAsync();
 
             return LeaveRequests;
@@ -60,17 +55,10 @@ namespace leave_management.Repository
 
         public async Task<LeaveRequests> FindById(int id)
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var LeaveHistory = await _db.LeaveRequests
+            var LeaveHistory = await _organizationManager.FilterDbSetByView(_db.LeaveRequests)
                 .Include(q => q.ApprovedBy)
                 .Include(q => q.RequestingEmployee)
                 .Include(q => q.LeaveType)
-
-                //ORI Filtring organizations by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
-
                 .FirstOrDefaultAsync(q => q.Id == id);
 
             return LeaveHistory;
@@ -78,24 +66,17 @@ namespace leave_management.Repository
 
         public async Task<ICollection<LeaveRequests>> GetLeaveRequestsByEmployee(string id)
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var LeaveRequests = await _db.LeaveRequests.Where(q => q.RequestingEmployeeId == id && q.OrganizationToken == organizationToken).ToListAsync();
+            var LeaveRequests = await _organizationManager.FilterDbSetByView(_db.LeaveRequests)
+                .Where(q => q.RequestingEmployeeId == id).ToListAsync();
             return LeaveRequests;
         }
 
         public async Task<bool> Exists(int id)
         {
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var exists = await _db.LeaveRequests
-
-                //ORI Filtring organizations by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
-                .AnyAsync(q => q.Id == id);
-
-            return exists;
+            if (await FindById(id) == null)
+                return false;
+            else
+                return true;
         }
 
         public async Task<bool> Save()
@@ -106,8 +87,8 @@ namespace leave_management.Repository
 
         public async Task<bool> Update(LeaveRequests entity)
         {
-            //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+
+            if (!_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }

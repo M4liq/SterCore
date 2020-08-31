@@ -17,6 +17,7 @@ namespace leave_management.Models
         public int DefaultDays { get; set; }
         [Display(Name="Date Created")]
         public DateTime? DateCreated { get; set; }
+        public string OrganizationToken { get; set; }
     }
 
 }

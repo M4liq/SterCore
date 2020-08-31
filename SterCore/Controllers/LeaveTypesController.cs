@@ -36,7 +36,7 @@ namespace leave_management.Controllers
         public async Task<ActionResult> Details(int id)
         {
             var exists = await _repo.Exists(id);
-            if (exists)
+            if (!exists)
             {
                 return NotFound();
             }
@@ -121,7 +121,7 @@ namespace leave_management.Controllers
                 ModelState.AddModelError("", "Coś poszło nie tak skontaktuj się z administratorem...");
                 return View(model);
             }
-        }
+}
 
         // GET: LeaveTypes/Delete/5
         public async Task<ActionResult> Delete(int id)

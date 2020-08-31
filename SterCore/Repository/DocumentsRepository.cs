@@ -12,17 +12,16 @@ namespace leave_management.Repository
     public class DocumentsRepository : IDocumentsRepository
     {
         private readonly ApplicationDbContext _db;
-        private readonly IOrganizationResourceManager _organizationManager;
+        private readonly IOrganizationResourceManager<Document> _organizationManager;
 
-        public DocumentsRepository(ApplicationDbContext db, IOrganizationResourceManager organizationManager)
+        public DocumentsRepository(ApplicationDbContext db, IOrganizationResourceManager<Document> organizationManager)
         {
             _db = db;
             _organizationManager = organizationManager;
         }
         public async Task<bool> Create(Document entity)
         {
-            //ORI separating data beetween organizations
-            entity.OrganizationToken = _organizationManager.GetOrganizationToken();
+            _organizationManager.SetAccess(entity);
 
             await _db.Documents.AddAsync(entity);
             return await Save();
@@ -31,7 +30,7 @@ namespace leave_management.Repository
         public async Task<bool> Delete(Document entity)
         {
             //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            if ( _organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }
@@ -42,38 +41,23 @@ namespace leave_management.Repository
 
         public async Task<bool> Exists(int id)
         {
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var exists = await _db.Documents
-
-                //ORI Filtring leave types by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
-                .AnyAsync(q => q.Id == id);
-
-            return exists;
+            if (await FindById(id) == null)
+                return false;
+            else
+                return true;
         }
 
         public async Task<ICollection<Document>> FindAll()
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
             //ORI filtering by token
-            var Document = await _db.Documents    
-                .Where(q => q.OrganizationToken == organizationToken)
+            var Document = await _organizationManager.FilterDbSetByView(_db.Documents)   
                 .ToListAsync();
             return Document;
         }
 
         public async Task<Document> FindById(int id)
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var Document = await _db.Documents
-
-                //ORI Filtring organizations by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
+            var Document = await _organizationManager.FilterDbSetByView(_db.Documents)
                 .FirstOrDefaultAsync(q => q.Id == id);
 
             return Document;
@@ -85,16 +69,10 @@ namespace leave_management.Repository
             return changes > 0;
         }
 
-        public void SetToken(Document entity)
-        {
-            var token = _organizationManager.GetOrganizationToken();
-            entity.OrganizationToken = token;
-        }
-
         public async Task<bool> Update(Document entity)
         {
             //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            if (_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }

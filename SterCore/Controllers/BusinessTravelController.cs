@@ -50,7 +50,19 @@ namespace leave_management.Controllers
             {
                 item.EmployeeFullName = String.Format("{0} {1}", employees.FirstOrDefault(q => q.Id == item.EmployeeId).Firstname, employees.FirstOrDefault(q => q.Id == item.EmployeeId).Lastname);
                 item.DestinationCountry = countries.FirstOrDefault(q => q.Id == item.CountryId).Name;
-                item.DifferenceOfCostsAndBillings = 30;
+               
+                var listOfExpenses = expenses.Where(q => q.BusinessTravelId == item.Id).ToList();
+                var ammountOfExpenses = 0.0;
+                listOfExpenses.ForEach(delegate (Expense expense) {
+                    ammountOfExpenses += expense.Amount;
+                });
+                var listOfBillings = billingBusinessTravels.Where(q => q.BusinessTravelId == item.Id).ToList();
+                var ammountOfBillings = 0.0;
+                listOfBillings.ForEach(delegate (BillingBusinessTravel billingBusinessTravel) {
+                    ammountOfBillings += billingBusinessTravel.Amount;
+                });
+
+                item.DifferenceOfCostsAndBillings = ammountOfBillings - ammountOfExpenses;
             }
             return View(model);
         }

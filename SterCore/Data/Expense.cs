@@ -11,7 +11,7 @@ namespace leave_management.Data
     public class Expense : OrganizationResurceIdentifier
     {
         public string Name { get; set; }
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
         public decimal ExchangeRate { get; set; }
 
         [ForeignKey("CurrencyId")]

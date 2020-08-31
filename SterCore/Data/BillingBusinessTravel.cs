@@ -13,7 +13,8 @@ namespace leave_management.Data
         [ForeignKey("BusinessTravelId")]
         public BusinessTravel BusinessTravel { get; set; }
         public int BusinessTravelId { get; set; }
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
+        public decimal ExchangeRate { get; set; }
         public bool IsPaid { get; set; }
 
         [ForeignKey("CurrencyId")]

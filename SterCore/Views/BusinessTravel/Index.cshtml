@@ -77,6 +77,12 @@
                 <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz usunąć ten wpis?')">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                 </a>
+                <a asp-action="Create" class="btn btn-success" asp-controller="BillingBusinessTravel" asp-route-businessTravelId="@item.Id">
+                    <i class="fa fa-plus" aria-hidden="true"></i> <i class="fa fa-hand-holding-usd" aria-hidden="true"></i>
+                </a>
+                <a asp-action="Create" class="btn btn-success" asp-controller="Expense" asp-route-businessTravelId="@item.Id">
+                    <i class="fa fa-plus" aria-hidden="true"></i> <i class="fa fa-coins" aria-hidden="true"></i>
+                </a>
             </td>
         </tr>
 }

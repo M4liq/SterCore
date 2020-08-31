@@ -74,7 +74,7 @@ namespace leave_management.Controllers
         }
 
         // GET: BillingBusinessTravel/Create
-        public async Task<ActionResult> Create()
+        public async Task<ActionResult> Create(int businessTravelId)
         {
             var businessTravels = await _businessTravelRepo.FindAll();
             var businessTravelsItems = businessTravels.Select(q => new SelectListItem
@@ -104,6 +104,10 @@ namespace leave_management.Controllers
                 TypeOfBillings = typeOfBillingsItems
                 
             };
+            if (businessTravelId != null)
+            {
+                model.BusinessTravelId = businessTravelId;
+            }
 
             return View(model);
         }

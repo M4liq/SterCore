@@ -36,7 +36,7 @@ namespace leave_management.Models
     {
         public int Id { get; set; }
         [Display(Name = "Kod wyjazdu służbowego")]
-        public int ApplicationId { get; set; }
+        public string ApplicationId { get; set; }
         [Display(Name = "Kwota")]
         public decimal Amount { get; set; }
         [Display(Name = "Czy dokonano operację?")]

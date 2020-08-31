@@ -67,7 +67,7 @@ namespace leave_management.Controllers
         }
 
         // GET: Expense/Create
-        public async Task<ActionResult> Create()
+        public async Task<ActionResult> Create(int businessTravelId)
         {
             var businessTravels = _businessTravelRepo.FindAll().Result;
             var businessTravelsItems = businessTravels.Select(q => new SelectListItem
@@ -88,6 +88,10 @@ namespace leave_management.Controllers
                 BusinessTravels = businessTravelsItems,
                 Curencies = currenciesItems,
             };
+            if (businessTravelId != null)
+            {
+                model.BusinessTravelId = businessTravelId;
+            }
 
             return View(model);
         }

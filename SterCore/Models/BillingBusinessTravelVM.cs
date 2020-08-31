@@ -47,6 +47,9 @@ namespace leave_management.Models
         [Display(Name = "Kod wyjazdu służbowego")]
         public int BusinessTravelId { get; set; }
         public string OrganizationToken { get; set; }
+        [Required]
+        [Display(Name = "Kurs waluty względem PLN")]
+        public decimal ExchangeRate { get; set; }
 
         public IEnumerable<SelectListItem> BusinessTravels { get; set; }
         public IEnumerable<SelectListItem> Curencies { get; set; }

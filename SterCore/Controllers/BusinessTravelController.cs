@@ -52,12 +52,12 @@ namespace leave_management.Controllers
                 item.DestinationCountry = countries.FirstOrDefault(q => q.Id == item.CountryId).Name;
                
                 var listOfExpenses = expenses.Where(q => q.BusinessTravelId == item.Id).ToList();
-                var ammountOfExpenses = 0.0;
+                decimal ammountOfExpenses = 0.0M;
                 listOfExpenses.ForEach(delegate (Expense expense) {
                     ammountOfExpenses += expense.Amount;
                 });
                 var listOfBillings = billingBusinessTravels.Where(q => q.BusinessTravelId == item.Id).ToList();
-                var ammountOfBillings = 0.0;
+                decimal ammountOfBillings = 0.0M;
                 listOfBillings.ForEach(delegate (BillingBusinessTravel billingBusinessTravel) {
                     ammountOfBillings += billingBusinessTravel.Amount;
                 });

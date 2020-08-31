@@ -47,7 +47,7 @@ namespace leave_management.Models
         public int CountryId { get; set; }
         public string OrganizationToken { get; set; }
         [Display(Name = "Zestawienie kosztów")]
-        public double DifferenceOfCostsAndBillings { get; set; }
+        public decimal DifferenceOfCostsAndBillings { get; set; }
     }
     public class CreateBusinessTravelVM
     {

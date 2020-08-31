@@ -13,7 +13,9 @@ namespace leave_management.Models
         [Display(Name = "Nazwa")]
         public string Name { get; set; }
         [Display(Name = "Kwota")]
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
+        [Display(Name = "Kurs waluty względem PLN")]
+        public decimal ExchangeRate { get; set; }
         [Display(Name = "Waluta")]
         public int CurrencyId { get; set; }
         [Display(Name = "Waluta")]
@@ -34,7 +36,7 @@ namespace leave_management.Models
         public string Name { get; set; }
         
         [Display(Name = "Kwota")]
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
         [Required]
         [Display(Name = "Kurs waluty względem PLN")]
         public decimal ExchangeRate { get; set; }

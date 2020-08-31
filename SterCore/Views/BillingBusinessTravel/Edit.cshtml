@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edycja rozliczenia";
 }
 
-    <h1>Edycja rozliczenia</h1>
+<h1>Edycja rozliczenia</h1>
 
 <hr />
 <div class="row">
@@ -53,4 +53,9 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $.validator.methods.number = function (value, element) {
+            return this.optional(element) || /^(\d*\,)?\d+$/.test(value);
+        }
+    </script>
 }

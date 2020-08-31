@@ -46,7 +46,7 @@ namespace leave_management.Models
         public int TransportVehicleId { get; set; }
         public int CountryId { get; set; }
         public string OrganizationToken { get; set; }
-        [Display(Name = "Zestawienie kosztów")]
+        [Display(Name = "Zestawienie kosztów w przeliczeniu na PLN")]
         public decimal DifferenceOfCostsAndBillings { get; set; }
     }
     public class CreateBusinessTravelVM

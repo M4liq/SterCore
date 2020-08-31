@@ -54,12 +54,12 @@ namespace leave_management.Controllers
                 var listOfExpenses = expenses.Where(q => q.BusinessTravelId == item.Id).ToList();
                 decimal ammountOfExpenses = 0.0M;
                 listOfExpenses.ForEach(delegate (Expense expense) {
-                    ammountOfExpenses += expense.Amount;
+                    ammountOfExpenses += expense.Amount*expense.ExchangeRate;
                 });
                 var listOfBillings = billingBusinessTravels.Where(q => q.BusinessTravelId == item.Id).ToList();
                 decimal ammountOfBillings = 0.0M;
                 listOfBillings.ForEach(delegate (BillingBusinessTravel billingBusinessTravel) {
-                    ammountOfBillings += billingBusinessTravel.Amount;
+                    ammountOfBillings += billingBusinessTravel.Amount* billingBusinessTravel.ExchangeRate;
                 });
 
                 item.DifferenceOfCostsAndBillings = ammountOfBillings - ammountOfExpenses;

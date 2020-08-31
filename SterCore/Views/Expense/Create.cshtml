@@ -4,7 +4,7 @@
     ViewData["Title"] = "Utwórz wydatek";
 }
 
-    <h1>Utwórz wydatek</h1>
+<h1>Utwórz wydatek</h1>
 
 <hr />
 <div class="row">
@@ -27,15 +27,16 @@
                 <input asp-for="Amount" class="form-control" />
                 <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ExchangeRate" class="control-label"></label>
-                <input asp-for="ExchangeRate" class="form-control" />
-                <span asp-validation-for="ExchangeRate" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="CurrencyId" class="control-label"></label>
                 @Html.DropDownListFor(q => q.CurrencyId, new SelectList(Model.Curencies, "Value", "Text"), "Wybierz walutę", new { @class = "form-control" })
                 <span asp-validation-for="CurrencyId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExchangeRate" class="control-label"></label>
+                <input asp-for="ExchangeRate" class="form-control" />
+                <span asp-validation-for="ExchangeRate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Utwórz wydatek" class="btn btn-success btn-block" />
@@ -50,4 +51,9 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $.validator.methods.number = function (value, element) {
+            return this.optional(element) || /^(\d*\,)?\d+$/.test(value);
+        }
+    </script>
 }

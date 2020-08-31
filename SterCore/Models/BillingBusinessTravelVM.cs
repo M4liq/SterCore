@@ -16,7 +16,9 @@ namespace leave_management.Models
         [Display(Name = "Kod wyjazdu służbowego")]
         public string ApplicationId { get; set; }
         [Display(Name = "Kwota")]
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
+        [Display(Name = "Kurs waluty względem PLN")]
+        public decimal ExchangeRate { get; set; }
         [Display(Name = "Czy dokonano operację?")]
         public bool IsPaid { get; set; }
         [Display(Name = "Waluta")]
@@ -36,7 +38,7 @@ namespace leave_management.Models
         [Display(Name = "Kod wyjazdu służbowego")]
         public int ApplicationId { get; set; }
         [Display(Name = "Kwota")]
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
         [Display(Name = "Czy dokonano operację?")]
         public bool IsPaid { get; set; }
         [Display(Name = "Waluta")]

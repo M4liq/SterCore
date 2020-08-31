@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edycja wydatku" + Model.Name;
 }
 
-    <h1>Edycja wydatku @Model.Name</h1>
+<h1>Edycja wydatku @Model.Name</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -47,4 +47,9 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $.validator.methods.number = function (value, element) {
+            return this.optional(element) || /^(\d*\,)?\d+$/.test(value);
+        }
+    </script>
 }

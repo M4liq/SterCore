@@ -40,11 +40,12 @@ namespace leave_management.Controllers
         public async Task<ActionResult> Index()
         {
             var businnesTravels = await _repo.FindAll();
-            var countries = _countryRepository.FindAll().Result;
-            var employees = _employeeRepository.FindAll().Result;
-            var billingBusinessTravels = _billingBusinessTravelRepository.FindAll().Result;
-            var expenses = _expenseRepository.FindAll().Result;
+            var countries = await _countryRepository.FindAll();
+            var employees = await _employeeRepository.FindAll();
+            var billingBusinessTravels = await _billingBusinessTravelRepository.FindAll();
+            var expenses = await _expenseRepository.FindAll();
             var model = _mapper.Map<List<BusinessTravel>, List<BusinessTravelVM>>(businnesTravels.ToList());
+
             foreach (var item in model)
             {
                 item.EmployeeFullName = String.Format("{0} {1}", employees.FirstOrDefault(q => q.Id == item.EmployeeId).Firstname, employees.FirstOrDefault(q => q.Id == item.EmployeeId).Lastname);
@@ -63,9 +64,9 @@ namespace leave_management.Controllers
                 return NotFound();
             }
             var businessTravel = await _repo.FindById(id);
-            var countries = _countryRepository.FindAll().Result;
-            var employees = _employeeRepository.FindAll().Result;
-            var transportVehicles = _transportVehicleRepository.FindAll().Result;
+            var countries = await _countryRepository.FindAll();
+            var employees = await _employeeRepository.FindAll();
+            var transportVehicles = await _transportVehicleRepository.FindAll();
             var model = _mapper.Map<BusinessTravelVM>(businessTravel);
             model.EmployeeFullName = String.Format("{0} {1}", employees.FirstOrDefault(q => q.Id == model.EmployeeId).Firstname, employees.FirstOrDefault(q => q.Id == model.EmployeeId).Lastname);
             model.DestinationCountry = countries.FirstOrDefault(q => q.Id == model.CountryId).Name;
@@ -76,21 +77,21 @@ namespace leave_management.Controllers
         // GET: PWS/Create
         public async Task<ActionResult> Create()
         {
-            var employees = _employeeRepository.FindAll().Result;
+            var employees = await _employeeRepository.FindAll();
             var employeesItems = employees.Select(q => new SelectListItem
             {
                 Text = String.Format("{0} {1}", q.Firstname, q.Lastname),
                 Value = q.Id.ToString()
             });
 
-            var countries = _countryRepository.FindAll().Result;
+            var countries = await _countryRepository.FindAll();
             var countriesItems = countries.Select(q => new SelectListItem
             {
                 Text = q.Name,
                 Value = q.Id.ToString()
             });
 
-            var transportVehicles = _transportVehicleRepository.FindAll().Result;
+            var transportVehicles = await _transportVehicleRepository.FindAll();
             var transportVehiclesItems = transportVehicles.Select(q => new SelectListItem
             {
                 Text = q.Name,
@@ -127,7 +128,7 @@ namespace leave_management.Controllers
                 }
                 model.DateCreated = DateTime.Now;
                 
-                var lastApplicationId = _repo.getLatestApplicationId().Result;
+                var lastApplicationId = await _repo.getLatestApplicationId();
                 var applicationId = String.Format("WS{0}", lastApplicationId + 1);
                 model.ApplicationId = applicationId;
                 var businessTravel = _mapper.Map<BusinessTravel>(model);

@@ -39,9 +39,9 @@ namespace leave_management.Controllers
         public async Task<ActionResult> Index()
         {
             var billingBusinessTravels = await _billingBusinessTravelRepo.FindAll();
-            var currencies = _currencyRepository.FindAll().Result;
-            var typeOfBillings = _typeOfBillingRepository.FindAll().Result;
-            var businessTravels = _businessTravelRepo.FindAll().Result;
+            var currencies = await _currencyRepository.FindAll();
+            var typeOfBillings = await _typeOfBillingRepository.FindAll();
+            var businessTravels = await _businessTravelRepo.FindAll();
             
             var model = _mapper.Map<List<BillingBusinessTravel>, List<BillingBusinessTravelVM>>(billingBusinessTravels.ToList());
             foreach (var item in model)
@@ -62,9 +62,9 @@ namespace leave_management.Controllers
                 return NotFound();
             }
             var BillingBusinessTravel = await _billingBusinessTravelRepo.FindById(id);
-            var businessTravels = _businessTravelRepo.FindAll().Result;
-            var currencies = _currencyRepository.FindAll().Result;
-            var typeOfBillings = _typeOfBillingRepository.FindAll().Result;
+            var businessTravels = await _businessTravelRepo.FindAll();
+            var currencies = await _currencyRepository.FindAll();
+            var typeOfBillings = await _typeOfBillingRepository.FindAll();
 
             var model = _mapper.Map<BillingBusinessTravelVM>(BillingBusinessTravel);
             model.CurrencyName= currencies.FirstOrDefault(q=>q.Id == model.CurrencyId).Name;
@@ -76,20 +76,20 @@ namespace leave_management.Controllers
         // GET: BillingBusinessTravel/Create
         public async Task<ActionResult> Create()
         {
-            var businessTravels = _businessTravelRepo.FindAll().Result;
+            var businessTravels = await _businessTravelRepo.FindAll();
             var businessTravelsItems = businessTravels.Select(q => new SelectListItem
             {
                 Text = q.ApplicationId.ToString(),
                 Value = q.Id.ToString()
             });
 
-            var currencies = _currencyRepository.FindAll().Result;
+            var currencies = await _currencyRepository.FindAll();
             var currenciesItems = currencies.Select(q => new SelectListItem
             {
                 Text = q.Name,
                 Value = q.Id.ToString()
             });
-            var typeOfBillings = _typeOfBillingRepository.FindAll().Result;
+            var typeOfBillings = await _typeOfBillingRepository.FindAll();
             var typeOfBillingsItems = typeOfBillings.Select(q => new SelectListItem
             {
                 Text = q.Name,
@@ -148,20 +148,20 @@ namespace leave_management.Controllers
             }
             var BillingBusinessTravel = await _billingBusinessTravelRepo.FindById(id);
             var model = _mapper.Map<CreateBillingBusinessTravelVM>(BillingBusinessTravel);
-            var businessTravels = _businessTravelRepo.FindAll().Result;
+            var businessTravels = await _businessTravelRepo.FindAll();
             var businessTravelsItems = businessTravels.Select(q => new SelectListItem
             {
                 Text = q.ApplicationId.ToString(),
                 Value = q.Id.ToString()
             });
 
-            var currencies = _currencyRepository.FindAll().Result;
+            var currencies = await _currencyRepository.FindAll();
             var currenciesItems = currencies.Select(q => new SelectListItem
             {
                 Text = q.Name,
                 Value = q.Id.ToString()
             });
-            var typeOfBillings = _typeOfBillingRepository.FindAll().Result;
+            var typeOfBillings = await _typeOfBillingRepository.FindAll();
             var typeOfBillingsItems = typeOfBillings.Select(q => new SelectListItem
             {
                 Text = q.Name,

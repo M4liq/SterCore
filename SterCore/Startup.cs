@@ -75,6 +75,10 @@ namespace leave_management
 
             //Organization Resource Manager Initialization Fields
             services.AddScoped<IOrganizationResourceManager<LeaveType>, OrganizationResourceManager<LeaveType>>();
+            services.AddScoped<IOrganizationResourceManager<Document>, OrganizationResourceManager<Document>>();
+            services.AddScoped<IOrganizationResourceManager<Employee>, OrganizationResourceManager<Employee>>();
+            services.AddScoped<IOrganizationResourceManager<LeaveAllocations>, OrganizationResourceManager<LeaveAllocations>>();
+            services.AddScoped<IOrganizationResourceManager<LeaveRequests>, OrganizationResourceManager<LeaveRequests>>();
 
             //Initializind Data Seeding and Generic List required to handle Seeds
             services.AddScoped<ISeed, Seed>();

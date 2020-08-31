@@ -49,9 +49,7 @@ namespace leave_management.Repository
 
         public async Task<ICollection<LeaveType>> FindAll()
         {
-
             var leaveTypes = _organizationManager.FilterDbSetByView(_db.LeaveTypes);
-
             return await leaveTypes.ToListAsync(); 
         }
 

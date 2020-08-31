@@ -1,4 +1,5 @@
 ﻿using leave_management.Services.Components.ORI;
+using leave_management.Services.ORI.Contracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace leave_management.Data
 {
-    public class LeaveRequests : OrganizationResurceIdentifier
+    public class LeaveRequests : IApplicationDataView
     {
+        public int Id { get; set; }
         [ForeignKey("RequestingEmployeeId")]
         public Employee RequestingEmployee { get; set; }
         public string RequestingEmployeeId { get; set; }
@@ -26,6 +28,7 @@ namespace leave_management.Data
         public Employee ApprovedBy { get; set; }
         public string ApprovedById { get; set; }
         public string Comment { get; set; }
-
+        public string OrganizationToken { get; set; }
+        
     }
 }

@@ -31,8 +31,8 @@ namespace leave_management.Controllers
         // GET: Competence
         public async Task<ActionResult> Index()
         {
-            var competences = _competenceRepository.FindAll().Result;
-            var competenceTypes = _competenceTypeRepository.FindAll().Result;
+            var competences = await _competenceRepository.FindAll();
+            var competenceTypes = await _competenceTypeRepository.FindAll();
             var mappedModel = _mapper.Map<List<Competence>, List<CompetenceVM>>(competences.ToList());
             var model = new List<CompetenceVM>();
             var employees = await _userManager.GetUsersInRoleAsync("Employee");
@@ -61,9 +61,10 @@ namespace leave_management.Controllers
                 return NotFound();
             }
             var competence = await _competenceRepository.FindById(id);
-            var competenceTypes = _competenceTypeRepository.FindAll().Result;
+            var competenceTypes = await _competenceTypeRepository.FindAll();
             var model = _mapper.Map<CompetenceVM>(competence);
-            model.EmployeeFullName = _employeeRepo.FindById(model.EmployeeId).Result.Lastname + " " + _employeeRepo.FindById(model.EmployeeId).Result.Firstname;
+            var employee = await _employeeRepo.FindById(model.EmployeeId);
+            model.EmployeeFullName = String.Format("{0} {1}", employee.Lastname, employee.Firstname);
             model.CompetenceName = competenceTypes.FirstOrDefault(q => q.Id == competence.CompetenceTypeId).name;
             return View(model);
         }
@@ -77,7 +78,7 @@ namespace leave_management.Controllers
                 Text = q.Firstname + " " + q.Lastname,
                 Value = q.Id.ToString()
             });
-            var competenceTypes = _competenceTypeRepository.FindAll().Result;
+            var competenceTypes = await _competenceTypeRepository.FindAll();
             var competenceTypesItems = competenceTypes.Select(q => new SelectListItem
             {
                 Text = q.name,

@@ -104,7 +104,7 @@ namespace leave_management.Controllers
                 TypeOfBillings = typeOfBillingsItems
                 
             };
-            if (businessTravelId != null)
+            if (await _typeOfBillingRepository.Exists(businessTravelId))
             {
                 model.BusinessTravelId = businessTravelId;
             }

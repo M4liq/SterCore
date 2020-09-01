@@ -41,7 +41,7 @@ namespace leave_management.Controllers
             var medicalCheckUps = await _medicalCheckUpRepository.FindAll();
             var MappedModel = _mapper.Map<List<MedicalCheckUp>, List<MedicalCheckUpVM>>(medicalCheckUps.ToList());
             var employees = await _userManager.GetUsersInRoleAsync("Employee");
-            var typesOfMedicalCheckUps = _typeOfMedicalCheckUpRepo.FindAll().Result;
+            var typesOfMedicalCheckUps = await _typeOfMedicalCheckUpRepo.FindAll();
             var model = new List<MedicalCheckUpVM>();
             foreach (var item in MappedModel)
             {
@@ -74,8 +74,10 @@ namespace leave_management.Controllers
             }
             var medicalCheckUp = await _medicalCheckUpRepository.FindById(id);
             var model = _mapper.Map<MedicalCheckUpVM>(medicalCheckUp);
-            model.EmployeeFullName = _employeeRepo.FindById(model.EmployeeId).Result.Lastname + " " + _employeeRepo.FindById(model.EmployeeId).Result.Firstname;
-            model.TypeOfMedicalCheckUpName = _typeOfMedicalCheckUpRepo.FindById(model.TypeOfMedicalCheckUpId).Result.name;
+            var employee = await _employeeRepo.FindById(model.EmployeeId);
+            model.EmployeeFullName = String.Format("{0} {1}",employee.Lastname,employee.Firstname);
+            var typeOfMedicalCheckUp = await _typeOfMedicalCheckUpRepo.FindById(model.TypeOfMedicalCheckUpId);
+            model.TypeOfMedicalCheckUpName = typeOfMedicalCheckUp.name;
             return View(model);
         }
 
@@ -89,7 +91,7 @@ namespace leave_management.Controllers
                 Value = q.Id.ToString()
             });
 
-            var TypeOfMedicalCheckUps = _typeOfMedicalCheckUpRepo.FindAll().Result;
+            var TypeOfMedicalCheckUps = await _typeOfMedicalCheckUpRepo.FindAll();
             var TypeOfMedicalCheckUpsItems = TypeOfMedicalCheckUps.Select(q => new SelectListItem
             {
                 Text = q.name.ToString(),

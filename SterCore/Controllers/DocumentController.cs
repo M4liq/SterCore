@@ -28,7 +28,7 @@ namespace leave_management.Controllers
         // GET: Document
         public async Task<ActionResult> Index()
         {
-            var documents = _documentsRepository.FindAll().Result;
+            var documents = await _documentsRepository.FindAll();
             var mappedModel = _mapper.Map<List<Document>, List<DocumentVM>>(documents.ToList());
             var model = new List<DocumentVM>();
             var employees = await _userManager.GetUsersInRoleAsync("Employee");
@@ -60,7 +60,8 @@ namespace leave_management.Controllers
             }
             var document = await _documentsRepository.FindById(id);
             var model = _mapper.Map<DocumentVM>(document);
-            model.EmployeeFullName = _employeeRepo.FindById(model.EmployeeId).Result.Lastname + " " + _employeeRepo.FindById(model.EmployeeId).Result.Firstname;
+            var employee = await _employeeRepo.FindById(model.EmployeeId);
+            model.EmployeeFullName = String.Format("{0} {1}",employee.Lastname, employee.Firstname);
             return View(model);
         }
 

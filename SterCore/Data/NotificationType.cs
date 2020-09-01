@@ -1,4 +1,5 @@
 ﻿using leave_management.Services.Components.ORI;
+using leave_management.Services.ORI.Contracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,8 +8,11 @@ using System.Threading.Tasks;
 
 namespace leave_management.Data
 {
-    public class NotificationType : OrganizationResurceIdentifier
+    public class NotificationType : IApplicationDataView
     {
-        string name { get; set; }
+        [Key]
+        public int Id { get; set; }
+        public string OrganizationToken { get; set; }
+        string Name { get; set; }
     }
 }

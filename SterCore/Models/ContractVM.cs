@@ -14,6 +14,7 @@ namespace leave_management.Models
         public EmployeeVM Employee { get; set; }
         public string EmployeeId { get; set; }
         public ContractTypeVM ContractType { get; set; }
+        [Display(Name = "Typ umowy:")]
         public int ContractTypeId { get; set; }
         [Display(Name = "Data zawarcia:")]
         public DateTime DateOfContractAgreement { get; set; }     
@@ -38,11 +39,17 @@ namespace leave_management.Models
         public int Id { get; set; }
         public string OrganizationToken { get; set; }
         public EmployeeVM Employee { get; set; }
+        [Required]
+        [Display(Name = "Osoba:")]
         public string EmployeeId { get; set; }
         public ContractTypeVM ContractType { get; set; }
+        [Required]
+        [Display(Name = "Typ umowy:")]
         public int ContractTypeId { get; set; }
+        [Required]
         [Display(Name = "Data zawarcia:")]
         public DateTime DateOfContractAgreement { get; set; }
+        [Required]
         [Display(Name = "Data od:")]
         public DateTime DateValidFrom { get; set; }
         [Display(Name = "Data do:")]

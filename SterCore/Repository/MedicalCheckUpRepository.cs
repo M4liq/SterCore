@@ -12,68 +12,50 @@ namespace leave_management.Repository
     public class MedicalCheckUpRepository : IMedicalCheckUpRepository
     {
         private readonly ApplicationDbContext _db;
-        private readonly IOrganizationResourceManager _organizationManager;
-        public MedicalCheckUpRepository(ApplicationDbContext db, IOrganizationResourceManager organizationManager)
+        private readonly IOrganizationResourceManager<MedicalCheckUp> _organizationManager;
+        public MedicalCheckUpRepository(ApplicationDbContext db, IOrganizationResourceManager<MedicalCheckUp> organizationManager)
         {
             _db = db;
             _organizationManager = organizationManager;
         }
         public async Task<bool> Create(MedicalCheckUp entity)
         {
-            //ORI separating data beetween organizations
-            entity.OrganizationToken = _organizationManager.GetOrganizationToken();
-
+            _organizationManager.SetAccess(entity);
             await _db.MedicalCheckUps.AddAsync(entity);
             return await Save();
         }
 
         public async Task<bool> Delete(MedicalCheckUp entity)
         {
-            //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            if (!_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }
-
             _db.MedicalCheckUps.Remove(entity);
             return await Save();
         }
 
         public async Task<bool> Exists(int id)
         {
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var exists = await _db.MedicalCheckUps
-                //ORI Filtring leave types by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
-                .AnyAsync(q => q.Id == id);
-            return exists;
+            if (await FindById(id) == null)
+                return false;
+            else
+                return true;
         }
 
         public async Task<ICollection<MedicalCheckUp>> FindAll()
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-
-            var MedicalCheckUps = await _db.MedicalCheckUps
+            var MedicalCheckUps = _organizationManager.FilterDbSetByView(_db.MedicalCheckUps);
+            return await MedicalCheckUps
                 .Include(q => q.Employee)
                 .Include(q => q.typeOfMedicalCheckUp)
-                .Where(q => q.OrganizationToken == organizationToken)
                 .ToListAsync();
-            return MedicalCheckUps;
         }
 
         public async Task<MedicalCheckUp> FindById(int id)
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var MedicalCheckUp = await _db.MedicalCheckUps
-                //ORI Filtring organizations by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
-                .FirstOrDefaultAsync(q => q.Id == id);
-            return MedicalCheckUp;
+            var MedicalCheckUp = _organizationManager.FilterDbSetByView(_db.MedicalCheckUps);
+            return await MedicalCheckUp.FirstOrDefaultAsync(q => q.Id == id);
         }
 
         public async Task<bool> Save()
@@ -82,20 +64,13 @@ namespace leave_management.Repository
             return changes > 0;
         }
 
-        public void SetToken(MedicalCheckUp entity)
-        {
-            var token = _organizationManager.GetOrganizationToken();
-            entity.OrganizationToken = token;
-        }
 
         public async Task<bool> Update(MedicalCheckUp entity)
         {
-            //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            if (!_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }
-
             _db.MedicalCheckUps.Update(entity);
             return await Save();
         }

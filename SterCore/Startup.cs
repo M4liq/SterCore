@@ -87,6 +87,9 @@ namespace leave_management
             services.AddScoped<IOrganizationResourceManager<BillingBusinessTravel>, OrganizationResourceManager<BillingBusinessTravel>>();
             services.AddScoped<IOrganizationResourceManager<BusinessTravel>, OrganizationResourceManager<BusinessTravel>>();
             services.AddScoped<IOrganizationResourceManager<Competence>, OrganizationResourceManager<Competence>>();
+            services.AddScoped<IOrganizationResourceManager<CompetenceType>, OrganizationResourceManager<CompetenceType>>();
+            services.AddScoped<IOrganizationResourceManager<Expense>, OrganizationResourceManager<Expense>>();
+            services.AddScoped<IOrganizationResourceManager<MedicalCheckUp>, OrganizationResourceManager<MedicalCheckUp>>();
 
             //Initializind Data Seeding and Generic List required to handle Seeds
             services.AddScoped<ISeed, Seed>();

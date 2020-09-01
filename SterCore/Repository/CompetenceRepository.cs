@@ -53,7 +53,7 @@ namespace leave_management.Repository
         public async Task<Competence> FindById(int id)
         {
             var competences = _organizationManager.FilterDbSetByView(_db.Competences);
-            return await competences.FirstOrDefaultAsync(q => q.Id == id); ;
+            return await competences.FirstOrDefaultAsync(q => q.Id == id);
         }
 
         public async Task<bool> Save()
@@ -62,11 +62,7 @@ namespace leave_management.Repository
             return changes > 0;
         }
 
-        public void SetToken(Competence entity)
-        {
-            var token = _organizationManager.GetOrganizationToken();
-            entity.OrganizationToken = token;
-        }
+
 
         public async Task<bool> Update(Competence entity)
         {
@@ -75,7 +71,6 @@ namespace leave_management.Repository
             {
                 throw new UnauthorizedAccessException();
             }
-
             _db.Competences.Update(entity);
             return await Save();
         }

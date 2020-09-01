@@ -12,71 +12,48 @@ namespace leave_management.Repository
     public class CompetenceRepository : ICompetenceRepository
     {
         private readonly ApplicationDbContext _db;
-        private readonly IOrganizationResourceManager _organizationManager;
+        private readonly IOrganizationResourceManager<Competence> _organizationManager;
 
-        public CompetenceRepository(ApplicationDbContext db, IOrganizationResourceManager organizationManager)
+        public CompetenceRepository(ApplicationDbContext db, IOrganizationResourceManager<Competence> organizationManager)
         {
             _db = db;
             _organizationManager = organizationManager;
         }
         public async Task<bool> Create(Competence entity)
         {
-            //ORI separating data beetween organizations
-            entity.OrganizationToken = _organizationManager.GetOrganizationToken();
-
+            _organizationManager.SetAccess(entity);
             await _db.Competences.AddAsync(entity);
             return await Save();
         }
 
         public async Task<bool> Delete(Competence entity)
         {
-            //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            if (!_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }
-
             _db.Competences.Remove(entity);
             return await Save();
         }
 
         public async Task<bool> Exists(int id)
         {
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var exists = await _db.Competences
-
-                //ORI Filtring leave types by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
-                .AnyAsync(q => q.Id == id);
-
-            return exists;
+            if (await FindById(id) == null)
+                return false;
+            else
+                return true;
         }
 
         public async Task<ICollection<Competence>> FindAll()
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            //ORI filtering by token
-            var Competence = await _db.Competences
-                .Where(q => q.OrganizationToken == organizationToken)
-                .ToListAsync();
-            return Competence;
+            var competences = _organizationManager.FilterDbSetByView(_db.Competences);
+            return await competences.ToListAsync();
         }
 
         public async Task<Competence> FindById(int id)
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var Competence = await _db.Competences
-
-                //ORI Filtring organizations by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
-                .FirstOrDefaultAsync(q => q.Id == id);
-
-            return Competence;
+            var competences = _organizationManager.FilterDbSetByView(_db.Competences);
+            return await competences.FirstOrDefaultAsync(q => q.Id == id); ;
         }
 
         public async Task<bool> Save()
@@ -94,7 +71,7 @@ namespace leave_management.Repository
         public async Task<bool> Update(Competence entity)
         {
             //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            if (!_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }

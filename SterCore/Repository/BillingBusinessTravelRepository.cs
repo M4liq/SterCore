@@ -20,9 +20,7 @@ namespace leave_management.Repository
         }
         public async Task<bool> Create(BillingBusinessTravel entity)
         {
-            //ORI separating data beetween organizations
-            entity.OrganizationToken = _organizationManager.GetOrganizationToken();
-
+            _organizationManager.SetAccess(entity);
             await _db.billingBusinessTravels.AddAsync(entity);
             return await Save();
         }
@@ -30,7 +28,7 @@ namespace leave_management.Repository
         public async Task<bool> Delete(BillingBusinessTravel entity)
         {
             //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            if (!_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }
@@ -41,39 +39,22 @@ namespace leave_management.Repository
 
         public async Task<bool> Exists(int id)
         {
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var exists = await _db.billingBusinessTravels
-                //ORI Filtring leave types by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
-                .AnyAsync(q => q.Id == id);
-            return exists;
+            if (await FindById(id) == null)
+                return false;
+            else
+                return true;
         }
 
         public async Task<ICollection<BillingBusinessTravel>> FindAll()
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-
-            var BillingBusinessTravel = await _db.billingBusinessTravels
-                
-                .Include(q => q.BusinessTravel)
-                .Where(q => q.OrganizationToken == organizationToken)
-                .ToListAsync();
-            return BillingBusinessTravel;
+            var BillingBusinessTravel = _organizationManager.FilterDbSetByView(_db.billingBusinessTravels);
+            return await BillingBusinessTravel.Include(q => q.BusinessTravel).ToListAsync(); 
         }
 
         public async Task<BillingBusinessTravel> FindById(int id)
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var BillingBusinessTravel = await _db.billingBusinessTravels
-                //ORI Filtring organizations by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
-                .FirstOrDefaultAsync(q => q.Id == id);
-            return BillingBusinessTravel;
+            var BillingBusinessTravel = _organizationManager.FilterDbSetByView(_db.billingBusinessTravels);
+            return await BillingBusinessTravel.FirstOrDefaultAsync(q => q.Id == id);
         }
 
         public async Task<bool> Save()
@@ -90,12 +71,10 @@ namespace leave_management.Repository
 
         public async Task<bool> Update(BillingBusinessTravel entity)
         {
-            //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            if (!_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }
-
             _db.billingBusinessTravels.Update(entity);
             return await Save();
         }

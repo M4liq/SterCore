@@ -151,7 +151,7 @@ namespace leave_management.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch(Exception ex)
+            catch
             {
                 ModelState.AddModelError("", "Something went wrong");
                 return View();

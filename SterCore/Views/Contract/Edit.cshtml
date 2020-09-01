@@ -1,0 +1,119 @@
+﻿@model leave_management.Models.CreateContractVM
+
+@{
+    ViewData["Title"] = "Edycja umowy";
+}
+
+<h1>Edycja umowy</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="OrganizationToken" />
+
+            <div class="form-group">
+                <label asp-for="EmployeeId" class="control-label"></label>
+                @Html.DropDownListFor(q => q.EmployeeId, new SelectList(Model.Employees, "Value", "Text"), "Wybierz pracownika", new { @class = "form-control" })
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContractTypeId" class="control-label"></label>
+                @Html.DropDownListFor(q => q.ContractTypeId, new SelectList(Model.ContractTypes, "Value", "Text"), "Wybierz typ umowy", new { @class = "form-control" })
+                <span asp-validation-for="ContractTypeId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DateOfContractAgreement" class="control-label"></label>
+                <input asp-for="DateOfContractAgreement" value="@Model.DateOfContractAgreement" type="text" class="form-control datepicker" />
+                <span asp-validation-for="DateOfContractAgreement" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateValidFrom" class="control-label"></label>
+                <input asp-for="DateValidFrom" value="@Model.DateValidFrom" type="text" class="form-control datepicker" />
+                <span asp-validation-for="DateValidFrom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateValidUntil" class="control-label"></label>
+                <input asp-for="DateValidUntil" value="@Model.DateValidUntil" type="text" class="form-control datepicker" />
+                <span asp-validation-for="DateValidUntil" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdditionalInfo" class="control-label"></label>
+                <input asp-for="AdditionalInfo" class="form-control" />
+                <span asp-validation-for="AdditionalInfo" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="ShowSelectedEmployee" /> @Html.DisplayNameFor(model => model.ShowSelectedEmployee)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="ShowSelectedDepartment" /> @Html.DisplayNameFor(model => model.ShowSelectedDepartment)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Zapisz zmiany" class="btn btn-block btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-alt-circle-left"></i> Powrót do podsumowania</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.datepicker').daterangepicker({
+                "locale": {
+                    "format": "DD/MM/YYYY",
+                    "separator": " - ",
+                    "applyLabel": "Zatwierdź",
+                    "cancelLabel": "Anuluj",
+                    "fromLabel": "Od",
+                    "toLabel": "Do",
+                    "customRangeLabel": "Custom",
+                    "weekLabel": "Tydzień",
+                    "daysOfWeek": [
+                        "Nd",
+                        "Pn",
+                        "Wt",
+                        "Śr",
+                        "Cz",
+                        "Pt",
+                        "So"
+                    ],
+                    "monthNames": [
+                        "Styczeń",
+                        "Luty",
+                        "Marzec",
+                        "Kwiecień",
+                        "Maj",
+                        "Czerwiec",
+                        "Lipiec",
+                        "Sierpień",
+                        "Wrzesień",
+                        "Październik",
+                        "Listopad",
+                        "Grudzień"
+                    ],
+                    "firstDay": 1
+                },
+                "alwaysShowCalendars": true,
+                "showDropdowns": true,
+                "singleDatePicker": true
+            });
+
+
+        });
+    </script>
+}

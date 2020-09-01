@@ -12,8 +12,8 @@ namespace leave_management.Repository
     public class BillingBusinessTravelRepository : IBillingBusinessTravelRepository
     {
         private readonly ApplicationDbContext _db;
-        private readonly IOrganizationResourceManager _organizationManager;
-        public BillingBusinessTravelRepository(ApplicationDbContext db, IOrganizationResourceManager organizationManager)
+        private readonly IOrganizationResourceManager<BillingBusinessTravel> _organizationManager;
+        public BillingBusinessTravelRepository(ApplicationDbContext db, IOrganizationResourceManager<BillingBusinessTravel> organizationManager)
         {
             _db = db;
             _organizationManager = organizationManager;

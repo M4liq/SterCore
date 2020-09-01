@@ -41,6 +41,9 @@ namespace leave_management.Mappings
             CreateMap<TrainingCourse, TrainingCourseVM>().ReverseMap();
             CreateMap<TrainingCourse, CreateTrainingCourseVM>().ReverseMap();
             CreateMap<TrainingCourseType, TrainingCourseTypeVM>().ReverseMap();
+            CreateMap<Contract, ContractVM>().ReverseMap();
+            CreateMap<Contract, CreateContractVM>().ReverseMap();
+            CreateMap<ContractType, ContractTypeVM>().ReverseMap();
         }
     }
 }

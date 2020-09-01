@@ -12,71 +12,49 @@ namespace leave_management.Repository
     public class ExpenseRepository : IExpenseRepository
     {
         private readonly ApplicationDbContext _db;
-        private readonly IOrganizationResourceManager _organizationManager;
+        private readonly IOrganizationResourceManager<Expense> _organizationManager;
 
-        public ExpenseRepository(ApplicationDbContext db, IOrganizationResourceManager organizationManager)
+        public ExpenseRepository(ApplicationDbContext db, IOrganizationResourceManager<Expense> organizationManager)
         {
             _db = db;
             _organizationManager = organizationManager;
         }
         public async Task<bool> Create(Expense entity)
         {
-            //ORI separating data beetween organizations
-            entity.OrganizationToken = _organizationManager.GetOrganizationToken();
 
+            _organizationManager.SetAccess(entity);
             await _db.Expenses.AddAsync(entity);
             return await Save();
         }
 
         public async Task<bool> Delete(Expense entity)
         {
-            //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            if (!_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }
-
             _db.Expenses.Remove(entity);
             return await Save();
         }
 
         public async Task<bool> Exists(int id)
         {
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var exists = await _db.Expenses
-
-                //ORI Filtring leave types by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
-                .AnyAsync(q => q.Id == id);
-
-            return exists;
+            if (await FindById(id) == null)
+                return false;
+            else
+                return true;
         }
 
         public async Task<ICollection<Expense>> FindAll()
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            //ORI filtering by token
-            var Expense = await _db.Expenses
-                .Where(q => q.OrganizationToken == organizationToken)
-                .ToListAsync();
-            return Expense;
+            var Expense = _organizationManager.FilterDbSetByView(_db.Expenses);
+            return await Expense.ToListAsync();
         }
 
         public async Task<Expense> FindById(int id)
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var Expense = await _db.Expenses
-
-                //ORI Filtring organizations by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
-                .FirstOrDefaultAsync(q => q.Id == id);
-
-            return Expense;
+            var Expense = _organizationManager.FilterDbSetByView(_db.Expenses);
+            return await Expense.FirstOrDefaultAsync(q => q.Id == id); ;
         }
 
         public async Task<bool> Save()
@@ -85,20 +63,12 @@ namespace leave_management.Repository
             return changes > 0;
         }
 
-        public void SetToken(Expense entity)
-        {
-            var token = _organizationManager.GetOrganizationToken();
-            entity.OrganizationToken = token;
-        }
-
         public async Task<bool> Update(Expense entity)
         {
-            //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            if (!_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }
-
             _db.Expenses.Update(entity);
             return await Save();
         }

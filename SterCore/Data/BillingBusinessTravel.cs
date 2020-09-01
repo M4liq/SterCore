@@ -3,13 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using leave_management.Services.ORI.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace leave_management.Data
 {
-    public class BillingBusinessTravel : OrganizationResurceIdentifier
+    public class BillingBusinessTravel : IApplicationDataView
     {
+        [Key]
+        public int Id { get; set; }
+        public string OrganizationToken { get; set; }
         [ForeignKey("BusinessTravelId")]
         public BusinessTravel BusinessTravel { get; set; }
         public int BusinessTravelId { get; set; }

@@ -12,72 +12,48 @@ namespace leave_management.Repository
     public class BusinessTravelRepository : IBusinessTravelRepository
     {
         private readonly ApplicationDbContext _db;
-        private readonly IOrganizationResourceManager _organizationManager;
+        private readonly IOrganizationResourceManager<BusinessTravel> _organizationManager;
 
-        public BusinessTravelRepository(ApplicationDbContext db, IOrganizationResourceManager organizationManager)
+        public BusinessTravelRepository(ApplicationDbContext db, IOrganizationResourceManager<BusinessTravel> organizationManager)
         {
             _db = db;
             _organizationManager = organizationManager;
         }
         public async Task<bool> Create(BusinessTravel entity)
         {
-            //ORI separating data beetween organizations
-            entity.OrganizationToken = _organizationManager.GetOrganizationToken();
-
+            _organizationManager.SetAccess(entity);
             await _db.BusinessTravel.AddAsync(entity);
             return await Save();
         }
 
         public async Task<bool> Delete(BusinessTravel entity)
         {
-            //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            if (!_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }
-
             _db.BusinessTravel.Remove(entity);
             return await Save();
         }
 
         public async Task<bool> Exists(int id)
         {
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var exists = await _db.BusinessTravel
-
-                //ORI Filtring leave types by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
-                .AnyAsync(q => q.Id == id);
-
-            return exists;
+            if (await FindById(id) == null)
+                return false;
+            else
+                return true;
         }
 
         public async Task<ICollection<BusinessTravel>> FindAll()
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            //ORI filtering by token
-            var BusinessTravel = await _db.BusinessTravel
-                .Include(q => q.Employee)
-                .Where(q => q.OrganizationToken == organizationToken)
-                .ToListAsync();
-            return BusinessTravel;
+            var BusinessTravel = _organizationManager.FilterDbSetByView(_db.BusinessTravel);
+            return await BusinessTravel.Include(q => q.Employee).ToListAsync();
         }
 
         public async Task<BusinessTravel> FindById(int id)
         {
-            //ORI getting token to find organization scope
-            var organizationToken = _organizationManager.GetOrganizationToken();
-
-            var BusinessTravel = await _db.BusinessTravel
-
-                //ORI Filtring organizations by their tokens to get scope
-                .Where(q => q.OrganizationToken == organizationToken)
-                .FirstOrDefaultAsync(q => q.Id == id);
-
-            return BusinessTravel;
+            var BusinessTravel = _organizationManager.FilterDbSetByView(_db.BusinessTravel);
+            return await BusinessTravel.FirstOrDefaultAsync(q => q.Id == id);
         }
 
         public async Task<bool> Save()
@@ -88,8 +64,7 @@ namespace leave_management.Repository
 
         public async Task<bool> Update(BusinessTravel entity)
         {
-            //ORI checking if data is from appropirate organization scope
-            if (entity.OrganizationToken != _organizationManager.GetOrganizationToken())
+            if (!_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }
@@ -108,7 +83,7 @@ namespace leave_management.Repository
             }
             else
             {
-                latestApplicationId = 1;
+                latestApplicationId = 0;
             }
             return  latestApplicationId;
         }

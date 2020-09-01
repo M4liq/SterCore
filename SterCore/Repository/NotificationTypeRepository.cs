@@ -63,12 +63,6 @@ namespace leave_management.Repository
             return changes > 0;
         }
 
-        public void SetToken(NotificationType entity)
-        {
-            var token = _organizationManager.GetOrganizationToken();
-            entity.OrganizationToken = token;
-        }
-
         public async Task<bool> Update(NotificationType entity)
         {
             if (!_organizationManager.VerifyAccess(entity))

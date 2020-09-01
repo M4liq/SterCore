@@ -9,23 +9,23 @@ using System.Threading.Tasks;
 
 namespace leave_management.Repository
 {
-    public class NotificationRepository : INotificationRepository
+    public class ContractRepository : IContractRepository
     {
         private readonly ApplicationDbContext _db;
-        private readonly IOrganizationResourceManager<Notification> _organizationManager;
-        public NotificationRepository(ApplicationDbContext db, IOrganizationResourceManager<Notification> organizationManager)
+        private readonly IOrganizationResourceManager<Contract> _organizationManager;
+        public ContractRepository(ApplicationDbContext db, IOrganizationResourceManager<Contract> organizationManager)
         {
             _db = db;
             _organizationManager = organizationManager;
         }
-        public async Task<bool> Create(Notification entity)
+        public async Task<bool> Create(Contract entity)
         {
             _organizationManager.SetAccess(entity);
-            await _db.Notifications.AddAsync(entity);
+            await _db.Contracts.AddAsync(entity);
             return await Save();
         }
 
-        public async Task<bool> Delete(Notification entity)
+        public async Task<bool> Delete(Contract entity)
         {
             //ORI checking if data is from appropirate organization scope
             if (!_organizationManager.VerifyAccess(entity))
@@ -33,7 +33,7 @@ namespace leave_management.Repository
                 throw new UnauthorizedAccessException();
             }
 
-            _db.Notifications.Remove(entity);
+            _db.Contracts.Remove(entity);
             return await Save();
         }
 
@@ -45,16 +45,16 @@ namespace leave_management.Repository
                 return true;
         }
 
-        public async Task<ICollection<Notification>> FindAll()
+        public async Task<ICollection<Contract>> FindAll()
         {
-            var Notification = _organizationManager.FilterDbSetByView(_db.Notifications);
-            return await Notification.Include(q => q.Employee).ToListAsync();
+            var Contract = _organizationManager.FilterDbSetByView(_db.Contracts);
+            return await Contract.Include(q => q.Employee).ToListAsync();
         }
 
-        public async Task<Notification> FindById(int id)
+        public async Task<Contract> FindById(int id)
         {
-            var Notification = _organizationManager.FilterDbSetByView(_db.Notifications);
-            return await Notification.FirstOrDefaultAsync(q => q.Id == id);
+            var Contract = _organizationManager.FilterDbSetByView(_db.Contracts);
+            return await Contract.FirstOrDefaultAsync(q => q.Id == id);
         }
 
         public async Task<bool> Save()
@@ -63,13 +63,13 @@ namespace leave_management.Repository
             return changes > 0;
         }
 
-        public async Task<bool> Update(Notification entity)
+        public async Task<bool> Update(Contract entity)
         {
             if (!_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }
-            _db.Notifications.Update(entity);
+            _db.Contracts.Update(entity);
             return await Save();
         }
     }

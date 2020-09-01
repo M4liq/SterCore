@@ -114,7 +114,7 @@ namespace leave_management
             services.AddScoped<IDataSeed, SeedTransportVehicle>();
             services.AddScoped<IDataSeed, SeedTypeOfBilling>();
             services.AddScoped<IDataSeed, SeedTrainingCourseType>();
-            
+            services.AddScoped<IDataSeed, SeedContractType>();
 
             //Initializing LeaveHelper 
             services.AddScoped<ILeaveHelper, LeaveHelper>();

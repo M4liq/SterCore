@@ -39,6 +39,9 @@ namespace leave_management.Data
         public DbSet<NotificationType> NotificationTypes { get; set; }
         public DbSet<TrainingCourse> TrainingCourses { get; set; }
         public DbSet<TrainingCourseType> TrainingCourseTypes { get; set; }
+        public DbSet<Contract> Contracts { get; set; }
+        public DbSet<ContractType> ContractTypes { get; set; }
+
 
     }
 }

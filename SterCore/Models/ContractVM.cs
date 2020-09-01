@@ -21,7 +21,7 @@ namespace leave_management.Models
         [Display(Name = "Data od:")]
         public DateTime DateValidFrom { get; set; }
         [Display(Name = "Data do:")]
-        public DateTime DateValidUntil { get; set; }
+        public DateTime? DateValidUntil { get; set; }
         [Display(Name = "Opis:")]
         public string AdditionalInfo { get; set; }
         [Display(Name = "Pokaż pracownikowi")]
@@ -53,7 +53,7 @@ namespace leave_management.Models
         [Display(Name = "Data od:")]
         public DateTime DateValidFrom { get; set; }
         [Display(Name = "Data do:")]
-        public DateTime DateValidUntil { get; set; }
+        public DateTime? DateValidUntil { get; set; }
         [Display(Name = "Opis:")]
         public string AdditionalInfo { get; set; }
         [Display(Name = "Pokaż pracownikowi")]

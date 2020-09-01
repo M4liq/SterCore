@@ -30,7 +30,7 @@ namespace leave_management.Repository
         public async Task<bool> Delete(Document entity)
         {
             //ORI checking if data is from appropirate organization scope
-            if ( _organizationManager.VerifyAccess(entity))
+            if ( !_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }
@@ -72,7 +72,7 @@ namespace leave_management.Repository
         public async Task<bool> Update(Document entity)
         {
             //ORI checking if data is from appropirate organization scope
-            if (_organizationManager.VerifyAccess(entity))
+            if (!_organizationManager.VerifyAccess(entity))
             {
                 throw new UnauthorizedAccessException();
             }

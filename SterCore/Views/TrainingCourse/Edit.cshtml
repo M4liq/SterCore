@@ -1,16 +1,19 @@
-﻿@model leave_management.Models.CreateNotificationVM
+﻿@model leave_management.Models.CreateTrainingCourseVM
 
 @{
-    ViewData["Title"] = "Utwórz powiadomienie";
+    ViewData["Title"] = "Edit";
 }
 
-    <h1>Utwórz powiadomienie</h1>
+<h1>Edit</h1>
 
+<h4>CreateTrainingCourseVM</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="OrganizationToken" />
 
             <div class="form-group">
                 <label asp-for="EmployeeId" class="control-label"></label>
@@ -18,19 +21,18 @@
                 <span asp-validation-for="EmployeeId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NotificationTypeId" class="control-label"></label>
-                @Html.DropDownListFor(q => q.NotificationTypeId, new SelectList(Model.NotificationTypes, "Value", "Text"), "Wybierz typ powiadomienia", new { @class = "form-control" })
-                <span asp-validation-for="NotificationTypeId" class="text-danger"></span>
+                <label asp-for="TrainingCourseTypeId" class="control-label"></label>
+                @Html.DropDownListFor(q => q.TrainingCourseTypeId, new SelectList(Model.TrainingCourseTypes, "Value", "Text"), "Wybierz typ szkolenia", new { @class = "form-control" })
+                <span asp-validation-for="TrainingCourseTypeId" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                <label asp-for="DateOfNotification" class="control-label"></label>
-                <input asp-for="DateOfNotification" value="@DateTime.Now.Date" type="text" class="form-control datepicker" />
-                <span asp-validation-for="DateOfNotification" class="text-danger"></span>
+                <label asp-for="DateOfTrainingCourse" class="control-label"></label>
+                <input asp-for="DateOfTrainingCourse" value="@Model.DateOfTrainingCourse" type="text" class="form-control datepicker" />
+                <span asp-validation-for="DateOfTrainingCourse" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DateValidUntil" class="control-label"></label>
-                <input asp-for="DateValidUntil" value="@DateTime.Now.Date" type="text" class="form-control datepicker" />
+                <input asp-for="DateValidUntil" value="@Model.DateValidUntil" type="text" class="form-control datepicker" />
                 <span asp-validation-for="DateValidUntil" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -49,7 +51,7 @@
                 </label>
             </div>
             <div class="form-group">
-                <input type="submit" value="Utwórz powiadomienie"  class="btn btn-success btn-block" />
+                <input type="submit" value="Zapisz zmiany" class="btn btn-block btn-success" />
             </div>
         </form>
     </div>
@@ -61,6 +63,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 

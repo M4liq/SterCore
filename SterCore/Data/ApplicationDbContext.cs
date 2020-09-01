@@ -37,6 +37,8 @@ namespace leave_management.Data
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<NotificationType> NotificationTypes { get; set; }
+        public DbSet<TrainingCourse> TrainingCourses { get; set; }
+        public DbSet<TrainingCourseType> TrainingCourseTypes { get; set; }
 
     }
 }

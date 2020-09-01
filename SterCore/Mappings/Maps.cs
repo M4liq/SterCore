@@ -38,6 +38,9 @@ namespace leave_management.Mappings
             CreateMap<Notification, CreateNotificationVM>().ReverseMap();
             CreateMap<Notification, NotificationVM>().ReverseMap();
             CreateMap<NotificationType, NotificationTypeVM>().ReverseMap();
+            CreateMap<TrainingCourse, TrainingCourseVM>().ReverseMap();
+            CreateMap<TrainingCourse, CreateTrainingCourseVM>().ReverseMap();
+            CreateMap<TrainingCourseType, TrainingCourseTypeVM>().ReverseMap();
         }
     }
 }

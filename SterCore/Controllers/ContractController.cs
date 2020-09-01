@@ -100,27 +100,31 @@ namespace leave_management.Controllers
                 {
                     return View(model);
                 }
-                if (model.DateValidFrom.Date > model.DateValidUntil.Date)
+                if (model.DateValidUntil.HasValue)
                 {
-                    var employees = await _employeeRepository.FindAll();
-                    var employeesItems = employees.Select(q => new SelectListItem
+                    if (model.DateValidFrom.Date > model.DateValidUntil.Value.Date)
                     {
-                        Text = String.Format("{0} {1}", q.Firstname, q.Lastname),
-                        Value = q.Id.ToString()
-                    });
-                    var contractTypes = await _contractTypeRepository.FindAll();
-                    var contractTypesItems = contractTypes.Select(q => new SelectListItem
-                    {
-                        Text = q.Name,
-                        Value = q.Id.ToString()
-                    });
+                        var employees = await _employeeRepository.FindAll();
+                        var employeesItems = employees.Select(q => new SelectListItem
+                        {
+                            Text = String.Format("{0} {1}", q.Firstname, q.Lastname),
+                            Value = q.Id.ToString()
+                        });
+                        var contractTypes = await _contractTypeRepository.FindAll();
+                        var contractTypesItems = contractTypes.Select(q => new SelectListItem
+                        {
+                            Text = q.Name,
+                            Value = q.Id.ToString()
+                        });
 
-                    model.Employees = employeesItems;
-                    model.ContractTypes = contractTypesItems;
+                        model.Employees = employeesItems;
+                        model.ContractTypes = contractTypesItems;
 
-                    ModelState.AddModelError("", "Podane daty są nieprawidłowe");
-                    return View(model);
+                        ModelState.AddModelError("", "Podane daty są nieprawidłowe");
+                        return View(model);
+                    }
                 }
+                
                 var Contract = _mapper.Map<Contract>(model);
                 var isSuccess = await _contractRepository.Create(Contract);
                 if (!isSuccess)
@@ -148,9 +152,6 @@ namespace leave_management.Controllers
             }
             var Contract = await _contractRepository.FindById(id);
             var model = _mapper.Map<CreateContractVM>(Contract);
-
-
-
 
             var employees = await _employeeRepository.FindAll();
             var employeesItems = employees.Select(q => new SelectListItem
@@ -183,27 +184,31 @@ namespace leave_management.Controllers
                 {
                     return View(model);
                 }
-                if (model.DateValidFrom.Date > model.DateValidUntil.Date)
+                if (model.DateValidUntil.HasValue)
                 {
-                    var employees = await _employeeRepository.FindAll();
-                    var employeesItems = employees.Select(q => new SelectListItem
+                    if (model.DateValidFrom.Date > model.DateValidUntil.Value.Date)
                     {
-                        Text = String.Format("{0} {1}", q.Firstname, q.Lastname),
-                        Value = q.Id.ToString()
-                    });
-                    var contractTypes = await _contractTypeRepository.FindAll();
-                    var contractTypesItems = contractTypes.Select(q => new SelectListItem
-                    {
-                        Text = q.Name,
-                        Value = q.Id.ToString()
-                    });
+                        var employees = await _employeeRepository.FindAll();
+                        var employeesItems = employees.Select(q => new SelectListItem
+                        {
+                            Text = String.Format("{0} {1}", q.Firstname, q.Lastname),
+                            Value = q.Id.ToString()
+                        });
+                        var contractTypes = await _contractTypeRepository.FindAll();
+                        var contractTypesItems = contractTypes.Select(q => new SelectListItem
+                        {
+                            Text = q.Name,
+                            Value = q.Id.ToString()
+                        });
 
-                    model.Employees = employeesItems;
-                    model.ContractTypes = contractTypesItems;
+                        model.Employees = employeesItems;
+                        model.ContractTypes = contractTypesItems;
 
-                    ModelState.AddModelError("", "Podane daty są nieprawidłowe");
-                    return View(model);
+                        ModelState.AddModelError("", "Podane daty są nieprawidłowe");
+                        return View(model);
+                    }
                 }
+                
                 var Contract = _mapper.Map<Contract>(model);
                 var isSuccess = await _contractRepository.Update(Contract);
                 if (!isSuccess)
@@ -214,7 +219,7 @@ namespace leave_management.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch(Exception ex)
             {
                 ModelState.AddModelError("", "Something went wrong");
                 return View();

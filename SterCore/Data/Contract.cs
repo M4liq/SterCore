@@ -22,7 +22,7 @@ namespace leave_management.Data
         public int ContractTypeId { get; set; }
         public DateTime DateOfContractAgreement { get; set; }
         public DateTime DateValidFrom { get; set; }
-        public DateTime DateValidUntil { get; set; }
+        public DateTime? DateValidUntil { get; set; }
         public string AdditionalInfo { get; set; }
         public bool ShowSelectedEmployee { get; set; }
         public bool ShowSelectedDepartment { get; set; }

@@ -20,7 +20,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="ContractTypeId" class="control-label"></label>
-                @Html.DropDownListFor(q => q.ContractTypeId, new SelectList(Model.ContractTypes, "Value", "Text"), "Wybierz typ umowy", new { @class = "form-control" })
+                @Html.DropDownListFor(q => q.ContractTypeId, new SelectList(Model.ContractTypes, "Value", "Text"), "Wybierz typ umowy", new { @class = "form-control contract-type-select" })
                 <span asp-validation-for="ContractTypeId" class="text-danger"></span>
             </div>
 
@@ -34,9 +34,9 @@
                 <input asp-for="DateValidFrom" value="@Model.DateValidFrom" type="text" class="form-control datepicker" />
                 <span asp-validation-for="DateValidFrom" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group date-valid-until-form-group none">
                 <label asp-for="DateValidUntil" class="control-label"></label>
-                <input asp-for="DateValidUntil" value="@Model.DateValidUntil" type="text" class="form-control datepicker" />
+                <input asp-for="DateValidUntil" value="@Model.DateValidUntil" type="text" class="form-control date-valid-until-input datepicker" />
                 <span asp-validation-for="DateValidUntil" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -72,7 +72,31 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
     <script>
+            $(".contract-type-select").change(function () {
+            var dateValidFromInput = $(".date-valid-until-input");
+
+            switch ($(".contract-type-select option:selected").text()) {
+                case 'Umowa o pracę na czas nieokreślony':
+                    $(".date-valid-until-form-group").addClass("none");
+                    $(dateValidFromInput).val("");
+                    break;
+                default:
+                    $(".date-valid-until-form-group").removeClass("none");
+                    break;
+            }
+        });
         $(document).ready(function () {
+
+            switch ($(".contract-type-select option:selected").text()) {
+                case 'Umowa o pracę na czas nieokreślony':
+                    $(".date-valid-until-form-group").addClass("none");
+                    $(".date-valid-until-input").val("");
+                    break;
+                default:
+                    $(".date-valid-until-form-group").removeClass("none");
+                    break;
+            }
+
             $('.datepicker').daterangepicker({
                 "locale": {
                     "format": "DD/MM/YYYY",

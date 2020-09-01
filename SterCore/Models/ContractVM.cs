@@ -48,11 +48,14 @@ namespace leave_management.Models
         public int ContractTypeId { get; set; }
         [Required]
         [Display(Name = "Data zawarcia:")]
+        [DataType(DataType.Date)]
         public DateTime DateOfContractAgreement { get; set; }
         [Required]
         [Display(Name = "Data od:")]
+        [DataType(DataType.Date)]
         public DateTime DateValidFrom { get; set; }
         [Display(Name = "Data do:")]
+        [DataType(DataType.Date)]
         public DateTime? DateValidUntil { get; set; }
         [Display(Name = "Opis:")]
         public string AdditionalInfo { get; set; }

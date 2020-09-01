@@ -35,6 +35,8 @@ namespace leave_management.Data
         public DbSet<Country> Countries { get; set; }
         public DbSet<TypeOfBilling> TypeOfBillings { get; set; }
         public DbSet<Expense> Expenses { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<NotificationType> NotificationTypes { get; set; }
 
     }
 }

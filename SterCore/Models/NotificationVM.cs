@@ -27,6 +27,10 @@ namespace leave_management.Models
         public bool ShowSelectedEmployee { get; set; }
         [Display(Name = "Pokaż przełożonemu")]
         public bool ShowSelectedDepartment { get; set; }
+        [Display(Name = "Osoba:")]
+        public string EmployeeFullName { get; set; }
+        [Display(Name = "Typ powiadomienia:")]
+        public string NotificationTypeName { get; set; }
     }
     public class CreateNotificationVM
     {
@@ -48,7 +52,6 @@ namespace leave_management.Models
         public bool ShowSelectedEmployee { get; set; }
         [Display(Name = "Pokaż przełożonemu")]
         public bool ShowSelectedDepartment { get; set; }
-
         public IEnumerable<SelectListItem> Employees { get; set; }
         public IEnumerable<SelectListItem> NotificationTypes { get; set; }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace leave_management.Contracts
 {
-    interface INotificationTypeRepository : IRepositoryBase<NotificationType>
+    public interface INotificationTypeRepository : IRepositoryBase<NotificationType>
     {
     }
 }

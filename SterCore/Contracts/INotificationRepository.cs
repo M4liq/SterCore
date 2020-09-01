@@ -7,7 +7,7 @@ using leave_management.Data;
 
 namespace leave_management.Contracts
 {
-    interface INotificationRepository : IRepositoryBase<Notification>
+    public interface INotificationRepository : IRepositoryBase<Notification>
     {
     }
 }

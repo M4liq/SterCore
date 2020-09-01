@@ -77,6 +77,8 @@ namespace leave_management
             services.AddScoped<IExpenseRepository, ExpenseRepository>();
             services.AddScoped<ITransportVehicleRepository, TransportVehicleRepository>();
             services.AddScoped<ITypeOfBillingRepository, TypeOfBillingRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<INotificationTypeRepository, NotificationTypeRepository>();
 
             //Organization Resource Manager Initialization Fields
             services.AddScoped<IOrganizationResourceManager<LeaveType>, OrganizationResourceManager<LeaveType>>();
@@ -90,6 +92,8 @@ namespace leave_management
             services.AddScoped<IOrganizationResourceManager<CompetenceType>, OrganizationResourceManager<CompetenceType>>();
             services.AddScoped<IOrganizationResourceManager<Expense>, OrganizationResourceManager<Expense>>();
             services.AddScoped<IOrganizationResourceManager<MedicalCheckUp>, OrganizationResourceManager<MedicalCheckUp>>();
+            services.AddScoped<IOrganizationResourceManager<Notification>, OrganizationResourceManager<Notification>>();
+            services.AddScoped<IOrganizationResourceManager<NotificationType>, OrganizationResourceManager<NotificationType>>();
 
             //Initializind Data Seeding and Generic List required to handle Seeds
             services.AddScoped<ISeed, Seed>();

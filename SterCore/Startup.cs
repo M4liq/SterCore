@@ -77,6 +77,12 @@ namespace leave_management
             services.AddScoped<IExpenseRepository, ExpenseRepository>();
             services.AddScoped<ITransportVehicleRepository, TransportVehicleRepository>();
             services.AddScoped<ITypeOfBillingRepository, TypeOfBillingRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<INotificationTypeRepository, NotificationTypeRepository>();
+            services.AddScoped<ITrainingCourseRepository, TrainingCourseRepository>();
+            services.AddScoped<ITrainingCourseTypeRepository, TrainingCourseTypeRepository>();
+            services.AddScoped<IContractRepository, ContractRepository>();
+            services.AddScoped<IContractTypeRepository, ContractTypeRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
             //Organization Resource Manager Initialization Fields
@@ -91,6 +97,10 @@ namespace leave_management
             services.AddScoped<IOrganizationResourceManager<CompetenceType>, OrganizationResourceManager<CompetenceType>>();
             services.AddScoped<IOrganizationResourceManager<Expense>, OrganizationResourceManager<Expense>>();
             services.AddScoped<IOrganizationResourceManager<MedicalCheckUp>, OrganizationResourceManager<MedicalCheckUp>>();
+            services.AddScoped<IOrganizationResourceManager<Notification>, OrganizationResourceManager<Notification>>();
+            services.AddScoped<IOrganizationResourceManager<NotificationType>, OrganizationResourceManager<NotificationType>>();
+            services.AddScoped<IOrganizationResourceManager<TrainingCourse>, OrganizationResourceManager<TrainingCourse>>();
+            services.AddScoped<IOrganizationResourceManager<Contract>, OrganizationResourceManager<Contract>>();
             services.AddScoped<IOrganizationResourceManager<Department>, OrganizationResourceManager<Department>>();
 
             //Initializind Data Seeding and Generic List required to handle Seeds
@@ -105,6 +115,8 @@ namespace leave_management
             services.AddScoped<IDataSeed, SeedCurrency>();
             services.AddScoped<IDataSeed, SeedTransportVehicle>();
             services.AddScoped<IDataSeed, SeedTypeOfBilling>();
+            services.AddScoped<IDataSeed, SeedTrainingCourseType>();
+            services.AddScoped<IDataSeed, SeedContractType>();
 
             //Initializing LeaveHelper 
             services.AddScoped<ILeaveHelper, LeaveHelper>();

@@ -1,61 +1,53 @@
-﻿@model leave_management.Models.CreateBusinessTravelVM
+﻿@model leave_management.Models.CreateTrainingCourseVM
 
 @{
-    ViewData["Title"] = "Utwórz wyjazd służbowy";
+    ViewData["Title"] = "Dodaj szkolenie BHP";
 }
 
-<h1>Utwórz wyjazd służbowy</h1>
+    <h1>Dodaj szkolenie BHP</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-
             <div class="form-group">
-                <label asp-for="DateFrom" class="control-label"></label>
-                <input asp-for="DateFrom" type="text" value="@DateTime.Now.Date" class="form-control datepicker" />
-                <span asp-validation-for="DateFrom" class="text-danger"></span>
+                <label asp-for="EmployeeId" class="control-label"></label>
+                @Html.DropDownListFor(q => q.EmployeeId, new SelectList(Model.Employees, "Value", "Text"), "Wybierz pracownika", new { @class = "form-control" })
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DateTo" class="control-label"></label>
-                <input asp-for="DateTo" type="text" value="@DateTime.Now.Date" class="form-control datepicker" />
-                <span asp-validation-for="DateTo" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="CountryId" class="control-label"></label>
-                @Html.DropDownListFor(q => q.CountryId, new SelectList(Model.DestinationCountries, "Value", "Text"), "Wybierz kraj", new { @class = "form-control" })
-                <span asp-validation-for="CountryId" class="text-danger"></span>
+                <label asp-for="TrainingCourseTypeId" class="control-label"></label>
+                @Html.DropDownListFor(q => q.TrainingCourseTypeId, new SelectList(Model.TrainingCourseTypes, "Value", "Text"), "Wybierz typ szkolenia", new { @class = "form-control" })
+                <span asp-validation-for="TrainingCourseTypeId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DestinationCity" class="control-label"></label>
-                <input asp-for="DestinationCity" class="form-control" />
-                <span asp-validation-for="DestinationCity" class="text-danger"></span>
+                <label asp-for="DateOfTrainingCourse" class="control-label"></label>
+                <input asp-for="DateOfTrainingCourse" value="@DateTime.Now.Date" type="text" class="form-control datepicker" />
+                <span asp-validation-for="DateOfTrainingCourse" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PurposeOfTravel" class="control-label"></label>
-                <input asp-for="PurposeOfTravel" class="form-control" />
-                <span asp-validation-for="PurposeOfTravel" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TransportVehicleId" class="control-label"></label>
-                @Html.DropDownListFor(q => q.TransportVehicleId, new SelectList(Model.TransportVehicles, "Value", "Text"), "Wybierz środek transportu", new { @class = "form-control" })
-                <span asp-validation-for="TransportVehicleId" class="text-danger"></span>
+                <label asp-for="DateValidUntil" class="control-label"></label>
+                <input asp-for="DateValidUntil" value="@DateTime.Now.Date" type="text" class="form-control datepicker" />
+                <span asp-validation-for="DateValidUntil" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="AdditionalInfo" class="control-label"></label>
                 <input asp-for="AdditionalInfo" class="form-control" />
                 <span asp-validation-for="AdditionalInfo" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="EmployeeId" class="control-label"></label>
-                @Html.DropDownListFor(q => q.EmployeeId, new SelectList(Model.Employees, "Value", "Text"), "Wybierz pracownika", new { @class = "form-control" })
-                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="ShowSelectedEmployee" /> @Html.DisplayNameFor(model => model.ShowSelectedEmployee)
+                </label>
             </div>
-
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="ShowSelectedDepartment" /> @Html.DisplayNameFor(model => model.ShowSelectedDepartment)
+                </label>
+            </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Dodaj szkolenie"  class="btn btn-success btn-block" />
             </div>
         </form>
     </div>

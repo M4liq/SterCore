@@ -35,6 +35,15 @@ namespace leave_management.Mappings
             CreateMap<Competence, CreateCompetenceVM >().ReverseMap();
             CreateMap<CompetenceType, CompetenceTypeVM>().ReverseMap();
             CreateMap<Expense, ExpenseVM>().ReverseMap();
+            CreateMap<Notification, CreateNotificationVM>().ReverseMap();
+            CreateMap<Notification, NotificationVM>().ReverseMap();
+            CreateMap<NotificationType, NotificationTypeVM>().ReverseMap();
+            CreateMap<TrainingCourse, TrainingCourseVM>().ReverseMap();
+            CreateMap<TrainingCourse, CreateTrainingCourseVM>().ReverseMap();
+            CreateMap<TrainingCourseType, TrainingCourseTypeVM>().ReverseMap();
+            CreateMap<Contract, ContractVM>().ReverseMap();
+            CreateMap<Contract, CreateContractVM>().ReverseMap();
+            CreateMap<ContractType, ContractTypeVM>().ReverseMap();
             CreateMap<Expense, CreateExpenseVM>().ReverseMap();
             CreateMap<Expense, CreateExpenseVM>().ReverseMap();
             CreateMap<Department, DepartmentVM>().ReverseMap();

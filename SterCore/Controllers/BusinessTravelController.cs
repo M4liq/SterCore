@@ -134,8 +134,34 @@ namespace leave_management.Controllers
                 {
                     return View(model);
                 }
-                if(model.DateFrom.Date > model.DateTo.Date)
+                if (model.DateFrom.Date > model.DateTo.Date)
                 {
+                    var employees = await _employeeRepository.FindAll();
+                    var employeesItems = employees.Select(q => new SelectListItem
+                    {
+                        Text = String.Format("{0} {1}", q.Firstname, q.Lastname),
+                        Value = q.Id.ToString()
+                    });
+
+                    var countries = await _countryRepository.FindAll();
+                    var countriesItems = countries.Select(q => new SelectListItem
+                    {
+                        Text = q.Name,
+                        Value = q.Id.ToString()
+                    });
+
+                    var transportVehicles = await _transportVehicleRepository.FindAll();
+                    var transportVehiclesItems = transportVehicles.Select(q => new SelectListItem
+                    {
+                        Text = q.Name,
+                        Value = q.Value.ToString()
+                    });
+
+
+                    model.Employees = employeesItems;
+                    model.TransportVehicles = transportVehiclesItems;
+                    model.DestinationCountries = countriesItems;
+
                     ModelState.AddModelError("", "Podane daty są nieprawidłowe");
                     return View(model);
                 }
@@ -177,13 +203,44 @@ namespace leave_management.Controllers
         // POST: PWS/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(BusinessTravelVM model)
+        public async Task<ActionResult> Edit(CreateBusinessTravelVM model)
         {
             try
             {
                 // TODO: Add insert logic here
                 if (!ModelState.IsValid)
                 {
+                    return View(model);
+                }
+                if (model.DateFrom.Date > model.DateTo.Date)
+                {
+                    var employees = await _employeeRepository.FindAll();
+                    var employeesItems = employees.Select(q => new SelectListItem
+                    {
+                        Text = String.Format("{0} {1}", q.Firstname, q.Lastname),
+                        Value = q.Id.ToString()
+                    });
+
+                    var countries = await _countryRepository.FindAll();
+                    var countriesItems = countries.Select(q => new SelectListItem
+                    {
+                        Text = q.Name,
+                        Value = q.Id.ToString()
+                    });
+
+                    var transportVehicles = await _transportVehicleRepository.FindAll();
+                    var transportVehiclesItems = transportVehicles.Select(q => new SelectListItem
+                    {
+                        Text = q.Name,
+                        Value = q.Value.ToString()
+                    });
+
+
+                    model.Employees = employeesItems;
+                    model.TransportVehicles = transportVehiclesItems;
+                    model.DestinationCountries = countriesItems;
+
+                    ModelState.AddModelError("", "Podane daty są nieprawidłowe");
                     return View(model);
                 }
                 var businessTravel = _mapper.Map<BusinessTravel>(model);

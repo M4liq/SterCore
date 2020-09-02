@@ -15,7 +15,9 @@ namespace leave_management.Services.Extensions
         }
 
         public static T ExtGet<T>(this IHttpContextAccessor session, string key)
-        {
+        {   
+            //If returning null during seeding you probably need to bypass setting token, because session is not set
+            //Establish diffrent method of creating entity in repository
             var value = session.HttpContext.Session.Get(key);
 
             return value == null ? default(T) :

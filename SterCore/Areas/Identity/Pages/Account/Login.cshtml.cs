@@ -127,6 +127,7 @@ namespace leave_management.Areas.Identity.Pages.Account
                     {
                         HttpContext.Session.ExtSet("organizationToken", organization.OrganizationToken);
                         HttpContext.Session.ExtSet<string>("organizationName", organization.Name);
+
                         return RedirectToPage("./ChangeOrganizationView");
                     }
 

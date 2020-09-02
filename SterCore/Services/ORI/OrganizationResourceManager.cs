@@ -36,14 +36,7 @@ namespace leave_management.Services.Components
             await _db.AuthorizedOrganizations.AddAsync(authorize);
             return authorize;
     }
-        //Testing 
-        //public DbSet<IApplicationDataView> FilterListByView(DbSet<IApplicationDataView> entity)
-        //{
-        //    var token = GetOrganizationToken();
-        //    return entity.Where(q => q.GetToken() == token);
-        //}
 
-        //OrganizationrResource Interface
         public string GenerateToken()
         {
             Guid g = Guid.NewGuid();
@@ -87,6 +80,7 @@ namespace leave_management.Services.Components
 
             return false;
         }
+
     }
 
     public class OrganizationResourceManager<T> : IOrganizationResourceManager<T> 

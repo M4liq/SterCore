@@ -1,5 +1,6 @@
 ﻿using AutoMapper.Configuration;
 using leave_management.Contracts;
+using leave_management.Repository;
 using leave_management.Services.Components.ORI;
 using leave_management.Services.DataSeeds;
 using Microsoft.AspNetCore.Identity;
@@ -16,17 +17,20 @@ namespace leave_management.Data.Seeds
         private readonly IOrganizationResourceManager _organizationManager;
         private readonly IOrganizationRepository _organizationRepository;
         private readonly IAuthorizedOrganizationRepository _authorizedOrganizationRepository;
+        private readonly IDepartmentRepository _departmentRepository;
 
         public SeedUsersAndOrganizations(
             UserManager<Employee> userManager,
             IOrganizationResourceManager organizationManager,
             IOrganizationRepository organizationRepository,
-            IAuthorizedOrganizationRepository authorizedOrganizationRepository)
+            IAuthorizedOrganizationRepository authorizedOrganizationRepository,
+            IDepartmentRepository departmentRepository)
         {
             _userManager = userManager;
             _organizationManager = organizationManager;
             _organizationRepository = organizationRepository;
             _authorizedOrganizationRepository = authorizedOrganizationRepository;
+            _departmentRepository = departmentRepository;
 
         }
         public void Seed()
@@ -55,12 +59,23 @@ namespace leave_management.Data.Seeds
                     InialOrganization = true
                 };
 
+                    var successOrg = _organizationRepository.Create(initalOrganization, organizationToken).Result;
 
-                var successOrg = _organizationRepository.Create(initalOrganization, organizationToken).Result;
-
-
+                //There is potential of using State Pattern
                 if (successOrg)
                 {
+                    var department = new Department
+                    {
+                        Name = "Administracja",
+                        Code = "ADM",
+                        DateCreated = DateTime.Now,
+                        OrganizationToken = organizationToken,
+                        InitialDepartment = true,
+                        OrganizationId = initalOrganization.Id
+                    };
+
+                    var successDep = _departmentRepository.Create(department, true);
+
                     var user = new Employee
                     {
                         UserName = "admin@stercore.pl",

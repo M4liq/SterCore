@@ -44,6 +44,9 @@ namespace leave_management.Mappings
             CreateMap<Contract, ContractVM>().ReverseMap();
             CreateMap<Contract, CreateContractVM>().ReverseMap();
             CreateMap<ContractType, ContractTypeVM>().ReverseMap();
+            CreateMap<Expense, CreateExpenseVM>().ReverseMap();
+            CreateMap<Expense, CreateExpenseVM>().ReverseMap();
+            CreateMap<Department, DepartmentVM>().ReverseMap();
         }
     }
 }

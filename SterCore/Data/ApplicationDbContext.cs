@@ -21,7 +21,7 @@ namespace leave_management.Data
         public DbSet<LeaveType> LeaveTypes { get; set; }
         public DbSet<LeaveAllocations> LeaveAllocations { get; set; }
         public DbSet<Organization> Organization { get; set; }
-
+        public DbSet<Department> Department { get; set; }
         public DbSet<BusinessTravel> BusinessTravel { get; set; }
         public DbSet<BillingBusinessTravel> billingBusinessTravels { get; set; }
         public DbSet<TypeOfMedicalCheckUp> TypeOfMedicalCheckUps { get; set; }

@@ -36,6 +36,8 @@ namespace leave_management.Mappings
             CreateMap<CompetenceType, CompetenceTypeVM>().ReverseMap();
             CreateMap<Expense, ExpenseVM>().ReverseMap();
             CreateMap<Expense, CreateExpenseVM>().ReverseMap();
+            CreateMap<Expense, CreateExpenseVM>().ReverseMap();
+            CreateMap<Department, DepartmentVM>().ReverseMap();
         }
     }
 }

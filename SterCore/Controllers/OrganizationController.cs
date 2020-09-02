@@ -9,6 +9,7 @@ using leave_management.Contracts;
 using leave_management.Data;
 using leave_management.Models;
 using leave_management.Repository;
+using leave_management.Services.Components.ORI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,14 +20,22 @@ namespace leave_management.Controllers
     public class OrganizationController : Controller
     {
         private readonly IOrganizationRepository _organizationRepostory;
+        private readonly IDepartmentRepository _departmentRepostory;
+        private readonly IOrganizationResourceManager _organizationManager;
         private readonly IMapper _mapper;
         private readonly IEmployeeRepository _employeeRepository;
 
-        public OrganizationController(IMapper mapper, IOrganizationRepository organizationRepostory, IEmployeeRepository employeeRepository)
+        public OrganizationController(IMapper mapper, 
+            IOrganizationRepository organizationRepostory, 
+            IEmployeeRepository employeeRepository, 
+            IDepartmentRepository departmentRepostory,
+            IOrganizationResourceManager organizationManager)
         {
             _organizationRepostory = organizationRepostory;
             _mapper = mapper;
             _employeeRepository = employeeRepository;
+            _departmentRepostory = departmentRepostory;
+            _organizationManager = organizationManager;
         }
 
         // GET: Organization
@@ -74,6 +83,24 @@ namespace leave_management.Controllers
                 var record = _mapper.Map<Organization>(model);
                 var isSuccess = await _organizationRepostory.Create(record);
                 if (!isSuccess)
+                {
+                    ModelState.AddModelError("", "Coś poszło nie tak. Skontaktuj się z Administratorem...");
+                    return View(model);
+                }
+
+                var department = new Department
+                {
+                    Name = "Administracja",
+                    Code = "ADM",
+                    DateCreated = DateTime.Now,
+                    OrganizationToken = record.OrganizationToken,
+                    InitialDepartment = true,
+                    OrganizationId = record.Id
+                };
+
+                var successDep = await _departmentRepostory.Create(department, true);
+
+                if (!successDep)
                 {
                     ModelState.AddModelError("", "Coś poszło nie tak. Skontaktuj się z Administratorem...");
                     return View(model);

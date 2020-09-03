@@ -48,6 +48,7 @@ namespace leave_management.Mappings
             CreateMap<Expense, CreateExpenseVM>().ReverseMap();
             CreateMap<Department, DepartmentVM>().ReverseMap();
             CreateMap<Resource, ResourceVM>().ReverseMap();
+            CreateMap<Resource, CreateResourceVM>().ReverseMap();
             CreateMap<ResourceType, ResourceTypeVM>().ReverseMap();
         }
     }

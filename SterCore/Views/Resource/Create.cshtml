@@ -1,0 +1,106 @@
+﻿@model leave_management.Models.CreateResourceVM
+
+@{
+    ViewData["Title"] = "Utwórz zasób";
+}
+
+<h1>Utwórz zasób</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="EmployeeId" class="control-label"></label>
+                @Html.DropDownListFor(q => q.EmployeeId, new SelectList(Model.Employees, "Value", "Text"), "Wybierz pracownika", new { @class = "form-control" })
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ResourceTypeId" class="control-label"></label>
+                @Html.DropDownListFor(q => q.ResourceTypeId, new SelectList(Model.ResourceTypes, "Value", "Text"), "Wybierz typ zasobu", new { @class = "form-control" })
+                <span asp-validation-for="ResourceTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateFrom" class="control-label"></label>
+                <input asp-for="DateFrom" type="text" value="@DateTime.Now.Date" class="form-control datepicker" />
+                <span asp-validation-for="DateFrom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateUntil" class="control-label"></label>
+                <input asp-for="DateUntil" type="text" value="@DateTime.Now.Date" class="form-control datepicker" />
+                <span asp-validation-for="DateUntil" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdditionalInfo" class="control-label"></label>
+                <input asp-for="AdditionalInfo" class="form-control" />
+                <span asp-validation-for="AdditionalInfo" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsReturned" /> @Html.DisplayNameFor(model => model.IsReturned)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Utwórz zasób" class="btn btn-success btn-block" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-alt-circle-left"></i> Powrót do podsumowania</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.datepicker').daterangepicker({
+                "locale": {
+                    "format": "DD/MM/YYYY",
+                    "separator": " - ",
+                    "applyLabel": "Zatwierdź",
+                    "cancelLabel": "Anuluj",
+                    "fromLabel": "Od",
+                    "toLabel": "Do",
+                    "customRangeLabel": "Custom",
+                    "weekLabel": "Tydzień",
+                    "daysOfWeek": [
+                        "Nd",
+                        "Pn",
+                        "Wt",
+                        "Śr",
+                        "Cz",
+                        "Pt",
+                        "So"
+                    ],
+                    "monthNames": [
+                        "Styczeń",
+                        "Luty",
+                        "Marzec",
+                        "Kwiecień",
+                        "Maj",
+                        "Czerwiec",
+                        "Lipiec",
+                        "Sierpień",
+                        "Wrzesień",
+                        "Październik",
+                        "Listopad",
+                        "Grudzień"
+                    ],
+                    "firstDay": 1
+                },
+                "alwaysShowCalendars": true,
+                "showDropdowns": true,
+                "singleDatePicker": true
+            });
+
+
+        });
+    </script>
+}

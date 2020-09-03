@@ -86,6 +86,7 @@ namespace leave_management
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IResourceRepository, ResourceRepository>();
             services.AddScoped<IResourceTypeRepository, ResourceTypeRepository>();
+            services.AddScoped<IApplicationRepository, ApplicationRepository>();
 
             //Organization Resource Manager Initialization Fields
             services.AddScoped<IOrganizationResourceManager<LeaveType>, OrganizationResourceManager<LeaveType>>();

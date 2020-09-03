@@ -1,0 +1,48 @@
+﻿@model leave_management.Models.ResourceTypeVM
+
+@{
+    ViewData["Title"] = "Utwórz zasób";
+}
+
+<h1>Utwórz zasób</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="showDateFrom" /> @Html.DisplayNameFor(model => model.showDateFrom)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="showDateUntil" /> @Html.DisplayNameFor(model => model.showDateUntil)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="showReturned" /> @Html.DisplayNameFor(model => model.showReturned)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Dodaj Zasób" class="btn btn-success btn-block" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a class="btn btn-primary" asp-action="Index"><i class="fa fa-arrow-alt-circle-left"></i> Powrót do podsumowania</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,62 @@
+﻿@model IEnumerable<leave_management.Models.ResourceTypeVM>
+
+@{
+    ViewData["Title"] = "Utwórz nowy zasób";
+}
+
+<h1>Utwórz nowy zasób</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="Index" asp-controller="Resource"><i class="fa fa-arrow-alt-circle-left"></i> Powrót do przypisania zasobów</a>
+    <a class="btn btn-success" asp-action="Create"><i class="fa fa-plus-circle"></i> Utwórz nowy zasób</a>
+</p>
+<table id="tblData" class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.showDateFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.showDateUntil)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.showReturned)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.showDateFrom)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.showDateUntil)
+            </td>
+            <td>
+                @Html.DisplayNameFor(model => model.showReturned)
+            </td>
+            <td>
+                <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">
+                    <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                </a>
+                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">
+                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                </a>
+                <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz usunąć ten wpis?')">
+                    <i class="fa fa-trash" aria-hidden="true"></i>
+                </a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+

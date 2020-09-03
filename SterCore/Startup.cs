@@ -84,6 +84,8 @@ namespace leave_management
             services.AddScoped<IContractRepository, ContractRepository>();
             services.AddScoped<IContractTypeRepository, ContractTypeRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            services.AddScoped<IResourceRepository, ResourceRepository>();
+            services.AddScoped<IResourceTypeRepository, ResourceTypeRepository>();
 
             //Organization Resource Manager Initialization Fields
             services.AddScoped<IOrganizationResourceManager<LeaveType>, OrganizationResourceManager<LeaveType>>();
@@ -102,6 +104,8 @@ namespace leave_management
             services.AddScoped<IOrganizationResourceManager<TrainingCourse>, OrganizationResourceManager<TrainingCourse>>();
             services.AddScoped<IOrganizationResourceManager<Contract>, OrganizationResourceManager<Contract>>();
             services.AddScoped<IOrganizationResourceManager<Department>, OrganizationResourceManager<Department>>();
+            services.AddScoped<IOrganizationResourceManager<Resource>, OrganizationResourceManager<Resource>>();
+            services.AddScoped<IOrganizationResourceManager<ResourceType>, OrganizationResourceManager<ResourceType>>();
 
             //Initializind Data Seeding and Generic List required to handle Seeds
             services.AddScoped<ISeed, Seed>();

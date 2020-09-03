@@ -17,7 +17,7 @@ namespace leave_management.Data
         public Employee Employee { get; set; }
         public string EmployeeId { get; set; }
         [ForeignKey("ResourceTypeId")]
-        public NotificationType ResourceType { get; set; }
+        public ResourceType ResourceType { get; set; }
         public int ResourceTypeId { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateUntil { get; set; }

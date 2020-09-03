@@ -50,6 +50,8 @@ namespace leave_management.Mappings
             CreateMap<Resource, ResourceVM>().ReverseMap();
             CreateMap<Resource, CreateResourceVM>().ReverseMap();
             CreateMap<ResourceType, ResourceTypeVM>().ReverseMap();
+            CreateMap<Application, ApplicationVM>().ReverseMap();
+            CreateMap<Application, CreateApplicationVM>().ReverseMap();
         }
     }
 }

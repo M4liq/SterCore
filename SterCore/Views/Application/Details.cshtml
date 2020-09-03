@@ -1,0 +1,41 @@
+﻿@model leave_management.Models.ApplicationVM
+
+@{
+    ViewData["Title"] = "Szczegóły wniosku";
+}
+
+    <h1>Szczegóły wniosku</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EmployeeFullName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EmployeeFullName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ApplicationName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ApplicationName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DateOfApplication)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DateOfApplication)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a class="btn btn-block btn-warning" asp-action="Edit" asp-route-id="@Model.Id"><i class="fa fa-pencil"></i>Edytuj</a>
+    <a class="btn btn-block btn-primary" asp-action="Index"> <i class="fa fa-arrow-alt-circle-left"></i> Powrót do podsumowania</a>
+</div>

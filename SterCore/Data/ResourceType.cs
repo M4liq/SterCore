@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace leave_management.Data
 {
-    public class ResourceType
+    public class ResourceType : IApplicationDataView
     {
         [Key]
         public int Id { get; set; }

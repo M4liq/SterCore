@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace leave_management.Data
 {
-    public class Resource
+    public class Resource : IApplicationDataView
     {
         [Key]
         public int Id { get; set; }

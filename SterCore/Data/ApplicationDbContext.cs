@@ -43,5 +43,6 @@ namespace leave_management.Data
         public DbSet<ContractType> ContractTypes { get; set; }
         public DbSet<Resource> Resources { get; set; }
         public DbSet<ResourceType> ResourceTypes { get; set; }
+        public DbSet<Application> Applications { get; set; }
     }
 }

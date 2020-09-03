@@ -26,6 +26,9 @@ namespace leave_management.Models
         public string AdditionalInfo { get; set; }
         [Display(Name = "Zasób został zwrócony")]
         public bool IsReturned { get; set; }
+
+        public string EmployeeFullName { get; set; }
+        public string ResourceTypeName { get; set; }
     }
     public class CreateResourceVM
     {

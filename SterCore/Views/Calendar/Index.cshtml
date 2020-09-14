@@ -1,0 +1,143 @@
+﻿@model IEnumerable<leave_management.Models.CalendarVM>
+@{
+    ViewData["Title"] = "Kalendarz";
+}
+
+<h1>Kalendarz</h1>
+<div class="event-checkbox medical-event-checkbox">
+    <input type="checkbox" checked="checked" name="medicalEventFilter" id="medicalEventFilter" />
+    <label for="medicalEventFilter">Badania lekarskie</label>
+</div>
+<div class="event-checkbox notification-event-checkbox">
+    <input type="checkbox" checked="checked" name="notificationEventFilter" id="notificationEventFilter" />
+    <label for="notificationEventFilter">Powiadomienia</label>
+</div>
+<div class="event-checkbox contract-event-checkbox">
+    <input type="checkbox" checked="checked" name="contractEventFilter" id="contractEventFilter" />
+    <label for="contractEventFilter">Umowy</label>
+</div>
+<div class="event-checkbox training-course-event-checkbox">
+    <input type="checkbox" checked="checked" name="trainingCourseEventFilter" id="trainingCourseEventFilter" />
+    <label for="trainingCourseEventFilter">Szkolenia BHP</label>
+</div>
+<div class="calendar-container">
+    <div id="calendar"></div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script src='lib/fullcalendar/main.js'></script>
+    <script src='~/lib/fullcalendar/locales/pl.js'></script>
+    <script>
+    var MedicalCheckUpEvents = [];
+    @foreach(var item in Model)
+    {
+        if (!String.IsNullOrEmpty(item.MedicalCheckUpEmployeeFullName)) {
+            @: var temp = { title: "@item.MedicalCheckUpEmployeeFullName", start: new Date('@String.Format("{0}-{1}-{2}",item.MedicalCheckUpStartDate.Year,item.MedicalCheckUpStartDate.Month,item.MedicalCheckUpStartDate.Day)'),  allDay: true, icon: '@item.Icon', className: 'medical-check-up-event '}
+            @: MedicalCheckUpEvents.push(temp);
+        }
+    }
+
+    var NotificationEvents = [];
+    @foreach(var item in Model)
+    {
+        if (!String.IsNullOrEmpty(item.NotificationEmployeeFullName)) {
+            @: var temp = { title: "@item.NotificationEmployeeFullName", start: new Date('@String.Format("{0}-{1}-{2}",item.NotificationStartDate.Year,item.NotificationStartDate.Month,item.NotificationStartDate.Day)'),  allDay: true, icon: '@item.Icon', className: 'notification-event ' }
+            @: NotificationEvents.push(temp);
+        }
+    }
+        var ContractEvents = [];
+    @foreach(var item in Model)
+    {
+        if (!String.IsNullOrEmpty(item.ContractEmployeeFullName)) {
+            @: var temp = { title: "@item.ContractEmployeeFullName", start: new Date('@String.Format("{0}-{1}-{2}",item.ContractStartDate.Year,item.ContractStartDate.Month,item.ContractStartDate.Day)'),  allDay: true , icon: '@item.Icon', className: 'contract-event '}
+            @: ContractEvents.push(temp);
+        }
+    }
+        var TrainingCourseEvents = [];
+    @foreach(var item in Model)
+    {
+        if (!String.IsNullOrEmpty(item.TrainingCourseEmployeeFullName)) {
+            @: var temp = { title: "@item.TrainingCourseEmployeeFullName", start: new Date('@String.Format("{0}-{1}-{2}",item.TrainingCourseStartDate.Year,item.TrainingCourseStartDate.Month,item.TrainingCourseStartDate.Day)'), allDay: true, icon: '@item.Icon', className: 'training-course-event ' }
+            @: TrainingCourseEvents.push(temp);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'pl',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+            },
+            buttonIcons: false, // show the prev/next text
+            weekNumbers: true,
+            navLinks: true, // can click day/week names to navigate views
+            editable: false,
+            dayMaxEvents: true, // allow "more" link when too many events
+            eventSources: [
+                {
+                    events: MedicalCheckUpEvents,
+                    color: '#307351',
+                    textColor: 'white'
+                },
+                {
+                    events: ContractEvents,
+                    color: '#124E78',
+                    textColor: 'white'
+                },
+                {
+                    events: TrainingCourseEvents,
+                    color: '#3da5d9',
+                    textColor: 'white'
+                },
+                {
+                    events: NotificationEvents,
+                    color: '#B5D99C',
+                    textColor: 'black'
+                }
+
+            ],
+            height: 'auto',
+
+            eventContent: function (arg) {
+                var icon;
+                switch(arg.event.extendedProps.icon) {
+                  case 'right':
+                    icon = '<i class="fa fa-arrow-right"></i> '
+                    break;
+                  case 'left':
+                     icon = '<i class="fa fa-arrow-left"></i> '
+                    break;
+                  default:
+                }
+                return { html: icon + arg.event.title}
+},
+
+        });
+        calendar.render();
+
+        $("#medicalEventFilter").change(function () {
+            $('.medical-check-up-event').toggleClass('none');
+        });
+        $("#notificationEventFilter").change(function () {
+            $('.notification-event').toggleClass('none');
+        });
+        $("#contractEventFilter").change(function () {
+            $('.contract-event').toggleClass('none');
+        });
+        $("#trainingCourseEventFilter").change(function () {
+            $('.training-course-event').toggleClass('none');
+        });
+
+        });
+    </script>
+
+
+}

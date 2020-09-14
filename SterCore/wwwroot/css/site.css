@@ -78,3 +78,31 @@ textarea {
 .none {
     display: none;
 }
+.fc .none {
+    display: none;
+}
+.calendar-container{
+    height:100%;
+}
+.event-checkbox {
+    padding: 5px;
+    display: inline;
+    margin: 0 10px;
+    border-radius: 4px;
+}
+.medical-event-checkbox {  
+    background-color: #307351;
+    color: white;
+}
+.notification-event-checkbox {
+    background-color: #B5D99C;
+    color: black;
+}
+.contract-event-checkbox {
+    background-color: #124E78;
+    color: white;
+}
+.training-course-event-checkbox {
+    background-color: #3da5d9;
+    color: white;
+}

@@ -1,0 +1,97 @@
+﻿@model IEnumerable<leave_management.Models.CalendarVM>
+@{
+    ViewData["Title"] = "Kalendarz";
+}
+
+<h1>Kalendarz</h1>
+
+<div id="calendar"></div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script src='lib/fullcalendar/main.js'></script>
+    <script src='~/lib/fullcalendar/locales/pl.js'></script>
+    <script>
+    var MedicalCheckUpEvents = [];
+    @foreach(var item in Model)
+    {
+        if (!String.IsNullOrEmpty(item.MedicalCheckUpEmployeeFullName)) {
+            @: var temp = { title: "@item.MedicalCheckUpEmployeeFullName", start: new Date('@String.Format("{0}-{1}-{2}",item.MedicalCheckUpStartDate.Year,item.MedicalCheckUpStartDate.Month,item.MedicalCheckUpStartDate.Day)'), end: new Date('@String.Format("{0}-{1}-{2}",item.MedicalCheckUpEndDate.Year,item.MedicalCheckUpEndDate.Month,item.MedicalCheckUpEndDate.Day)'), allDay: true }
+            @: MedicalCheckUpEvents.push(temp);
+        }
+    }
+
+    var NotificationEvents = [];
+    @foreach(var item in Model)
+    {
+        if (!String.IsNullOrEmpty(item.NotificationEmployeeFullName)) {
+            @: var temp = { title: "@item.NotificationEmployeeFullName", start: new Date('@String.Format("{0}-{1}-{2}",item.NotificationStartDate.Year,item.NotificationStartDate.Month,item.NotificationStartDate.Day)'), end: new Date('@String.Format("{0}-{1}-{2}",item.NotificationEndDate.Year,item.NotificationEndDate.Month,item.NotificationEndDate.Day)'), allDay: true }
+            @: NotificationEvents.push(temp);
+        }
+    }
+        var ContractEvents = [];
+    @foreach(var item in Model)
+    {
+        if (!String.IsNullOrEmpty(item.ContractEmployeeFullName)) {
+            @: var temp = { title: "@item.ContractEmployeeFullName", start: new Date('@String.Format("{0}-{1}-{2}",item.ContractStartDate.Year,item.ContractStartDate.Month,item.ContractStartDate.Day)'), end: new Date('@String.Format("{0}-{1}-{2}",item.ContractEndDate.Year,item.ContractEndDate.Month,item.ContractEndDate.Day)'), allDay: true }
+            @: ContractEvents.push(temp);
+        }
+    }
+        var TrainingCourseEvents = [];
+    @foreach(var item in Model)
+    {
+        if (!String.IsNullOrEmpty(item.TrainingCourseEmployeeFullName)) {
+            @: var temp = { title: "@item.TrainingCourseEmployeeFullName", start: new Date('@String.Format("{0}-{1}-{2}",item.TrainingCourseStartDate.Year,item.TrainingCourseStartDate.Month,item.TrainingCourseStartDate.Day)'), end: new Date('@String.Format("{0}-{1}-{2}",item.TrainingCourseEndDate.Year,item.TrainingCourseEndDate.Month,item.TrainingCourseEndDate.Day)'), allDay: true }
+            @: TrainingCourseEvents.push(temp);
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'pl',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+            },
+            buttonIcons: false, // show the prev/next text
+            weekNumbers: true,
+            navLinks: true, // can click day/week names to navigate views
+            editable: false,
+            dayMaxEvents: true, // allow "more" link when too many events
+            eventSources: [
+                {
+                    events: MedicalCheckUpEvents,
+                    color: '#307351',
+                    textColor: 'white'
+                },
+                {
+                    events: ContractEvents,
+                    color: '#124E78',
+                    textColor: 'white'
+                },
+                {
+                    events: TrainingCourseEvents,
+                    color: '#3da5d9',
+                    textColor: 'white'
+                },
+                {
+                    events: NotificationEvents,
+                    color: '#B5D99C',
+                    textColor: 'black'
+                }
+            
+            ]
+            
+        });
+        calendar.render();
+        
+    });
+    </script>
+
+
+}

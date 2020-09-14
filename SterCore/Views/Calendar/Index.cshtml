@@ -4,6 +4,22 @@
 }
 
 <h1>Kalendarz</h1>
+<div class="event-checkbox medical-event-checkbox">
+    <input type="checkbox" checked="checked" name="medicalEventFilter" id="medicalEventFilter" />
+    <label for="medicalEventFilter">Badania lekarskie</label>
+</div>
+<div class="event-checkbox notification-event-checkbox">
+    <input type="checkbox" checked="checked" name="notificationEventFilter" id="notificationEventFilter" />
+    <label for="notificationEventFilter">Powiadomienia</label>
+</div>
+<div class="event-checkbox contract-event-checkbox">
+    <input type="checkbox" checked="checked" name="contractEventFilter" id="contractEventFilter" />
+    <label for="contractEventFilter">Umowy</label>
+</div>
+<div class="event-checkbox training-course-event-checkbox">
+    <input type="checkbox" checked="checked" name="trainingCourseEventFilter" id="trainingCourseEventFilter" />
+    <label for="trainingCourseEventFilter">Szkolenia BHP</label>
+</div>
 
 <div id="calendar"></div>
 
@@ -18,7 +34,7 @@
     @foreach(var item in Model)
     {
         if (!String.IsNullOrEmpty(item.MedicalCheckUpEmployeeFullName)) {
-            @: var temp = { title: "@item.MedicalCheckUpEmployeeFullName", start: new Date('@String.Format("{0}-{1}-{2}",item.MedicalCheckUpStartDate.Year,item.MedicalCheckUpStartDate.Month,item.MedicalCheckUpStartDate.Day)'), end: new Date('@String.Format("{0}-{1}-{2}",item.MedicalCheckUpEndDate.Year,item.MedicalCheckUpEndDate.Month,item.MedicalCheckUpEndDate.Day)'), allDay: true }
+            @: var temp = { title: "@item.MedicalCheckUpEmployeeFullName", start: new Date('@String.Format("{0}-{1}-{2}",item.MedicalCheckUpStartDate.Year,item.MedicalCheckUpStartDate.Month,item.MedicalCheckUpStartDate.Day)'),  allDay: true, icon: '@item.Icon', className: 'medical-check-up-event '}
             @: MedicalCheckUpEvents.push(temp);
         }
     }
@@ -27,7 +43,7 @@
     @foreach(var item in Model)
     {
         if (!String.IsNullOrEmpty(item.NotificationEmployeeFullName)) {
-            @: var temp = { title: "@item.NotificationEmployeeFullName", start: new Date('@String.Format("{0}-{1}-{2}",item.NotificationStartDate.Year,item.NotificationStartDate.Month,item.NotificationStartDate.Day)'), end: new Date('@String.Format("{0}-{1}-{2}",item.NotificationEndDate.Year,item.NotificationEndDate.Month,item.NotificationEndDate.Day)'), allDay: true }
+            @: var temp = { title: "@item.NotificationEmployeeFullName", start: new Date('@String.Format("{0}-{1}-{2}",item.NotificationStartDate.Year,item.NotificationStartDate.Month,item.NotificationStartDate.Day)'),  allDay: true, icon: '@item.Icon', className: 'notification-event ' }
             @: NotificationEvents.push(temp);
         }
     }
@@ -35,7 +51,7 @@
     @foreach(var item in Model)
     {
         if (!String.IsNullOrEmpty(item.ContractEmployeeFullName)) {
-            @: var temp = { title: "@item.ContractEmployeeFullName", start: new Date('@String.Format("{0}-{1}-{2}",item.ContractStartDate.Year,item.ContractStartDate.Month,item.ContractStartDate.Day)'), end: new Date('@String.Format("{0}-{1}-{2}",item.ContractEndDate.Year,item.ContractEndDate.Month,item.ContractEndDate.Day)'), allDay: true }
+            @: var temp = { title: "@item.ContractEmployeeFullName", start: new Date('@String.Format("{0}-{1}-{2}",item.ContractStartDate.Year,item.ContractStartDate.Month,item.ContractStartDate.Day)'),  allDay: true , icon: '@item.Icon', className: 'contract-event '}
             @: ContractEvents.push(temp);
         }
     }
@@ -43,11 +59,11 @@
     @foreach(var item in Model)
     {
         if (!String.IsNullOrEmpty(item.TrainingCourseEmployeeFullName)) {
-            @: var temp = { title: "@item.TrainingCourseEmployeeFullName", start: new Date('@String.Format("{0}-{1}-{2}",item.TrainingCourseStartDate.Year,item.TrainingCourseStartDate.Month,item.TrainingCourseStartDate.Day)'), end: new Date('@String.Format("{0}-{1}-{2}",item.TrainingCourseEndDate.Year,item.TrainingCourseEndDate.Month,item.TrainingCourseEndDate.Day)'), allDay: true }
+            @: var temp = { title: "@item.TrainingCourseEmployeeFullName", start: new Date('@String.Format("{0}-{1}-{2}",item.TrainingCourseStartDate.Year,item.TrainingCourseStartDate.Month,item.TrainingCourseStartDate.Day)'), allDay: true, icon: '@item.Icon', className: 'training-course-event ' }
             @: TrainingCourseEvents.push(temp);
         }
     }
-    
+
     document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -84,13 +100,41 @@
                     color: '#B5D99C',
                     textColor: 'black'
                 }
-            
-            ]
-            
+
+            ],
+
+
+            eventContent: function (arg) {
+                var icon;
+                switch(arg.event.extendedProps.icon) {
+                  case 'right':
+                    icon = '<i class="fa fa-arrow-right"></i> '
+                    break;
+                  case 'left':
+                     icon = '<i class="fa fa-arrow-left"></i> '
+                    break;
+                  default:
+                }
+                return { html: icon + arg.event.title}
+},
+
         });
         calendar.render();
-        
-    });
+
+        $("#medicalEventFilter").change(function () {
+            $('.medical-check-up-event').toggleClass('none');
+        });
+        $("#notificationEventFilter").change(function () {
+            $('.notification-event').toggleClass('none');
+        });
+        $("#contractEventFilter").change(function () {
+            $('.contract-event').toggleClass('none');
+        });
+        $("#trainingCourseEventFilter").change(function () {
+            $('.training-course-event').toggleClass('none');
+        });
+
+        });
     </script>
 
 

@@ -45,21 +45,21 @@ namespace leave_management.Controllers
             var employees = await _employeeRepo.FindAll();
 
             var model = new List<CalendarVM>();
-            
             foreach (var item in trainingCourses)
             {
                 var employeeFirstName = employees.FirstOrDefault(q => q.Id == item.EmployeeId).Firstname;
                 var employeeLastName = employees.FirstOrDefault(q => q.Id == item.EmployeeId).Lastname;
                 model.Add(new CalendarVM
                 {
-                    TrainingCourseEmployeeFullName = String.Format("{0} {1} -->",employeeLastName,employeeFirstName),
+                    TrainingCourseEmployeeFullName = String.Format("{0} {1}", employeeLastName,employeeFirstName),
                     TrainingCourseStartDate = item.DateOfTrainingCourse,
-                    //TrainingCourseEndDate = item.DateValidUntil
+                    Icon = "right"
                 });
                 model.Add(new CalendarVM
                 {
-                    TrainingCourseEmployeeFullName = String.Format("<-- {0} {1}", employeeLastName, employeeFirstName),
+                    TrainingCourseEmployeeFullName = String.Format("{0} {1}", employeeLastName, employeeFirstName),
                     TrainingCourseStartDate = item.DateValidUntil,
+                    Icon = "left"
                 });
             }
             foreach (var item in medicalCheckUps)
@@ -70,7 +70,14 @@ namespace leave_management.Controllers
                 {
                     MedicalCheckUpEmployeeFullName = String.Format("{0} {1}", employeeLastName, employeeFirstName),
                     MedicalCheckUpStartDate = item.DateOfMedicalExamination,
-                    MedicalCheckUpEndDate = item.ValidUntil
+                    Icon = "right"
+                });
+                
+                model.Add(new CalendarVM
+                {
+                    MedicalCheckUpEmployeeFullName = String.Format("{0} {1}", employeeLastName, employeeFirstName),
+                    MedicalCheckUpStartDate = item.ValidUntil,
+                    Icon = "left"
                 });
             }
             foreach (var item in notifications)
@@ -81,7 +88,13 @@ namespace leave_management.Controllers
                 {
                     NotificationEmployeeFullName = String.Format("{0} {1}", employeeLastName, employeeFirstName),
                     NotificationStartDate = item.DateOfNotification,
-                    NotificationEndDate = item.DateValidUntil
+                    Icon = "right"
+                });
+                model.Add(new CalendarVM
+                {
+                    NotificationEmployeeFullName = String.Format("{0} {1}", employeeLastName, employeeFirstName),
+                    NotificationStartDate = item.DateValidUntil,
+                    Icon = "left"
                 });
             }
             foreach (var item in contracts)
@@ -93,7 +106,15 @@ namespace leave_management.Controllers
                     ContractEmployeeFullName = String.Format("{0} {1}", employeeLastName, employeeFirstName),
                     ContractStartDate = item.DateValidFrom,
                     ContractEndDate = item.DateValidUntil ?? item.DateValidFrom,
-                    ContractDateOfContractAgreement = item.DateOfContractAgreement
+                    ContractDateOfContractAgreement = item.DateOfContractAgreement,
+                    Icon = "right"
+                });
+                model.Add(new CalendarVM
+                {
+                    ContractEmployeeFullName = String.Format("{0} {1}", employeeLastName, employeeFirstName),
+                    ContractStartDate = item.DateValidUntil ?? item.DateValidFrom,
+                    ContractDateOfContractAgreement = item.DateOfContractAgreement,
+                    Icon = "left"
                 });
             }
 

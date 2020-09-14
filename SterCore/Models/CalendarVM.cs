@@ -25,5 +25,7 @@ namespace leave_management.Models
         
         public DateTime MedicalCheckUpStartDate { get; set; }
         public DateTime MedicalCheckUpEndDate { get; set; }
+
+        public string Icon { get; set; }
     }
 }

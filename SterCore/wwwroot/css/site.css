@@ -81,6 +81,9 @@ textarea {
 .fc .none {
     display: none;
 }
+.calendar-container{
+    height:100%;
+}
 .event-checkbox {
     padding: 5px;
     display: inline;

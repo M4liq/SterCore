@@ -53,6 +53,13 @@
                     </div>
                 }
             }
+
+            <div class="form-group">
+                <label asp-for="Input.DepartmentId" class="control-label"></label>
+                <div class="input-group mb-3">
+                    @Html.DropDownListFor(q => q.Input.DepartmentId, new SelectList(Model.Departments as IEnumerable<SelectListItem>, "Value", "Text"), "Wybierz dział użytkownika", new { @class = "form-control" })
+                </div>
+            </div>
             <div class="row">
                 <button type="submit" class="btn btn-primary">Dodaj użytkownika</button>  <a class="btn btn-outline-secondary ml-2" asp-controller="Employee" asp-action="Index">Powrót do listy</a>
                 <!-- /.col -->

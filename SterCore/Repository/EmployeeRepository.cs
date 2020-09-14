@@ -54,7 +54,9 @@ namespace leave_management.Repository
 
         public async Task<Employee> FindById(string id)
         {
-            var employee = await _organizationManager.FilterDbSetByView(_db.Employees).Include(q => q.Organization)
+            var employee = await _organizationManager.FilterDbSetByView(_db.Employees)
+                .Include(q => q.Department)
+                .ThenInclude(q => q.Organization)
                 .FirstOrDefaultAsync(q => q.Id == id);
 
             return employee;
@@ -64,13 +66,17 @@ namespace leave_management.Repository
         {
             if(disableORI)
             {
-                var employee = await _db.Employees.Include(q => q.Organization)
+                var employee = await _db.Employees
+                    .Include(q => q.Department)
+                    .ThenInclude(q => q.Organization)
                     .FirstOrDefaultAsync(q => q.Id == id);
                 return employee;
             }
             else
             {
-                var employee = await _organizationManager.FilterDbSetByView(_db.Employees).Include(q => q.Organization)
+                var employee = await _organizationManager.FilterDbSetByView(_db.Employees)
+                    .Include(q => q.Department)
+                    .ThenInclude(q => q.Organization)
                     .FirstOrDefaultAsync(q => q.Id == id);
                 return employee;
             }

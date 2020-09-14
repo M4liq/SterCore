@@ -16,9 +16,9 @@ namespace leave_management.Data
         public string TaxId { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DateTime DateJoined { get; set; }
-        [ForeignKey("OrganizationId")]
-        public Organization Organization { get; set; }
-        public int OrganizationId { get; set; }
+        [ForeignKey("DepartmentId")]
+        public Department Department  { get; set; }
+        public int DepartmentId { get; set; }
         public bool Deleted { get; set; }
         public bool ChangedPassword { get; set; }
         public string OrganizationToken { get; set; }

@@ -106,8 +106,7 @@ namespace leave_management.Areas.Identity.Pages.Account
                     return RedirectToPage("./FirstRegistration");
                 }
 
-                var organization = _employeeRepository.FindById(user.Id, true).Result.Organization;
-
+                var organization = _employeeRepository.FindById(user.Id, true).Result.Department.Organization;
                 if (organization.Disabled)
                 {
 
@@ -130,6 +129,7 @@ namespace leave_management.Areas.Identity.Pages.Account
 
                         return RedirectToPage("./ChangeOrganizationView");
                     }
+
 
                     HttpContext.Session.ExtSet<string>("organizationName", organization.Name);
                     HttpContext.Session.ExtSet("organizationToken", organization.OrganizationToken);

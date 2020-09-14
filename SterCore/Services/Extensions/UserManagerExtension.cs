@@ -17,7 +17,7 @@ namespace leave_management.Services.Extensions
         {
             var user = await userManager.GetUserAsync(userPrincipal);
             var employee = await employeeRepository.FindById(user.Id);
-            return employee.Organization;
+            return employee.Department.Organization;
         }
 
     }

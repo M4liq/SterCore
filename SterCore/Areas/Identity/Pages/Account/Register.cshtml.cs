@@ -33,6 +33,7 @@ namespace leave_management.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IOrganizationRepository _organizationRepository;
+        private readonly IDepartmentRepository _departmentRepository;
         private readonly IOrganizationResourceManager _organizationResourceManager;
 
         public RegisterModel(
@@ -42,6 +43,7 @@ namespace leave_management.Areas.Identity.Pages.Account
             IEmployeeRepository employeeRepository,
             IEmailSender emailSender,
             IOrganizationRepository organizationRepository,
+            IDepartmentRepository departmentRepository,
             IOrganizationResourceManager organizationResourceManager)
         {
             _userManager = userManager;
@@ -49,6 +51,7 @@ namespace leave_management.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _organizationResourceManager = organizationResourceManager;
+            _departmentRepository = departmentRepository;
             _employeeRepository = employeeRepository;
             _organizationRepository = organizationRepository;
         }
@@ -60,6 +63,7 @@ namespace leave_management.Areas.Identity.Pages.Account
 
         public IEnumerable<SelectListItem> Organizations { get; set; }
         public IEnumerable<SelectListItem> SystemRoles { get; set; }
+        public IEnumerable<SelectListItem> Departments { get; set; }
 
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
@@ -84,8 +88,11 @@ namespace leave_management.Areas.Identity.Pages.Account
             [Display(Name = "Organizacja")]
             public int OrganizationId { get; set; }
 
-            [Display(Name = "Rola użytkownika")]
+            [Display(Name = "Rola pracownika")]
             public string UserRoleId { get; set; }
+
+            [Display(Name = "Dział pracownika")]
+            public string DepartmentId { get; set; }
 
         }
 
@@ -120,6 +127,14 @@ namespace leave_management.Areas.Identity.Pages.Account
 
             }
 
+            var departments = await _departmentRepository.FindAll();
+            var departmentItems = departments.Select(q => new SelectListItem
+            {
+                Text = q.Name,
+                Value = q.Id.ToString()
+            });
+            Departments = departmentItems;
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -134,6 +149,9 @@ namespace leave_management.Areas.Identity.Pages.Account
                     var roles = await _userManager.GetRolesAsync(superior);
                     var organization = await _organizationResourceManager.GetCurrentOrganization();
 
+                if (!Int32.TryParse(Input.DepartmentId, out int departmentId))
+                    return RedirectToAction("Index", "Employee");
+
                 var user = new Employee
                 {
                     UserName = Input.Email,
@@ -143,8 +161,7 @@ namespace leave_management.Areas.Identity.Pages.Account
                     ChangedPassword = false,
                     DateJoined = DateTime.Now,
                     DateOfBirth = DateTime.Now.AddYears(-35).Date,
-                    Organization = organization,
-                    OrganizationId = organization.Id,
+                    DepartmentId = departmentId,
                     OrganizationToken = organization.OrganizationToken,
                     InitialAdministrator = false
             };

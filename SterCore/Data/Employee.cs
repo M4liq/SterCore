@@ -18,7 +18,7 @@ namespace leave_management.Data
         public DateTime DateJoined { get; set; }
         [ForeignKey("DepartmentId")]
         public Department Department  { get; set; }
-        public int DepartmentId { get; set; }
+        public int? DepartmentId { get; set; }
         public bool Deleted { get; set; }
         public bool ChangedPassword { get; set; }
         public string OrganizationToken { get; set; }

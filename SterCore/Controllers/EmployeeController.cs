@@ -12,23 +12,29 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
     [Authorize(Roles = "Administrator, Agent, Employer")]
     public class EmployeeController : Controller
     {
-        public EmployeeController(UserManager<Employee> userManager, IMapper mapper, IEmployeeRepository employeeRepository)
+        public EmployeeController(
+            UserManager<Employee> userManager,
+            IMapper mapper,
+            IEmployeeRepository employeeRepository,
+            IDepartmentRepository departmentRepository)
         {
+            _departmentRepository = departmentRepository;
             _mapper = mapper;
             _userManager = userManager;
             _employeeRepository = employeeRepository;
         }
 
-       private  UserManager<Employee> _userManager { get; set; }
-       private  IMapper _mapper { get; set; }
-       public IEmployeeRepository _employeeRepository { get; set; }
-
+       private  UserManager<Employee> _userManager { get; }
+       private  IMapper _mapper { get; }
+       public IEmployeeRepository _employeeRepository { get; }
+       public IDepartmentRepository _departmentRepository { get; }
 
         // GET: Employee
         public async Task<ActionResult> Index()
@@ -56,6 +62,16 @@ namespace leave_management.Controllers
                return NotFound();
 
             var model = _mapper.Map<EditEmployeeVM>(employee);
+            model.PreviousEmail = employee.Email;
+
+            var departments = await _departmentRepository.FindAll();
+            var departmentItems = departments.Select(q => new SelectListItem
+            {
+                Text = q.Name,
+                Value = q.Id.ToString()
+            });
+
+            model.Departments = departmentItems;
             return View(model);
         }
 
@@ -66,12 +82,26 @@ namespace leave_management.Controllers
         {
             try
             {
+                //loading deaprtments in case of error
+                var departments = await _departmentRepository.FindAll();
+                var departmentItems = departments.Select(q => new SelectListItem
+                {
+                    Text = q.Name,
+                    Value = q.Id.ToString()
+                });
+                model.Departments = departmentItems;
+
                 if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
 
                 var employee = await _userManager.FindByIdAsync(model.Id);
+                if(employee == null)
+                    {
+                        ModelState.AddModelError("", "Nie ma takiego pracownika ...");
+                        return View(model);
+                    }
 
                 //Mapping fields manually due tu errors in DB update. Automapper does not assing all required fields.
                 employee.Email = model.Email;
@@ -79,10 +109,19 @@ namespace leave_management.Controllers
                 employee.Lastname = model.Lastname;
                 employee.PhoneNumber = model.PhoneNumber;
                 employee.DateOfBirth = model.DateOfBirth;
+                employee.DepartmentId = model.DepartmentId;
 
-                var succeded = await _employeeRepository.Update(employee);
+                var isUnique = ((await _userManager.FindByEmailAsync(employee.Email) != null) && model.PreviousEmail!=model.Email);
+                
+                if(!isUnique)
+                {
+                    ModelState.AddModelError("", "Istnieje już użytkownik z takim adresem email ...");
+                    return View(model);
+                }
 
-                if (!succeded)
+                var result = await _userManager.UpdateAsync(employee);
+
+                if (!result.Succeeded)
                 {
                     ModelState.AddModelError("", "Coś poszło nie tak, skontaktuj się z administratorem ...");
                     return View(model);

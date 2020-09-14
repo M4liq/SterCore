@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace leave_management.Migrations
 {
-    public partial class FetchinLastestUpdates : Migration
+    public partial class ChangingOnDeleteBehaviour : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -245,6 +245,30 @@ namespace leave_management.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Department",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    Code = table.Column<string>(nullable: true),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    InitialDepartment = table.Column<bool>(nullable: false),
+                    OrganizationToken = table.Column<string>(nullable: true),
+                    OrganizationId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Department", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Department_Organization_OrganizationId",
+                        column: x => x.OrganizationId,
+                        principalTable: "Organization",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -269,7 +293,7 @@ namespace leave_management.Migrations
                     TaxId = table.Column<string>(nullable: true),
                     DateOfBirth = table.Column<DateTime>(nullable: true),
                     DateJoined = table.Column<DateTime>(nullable: true),
-                    OrganizationId = table.Column<int>(nullable: true),
+                    DepartmentId = table.Column<int>(nullable: true),
                     Deleted = table.Column<bool>(nullable: true),
                     ChangedPassword = table.Column<bool>(nullable: true),
                     OrganizationToken = table.Column<string>(nullable: true),
@@ -279,35 +303,11 @@ namespace leave_management.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Organization_OrganizationId",
-                        column: x => x.OrganizationId,
-                        principalTable: "Organization",
+                        name: "FK_AspNetUsers_Department_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Department",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Department",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
-                    Code = table.Column<string>(nullable: true),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    InitialDepartment = table.Column<bool>(nullable: false),
-                    OrganizationToken = table.Column<string>(nullable: true),
-                    OrganizationId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Department", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Department_Organization_OrganizationId",
-                        column: x => x.OrganizationId,
-                        principalTable: "Organization",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -856,9 +856,9 @@ namespace leave_management.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_OrganizationId",
+                name: "IX_AspNetUsers_DepartmentId",
                 table: "AspNetUsers",
-                column: "OrganizationId");
+                column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_billingBusinessTravels_BusinessTravelId",
@@ -1031,9 +1031,6 @@ namespace leave_management.Migrations
                 name: "Contracts");
 
             migrationBuilder.DropTable(
-                name: "Department");
-
-            migrationBuilder.DropTable(
                 name: "Documents");
 
             migrationBuilder.DropTable(
@@ -1098,6 +1095,9 @@ namespace leave_management.Migrations
 
             migrationBuilder.DropTable(
                 name: "TransportVehicles");
+
+            migrationBuilder.DropTable(
+                name: "Department");
 
             migrationBuilder.DropTable(
                 name: "Organization");

@@ -44,5 +44,16 @@ namespace leave_management.Data
         public DbSet<Resource> Resources { get; set; }
         public DbSet<ResourceType> ResourceTypes { get; set; }
         public DbSet<Application> Applications { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Department>()
+                .HasMany<Employee>()
+                .WithOne(e => e.Department)
+                .OnDelete(DeleteBehavior.SetNull);
+        }
     }
 }

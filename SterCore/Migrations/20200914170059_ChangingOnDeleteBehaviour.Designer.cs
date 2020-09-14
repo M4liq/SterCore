@@ -10,8 +10,8 @@ using leave_management.Data;
 namespace leave_management.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200914112856_FetchinLastestUpdates")]
-    partial class FetchinLastestUpdates
+    [Migration("20200914170059_ChangingOnDeleteBehaviour")]
+    partial class ChangingOnDeleteBehaviour
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1057,6 +1057,9 @@ namespace leave_management.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Firstname")
                         .HasColumnType("nvarchar(max)");
 
@@ -1066,16 +1069,13 @@ namespace leave_management.Migrations
                     b.Property<string>("Lastname")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrganizationId")
-                        .HasColumnType("int");
-
                     b.Property<string>("OrganizationToken")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TaxId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("OrganizationId");
+                    b.HasIndex("DepartmentId");
 
                     b.HasDiscriminator().HasValue("Employee");
                 });
@@ -1328,11 +1328,10 @@ namespace leave_management.Migrations
 
             modelBuilder.Entity("leave_management.Data.Employee", b =>
                 {
-                    b.HasOne("leave_management.Data.Organization", "Organization")
+                    b.HasOne("leave_management.Data.Department", "Department")
                         .WithMany()
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618
         }

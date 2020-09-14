@@ -133,6 +133,7 @@ namespace leave_management.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var department = await _departmentRepository.FindById(id);
+   
             if (department == null)
             {
                 return NotFound();

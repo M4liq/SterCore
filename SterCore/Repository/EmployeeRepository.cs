@@ -47,7 +47,7 @@ namespace leave_management.Repository
 
         public async Task<ICollection<Employee>> FindAll()
         {
-            var leaveTypes = _organizationManager.FilterDbSetByView(_db.Employees);
+            var leaveTypes = _organizationManager.FilterDbSetByView(_db.Employees).Include(q => q.Department);
 
             return await leaveTypes.ToListAsync();
         }
@@ -81,6 +81,13 @@ namespace leave_management.Repository
                 return employee;
             }
 
+        }
+
+        public async Task<ICollection<Employee>> FindUsersWithEmail(string email)
+        {
+            //without filtering
+            var employees = _db.Employees.Where(q => q.Email == email).ToListAsync();
+            return await employees;
         }
 
         public async Task<IEnumerable<IdentityRole>> GetAdministratorIdentityRoles()

@@ -24,7 +24,7 @@
                 @Html.DisplayNameFor(model => model.PhoneNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
+                @Html.DisplayNameFor(model => model.Department)
             </th>
             <th></th>
         </tr>
@@ -43,7 +43,14 @@
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DateOfBirth)
+                    @if (item.Department == null)
+                    {
+                        <p>Nieprzydzielony</p>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.Department.Name)
+                    }
                 </td>
                 <td>
                     <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">

@@ -71,21 +71,20 @@ namespace leave_management.Data.Seeds
                         DateCreated = DateTime.Now,
                         OrganizationToken = organizationToken,
                         InitialDepartment = true,
-                        OrganizationId = initalOrganization.Id
+                        OrganizationId = initalOrganization.Id,
                     };
 
-                    var successDep = _departmentRepository.Create(department, true);
+                    var successDep = _departmentRepository.Create(department, true).Result;
 
                     var user = new Employee
                     {
                         UserName = "admin@stercore.pl",
                         Email = "admin@stercore.pl",
-                        OrganizationId = initalOrganization.Id,
-                        OrganizationToken = organizationToken, //adding organization token, cause it is not handled by user manager
+                        DepartmentId = department.Id,
                         ChangedPassword = true,
                         InitialAdministrator = true
                     };
-
+                    
 
                     if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
                     {

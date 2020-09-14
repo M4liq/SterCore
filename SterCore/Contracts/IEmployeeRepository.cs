@@ -10,6 +10,7 @@ namespace leave_management.Contracts
     public interface IEmployeeRepository
     {
         Task<ICollection<Employee>> FindAll();
+        Task<ICollection<Employee>> FindUsersWithEmail(string email);
         Task<Employee> FindById(string id);
         Task<Employee> FindById(string id, bool disableORI);
         Task<bool> Exists(string id);

@@ -9,6 +9,7 @@ using leave_management.Models;
 using leave_management.Services.Components.ORI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -23,7 +24,11 @@ namespace leave_management.Controllers
         private readonly IMapper _mapper;
         private readonly IOrganizationResourceManager _organizationManager;
 
-        public DepartmentController(IDepartmentRepository departmentRepository, IMapper mapper, IOrganizationResourceManager organizationManager)
+        public DepartmentController(
+            IDepartmentRepository departmentRepository,
+            IMapper mapper, 
+            IOrganizationResourceManager organizationManager
+            )
         {
             _departmentRepository = departmentRepository;
             _mapper= mapper;
@@ -128,6 +133,7 @@ namespace leave_management.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             var department = await _departmentRepository.FindById(id);
+   
             if (department == null)
             {
                 return NotFound();

@@ -47,14 +47,16 @@ namespace leave_management.Repository
 
         public async Task<ICollection<Employee>> FindAll()
         {
-            var leaveTypes = _organizationManager.FilterDbSetByView(_db.Employees);
+            var leaveTypes = _organizationManager.FilterDbSetByView(_db.Employees).Include(q => q.Department);
 
             return await leaveTypes.ToListAsync();
         }
 
         public async Task<Employee> FindById(string id)
         {
-            var employee = await _organizationManager.FilterDbSetByView(_db.Employees).Include(q => q.Organization)
+            var employee = await _organizationManager.FilterDbSetByView(_db.Employees)
+                .Include(q => q.Department)
+                .ThenInclude(q => q.Organization)
                 .FirstOrDefaultAsync(q => q.Id == id);
 
             return employee;
@@ -64,17 +66,28 @@ namespace leave_management.Repository
         {
             if(disableORI)
             {
-                var employee = await _db.Employees.Include(q => q.Organization)
+                var employee = await _db.Employees
+                    .Include(q => q.Department)
+                    .ThenInclude(q => q.Organization)
                     .FirstOrDefaultAsync(q => q.Id == id);
                 return employee;
             }
             else
             {
-                var employee = await _organizationManager.FilterDbSetByView(_db.Employees).Include(q => q.Organization)
+                var employee = await _organizationManager.FilterDbSetByView(_db.Employees)
+                    .Include(q => q.Department)
+                    .ThenInclude(q => q.Organization)
                     .FirstOrDefaultAsync(q => q.Id == id);
                 return employee;
             }
 
+        }
+
+        public async Task<ICollection<Employee>> FindUsersWithEmail(string email)
+        {
+            //without filtering
+            var employees = _db.Employees.Where(q => q.Email == email).ToListAsync();
+            return await employees;
         }
 
         public async Task<IEnumerable<IdentityRole>> GetAdministratorIdentityRoles()

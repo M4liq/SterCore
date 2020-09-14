@@ -1,4 +1,6 @@
-﻿using System;
+﻿using leave_management.Data;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -27,7 +29,10 @@ namespace leave_management.Models
         [Display(Name = "Data Dodania")]
         public DateTime DateJoined { get; set; }
         public bool InitialAdministrator { get; set; }
-
+        [Display(Name = "Dział")]
+        public int DepartmentId { get; set; }
+        [Display(Name = "Dział")]
+        public Department Department { get; set; }
     }
 
     public class EditEmployeeVM
@@ -37,6 +42,7 @@ namespace leave_management.Models
         public string UserName { get; set; }
         [Display(Name = "Adres Email")]
         public string Email { get; set; }
+        public string PreviousEmail { get; set; }
         [Display(Name = "Numer Telefonu")]
         public string PhoneNumber { get; set; }
         [Display(Name = "Imię")]
@@ -45,6 +51,9 @@ namespace leave_management.Models
         public string Lastname { get; set; }
         [Display(Name = "Data urodzenia")]
         public DateTime DateOfBirth { get; set; }
-  
+        [Display(Name = "Dział")]
+        public int DepartmentId { get; set; }
+        public IEnumerable<SelectListItem> Departments { get; set; }
+
     }
 }

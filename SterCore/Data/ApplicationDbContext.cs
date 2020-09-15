@@ -61,5 +61,9 @@ namespace leave_management.Data
                 .HasIndex(u => u.Email)
                 .IsUnique();
         }
+
+        public DbSet<WorkTimeSchedule> WorkTimeSchedule { get; set; }
+        public DbSet<WorkingTimeSystem> WorkingTimeSystem { get; set; }
+
     }
 }

@@ -1,7 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using leave_management.Data;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +21,8 @@ using leave_management.Services.Components.ORI;
 using leave_management.Services.Extensions;
 using leave_management.Services.DataSeeds;
 using leave_management.Services.DataSeeds.Contracts;
+using System.Collections;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
 using leave_management.Data.Seeds;
 using leave_management.Services.LeaveHelper.Contracts;
 using leave_management.Services.LeaveHelper;
@@ -83,8 +89,13 @@ namespace leave_management
             services.AddScoped<IApplicationRepository, ApplicationRepository>();
             services.AddScoped<IAuthorizedDepartmentRepository, AuthorizedDepartmentRepository>();
             services.AddScoped<IExplicitLeaveTypeRepository, ExplicitLeaveRepository>();
-
+            services.AddScoped<IWorkingTimeSystemRepository, WorkingTimeSystemRepository>();
+            
+            
+            
+            
             //Organization Resource Manager Initialization Fields
+            services.AddScoped<IOrganizationResourceManager<LeaveType>, OrganizationResourceManager<LeaveType>>();
             services.AddScoped<IOrganizationResourceManager<Document>, OrganizationResourceManager<Document>>();
             services.AddScoped<IOrganizationResourceManager<Employee>, OrganizationResourceManager<Employee>>();
             services.AddScoped<IOrganizationResourceManager<LeaveAllocations>, OrganizationResourceManager<LeaveAllocations>>();
@@ -119,8 +130,12 @@ namespace leave_management
             services.AddScoped<IDataSeed, SeedTypeOfBilling>();
             services.AddScoped<IDataSeed, SeedTrainingCourseType>();
             services.AddScoped<IDataSeed, SeedContractType>();
+
             services.AddScoped<IDataSeed, SeedCommonLeaveTypes>();
             services.AddScoped<IDataSeed, SeedExplicitLeaveTypes>();
+
+            services.AddScoped<IDataSeed, SeedWorkingTimeSystem>();
+
 
             //Initializing LeaveHelper 
             services.AddScoped<ILeaveHelper, LeaveHelper>();

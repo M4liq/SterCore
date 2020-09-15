@@ -62,8 +62,8 @@ namespace leave_management.Data
                 .IsUnique();
         }
 
-        public DbSet<WorkTimeSchedule> WorkTimeSchedule { get; set; }
-        public DbSet<WorkingTimeSystem> WorkingTimeSystem { get; set; }
+        public DbSet<WorkTimeSchedule> WorkTimeSchedules { get; set; }
+        public DbSet<WorkingTimeSystem> WorkingTimeSystems { get; set; }
 
     }
 }

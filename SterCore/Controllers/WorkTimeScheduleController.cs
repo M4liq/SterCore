@@ -79,6 +79,11 @@ namespace leave_management.Controllers
                 {
                     return View(model);
                 }
+                if (model.DateFrom.Date > model.DateTo.Date)
+                {
+                    ModelState.AddModelError("", "Podane daty są nieprawidłowe");
+                    return View(model);
+                }
                 model.DateCreated = DateTime.Now;
                 var workTimeSchedule = _mapper.Map<WorkTimeSchedule>(model);
                 var isSuccess = await _workTimeScheduleRepository.Create(workTimeSchedule);

@@ -112,22 +112,58 @@ namespace leave_management.Controllers
         // GET: WorkTimeSchedule/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var success = await _workTimeScheduleRepository.Exists(id);
+            if (!success)
+            {
+                return NotFound();
+            }
+            var workTimeSchedule = await _workTimeScheduleRepository.FindById(id);
+            var model = _mapper.Map<CreateWorkTimeScheduleVM>(workTimeSchedule);
+            var employees = await _employeeRepository.FindAll();
+            var employeesItems = employees.Select(q => new SelectListItem
+            {
+                Text = String.Format("{0} {1}", q.Firstname, q.Lastname),
+                Value = q.Id.ToString()
+            });
+            var workTimeSystems = await _workingTimeSystemRepository.FindAll();
+            var workTimeSystemsItems = workTimeSystems.Select(q => new SelectListItem
+            {
+                Text = q.Name.ToString(),
+                Value = q.Id.ToString()
+            });
+
+            model.Employees = employeesItems;
+            model.WorkingTimeSystems = workTimeSystemsItems;
+
+            return View(model);
         }
 
         // POST: WorkTimeSchedule/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(CreateWorkTimeScheduleVM model)
         {
             try
             {
-                // TODO: Add update logic here
+                // TODO: Add insert logic here
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                var workTimeSchedule = _mapper.Map<WorkTimeSchedule>(model);
+                var isSuccess = await _workTimeScheduleRepository.Update(workTimeSchedule);
+                if (!isSuccess)
+                {
+                    ModelState.AddModelError("", "Something went wrong");
+                    return View(model);
+                }
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                ModelState.AddModelError("", "Something went wrong");
                 return View();
             }
         }
@@ -135,7 +171,17 @@ namespace leave_management.Controllers
         // GET: WorkTimeSchedule/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            return View();
+            var workTimeSchedule = await _workTimeScheduleRepository.FindById(id);
+            if (workTimeSchedule == null)
+            {
+                return NotFound();
+            }
+            var isSuccess = await _workTimeScheduleRepository.Delete(workTimeSchedule);
+            if (!isSuccess)
+            {
+                return BadRequest();
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: WorkTimeSchedule/Delete/5

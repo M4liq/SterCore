@@ -2,7 +2,7 @@
 @using leave_management.Data
 @using leave_management.Helpers.Enums
 @using Microsoft.AspNetCore.Http
-@using Microsoft.AspNetCore.Components 
+@using Microsoft.AspNetCore.Components
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @inject SignInManager<Employee> SignInManager
 @inject UserManager<Employee> UserManager
@@ -233,6 +233,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <li class="nav-item has-treeview">
                                     <a id="holiday" href="#" class="nav-link active drop-state">
                                         <i class="fas fa-plane nav-icon"></i>
+
                                         <p>
                                             Urlopy
                                             <i class="right fas fa-angle-left"></i>
@@ -305,6 +306,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 User.IsInRole(RoleEnum.Agent) || 
                                 User.IsInRole(RoleEnum.Employer))
                             {
+                            <li class="nav-item has-treeview">
+                                    <a href="#" class="nav-link active">
+                                        <i class="far fa-clock nav-icon"></i>
+                                        <p>
+                                            Czas pracy
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a asp-controller="WorkTimeSchedule" asp-action="Index" class="nav-link">
+                                                <i class="fas fa-calendar-week nav-icon"></i>
+                                                <p>Harmonogramy</p>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
                                 <li class="nav-item has-treeview">
                                     <a id="CardIndex" href="#" class="nav-link active drop-state">
                                         <i class="fas fa-folder-open nav-icon"></i>

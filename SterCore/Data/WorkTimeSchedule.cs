@@ -14,9 +14,6 @@ namespace leave_management.Data
         [Key]
         public int Id { get; set; }
         public string OrganizationToken { get; set; }
-        [ForeignKey("WorkTimeScheduleEmployeesId")]
-        public WorkTimeScheduleEmployee WorkTimeScheduleEmployees { get; set; }
-        public int WorkTimeScheduleEmployeesId { get; set; }
         public string Title { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }

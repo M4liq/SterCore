@@ -31,45 +31,45 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateFrom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateTo)
-            </td>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateFrom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateTo)
+                </td>
 
-            <td>
-                <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">
-                    <i class="fa fa-pencil-alt" aria-hidden="true"></i>
-                </a>
-                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                </a>
-                <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz usunąć ten wpis?')">
-                    <i class="fa fa-trash" aria-hidden="true"></i>
-                </a>
-                @if (item.IsApproved)
-                {
-                    <a asp-action="Approve" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz usunąć zatwierdzenie?')">
-                        <i class="fa fa-plus" aria-hidden="true"></i> Unieważnij
+                <td>
+                    <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">
+                        <i class="fa fa-pencil-alt" aria-hidden="true"></i>
                     </a>
-                }
-                else
-                {
-            <a asp-action="Approve" class="btn btn-success" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz zatwierdzić ten wpis?')">
-                <i class="fa fa-ban" aria-hidden="true"></i> Zatwierdź
-            </a>
-                }
+                    <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    </a>
+                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz usunąć ten wpis?')">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                    </a>
+                    @if (item.IsApproved)
+                    {
+                        <a asp-action="Approve" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz usunąć zatwierdzenie?')">
+                            <i class="fa fa-plus" aria-hidden="true"></i> Unieważnij
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-action="Approve" class="btn btn-success" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz zatwierdzić ten wpis?')">
+                            <i class="fa fa-ban" aria-hidden="true"></i> Zatwierdź
+                        </a>
+                    }
 
-            </td>
-        </tr>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

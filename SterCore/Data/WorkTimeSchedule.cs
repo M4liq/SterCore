@@ -15,6 +15,7 @@ namespace leave_management.Data
         public int Id { get; set; }
         public string OrganizationToken { get; set; }
         public string Title { get; set; }
+        public DateTime DateCreated { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
         public string WorkingTimeSystem { get; set; }

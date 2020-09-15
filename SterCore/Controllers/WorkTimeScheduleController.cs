@@ -17,15 +17,18 @@ namespace leave_management.Controllers
     {
         private readonly IWorkTimeScheduleRepository _workTimeScheduleRepository;
         private readonly IWorkTimeScheduleEmployeesRepository _workTimeScheduleEmployeesRepository;
+        private readonly IWorkingTimeSystemRepository _workingTimeSystemRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IMapper _mapper;
         public WorkTimeScheduleController(IWorkTimeScheduleRepository workTimeScheduleRepository, 
-            IWorkTimeScheduleEmployeesRepository workTimeScheduleEmployeesRepository, 
+            IWorkTimeScheduleEmployeesRepository workTimeScheduleEmployeesRepository,
+            IWorkingTimeSystemRepository workingTimeSystemRepository,
             IEmployeeRepository employeeRepository, 
             IMapper mapper)
         {
             _workTimeScheduleRepository = workTimeScheduleRepository;
             _workTimeScheduleEmployeesRepository = workTimeScheduleEmployeesRepository;
+            _workingTimeSystemRepository = workingTimeSystemRepository;
             _employeeRepository = employeeRepository;
             _mapper = mapper;
         }
@@ -53,8 +56,15 @@ namespace leave_management.Controllers
                 Text = String.Format("{0} {1}", q.Firstname, q.Lastname),
                 Value = q.Id.ToString()
             });
+            var workTimeSystems = await _workingTimeSystemRepository.FindAll();
+            var workTimeSystemsItems = workTimeSystems.Select(q => new SelectListItem
+            {
+                Text = q.Name.ToString(),
+                Value = q.Id.ToString()
+            });
 
             model.Employees = employeesItems;
+            model.WorkingTimeSystems = workTimeSystemsItems;
             return View(model);
         }
 

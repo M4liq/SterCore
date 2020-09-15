@@ -14,6 +14,8 @@ namespace leave_management.Models
 
         [Display(Name = "Tytuł")]
         public string Title { get; set; }
+        [Display(Name = "Data utworzenia")]
+        public DateTime DateCreated { get; set; }
         [Display(Name = "Data od")]
         public DateTime DateFrom { get; set; }
         [Display(Name = "Data do")]
@@ -33,6 +35,8 @@ namespace leave_management.Models
 
         [Display(Name = "Tytuł")]
         public string Title { get; set; }
+        public DateTime DateCreated { get; set; }
+
         [Display(Name = "Data od")]
         public DateTime DateFrom { get; set; }
         [Display(Name = "Data do")]
@@ -43,6 +47,7 @@ namespace leave_management.Models
         public bool EnableChangeOfEmployees { get; set; }
         [Display(Name = "Opis")]
         public string AdditionalInfo { get; set; }
+        public List<string> EmployeeIds { get; set; }
 
         public IEnumerable<SelectListItem> Employees { get; set; }
         public IEnumerable<SelectListItem> WorkingTimeSystems { get; set; }

@@ -71,16 +71,40 @@ namespace leave_management.Controllers
         // POST: WorkTimeSchedule/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(IFormCollection collection)
+        public async Task<ActionResult> Create(CreateWorkTimeScheduleVM model)
         {
             try
             {
-                // TODO: Add insert logic here
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+                model.DateCreated = DateTime.Now;
+                var workTimeSchedule = _mapper.Map<WorkTimeSchedule>(model);
+                var isSuccess = await _workTimeScheduleRepository.Create(workTimeSchedule);
+                if (!isSuccess)
+                {
+                    ModelState.AddModelError("", "Something went wrong");
+                    return View(model);
+                }
+                foreach (var item in model.EmployeeIds)
+                {
+                    var workTimeScheduleEmployee = new WorkTimeScheduleEmployee();
+                    workTimeScheduleEmployee.ScheduleId = workTimeSchedule.Id;
+                    workTimeScheduleEmployee.EmployeeId = item;
+                    var isSuccessWorkTimeScheduleEmployees = await _workTimeScheduleEmployeesRepository.Create(workTimeScheduleEmployee);
+                    if (!isSuccessWorkTimeScheduleEmployees)
+                    {
+                        ModelState.AddModelError("", "Something went wrong");
+                        return View(model);
+                    }
+                }
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
+                ModelState.AddModelError("", "Something went wrong");
                 return View();
             }
         }

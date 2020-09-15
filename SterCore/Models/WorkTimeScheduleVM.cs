@@ -15,7 +15,7 @@ namespace leave_management.Models
         [Display(Name = "Tytuł")]
         public string Title { get; set; }
         [Display(Name = "Data utworzenia")]
-        public DateTime DateCreated { get; set; }
+        public DateTime? DateCreated { get; set; }
         [Display(Name = "Data od")]
         public DateTime DateFrom { get; set; }
         [Display(Name = "Data do")]

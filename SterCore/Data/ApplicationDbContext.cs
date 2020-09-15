@@ -64,6 +64,6 @@ namespace leave_management.Data
 
         public DbSet<WorkTimeSchedule> WorkTimeSchedules { get; set; }
         public DbSet<WorkingTimeSystem> WorkingTimeSystems { get; set; }
-
+        public DbSet<WorkTimeScheduleEmployee> WorkTimeScheduleEmployees { get; set; }
     }
 }

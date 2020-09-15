@@ -17,8 +17,10 @@ namespace leave_management.Models
         [Display(Name = "Data utworzenia")]
         public DateTime? DateCreated { get; set; }
         [Display(Name = "Data od")]
+        [DataType(DataType.Date)]
         public DateTime DateFrom { get; set; }
         [Display(Name = "Data do")]
+        [DataType(DataType.Date)]
         public DateTime DateTo { get; set; }
         [Display(Name = "System czasu pracy")]
         public string WorkingTimeSystem { get; set; }

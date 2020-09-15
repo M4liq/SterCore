@@ -18,12 +18,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="DateFrom" class="control-label"></label>
-                <input asp-for="DateFrom" type="text" value="@DateTime.Now.Date" class="form-control date-from datepicker" />
+                <input asp-for="DateFrom" type="text" value="@DateTime.Now.Date" class="form-control datepicker" />
                 <span asp-validation-for="DateFrom" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DateTo" class="control-label"></label>
-                <input asp-for="DateTo" type="text" value="@DateTime.Now.Date" class="form-control date-to datepicker" />
+                <input asp-for="DateTo" type="text" value="@DateTime.Now.Date" class="form-control datepicker" />
                 <span asp-validation-for="DateTo" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -106,10 +106,7 @@
                 "singleDatePicker": true
             });
 
-            $('.date-from').on('apply.daterangepicker', function(ev, picker) {
-             
-              $('.date-to').data('daterangepicker').minDate($('.date-from').val());
-            });
+
         });
     </script>
 }

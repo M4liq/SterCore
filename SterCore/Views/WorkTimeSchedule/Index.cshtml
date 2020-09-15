@@ -55,6 +55,19 @@
                 <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz usunąć ten wpis?')">
                     <i class="fa fa-trash" aria-hidden="true"></i>
                 </a>
+                @if (item.IsApproved)
+                {
+                    <a asp-action="Approve" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz usunąć zatwierdzenie?')">
+                        <i class="fa fa-plus" aria-hidden="true"></i> Unieważnij
+                    </a>
+                }
+                else
+                {
+            <a asp-action="Approve" class="btn btn-success" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz zatwierdzić ten wpis?')">
+                <i class="fa fa-ban" aria-hidden="true"></i> Zatwierdź
+            </a>
+                }
+
             </td>
         </tr>
         }

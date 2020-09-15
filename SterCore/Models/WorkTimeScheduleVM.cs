@@ -28,6 +28,7 @@ namespace leave_management.Models
         public bool EnableChangeOfEmployees { get; set; }
         [Display(Name = "Opis")]
         public string AdditionalInfo { get; set; }
+        public bool IsApproved{ get; set; }
     }
 
     public class CreateWorkTimeScheduleVM

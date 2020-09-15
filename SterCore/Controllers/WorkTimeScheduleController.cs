@@ -200,5 +200,30 @@ namespace leave_management.Controllers
                 return View();
             }
         }
+
+        public async Task<ActionResult> Approve(int id)
+        {
+            var workTimeSchedule = await _workTimeScheduleRepository.FindById(id);
+            if (workTimeSchedule == null)
+            {
+                return NotFound();
+            }
+            var isSuccess = false;
+            if (workTimeSchedule.IsApproved)
+            {
+                workTimeSchedule.IsApproved = false;
+                isSuccess = await _workTimeScheduleRepository.Update(workTimeSchedule);
+            }
+            else
+            {
+                workTimeSchedule.IsApproved = true;
+                isSuccess = await _workTimeScheduleRepository.Update(workTimeSchedule);
+            }
+            if (!isSuccess)
+            {
+                return BadRequest();
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

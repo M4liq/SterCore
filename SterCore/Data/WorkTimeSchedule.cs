@@ -21,6 +21,8 @@ namespace leave_management.Data
         public string WorkingTimeSystem { get; set; }
         public bool EnableChangeOfEmployees { get; set; }
         public string AdditionalInfo { get; set; }
+        public bool IsApproved{ get; set; }
+
 
     }
 }

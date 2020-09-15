@@ -46,7 +46,7 @@ namespace leave_management.Controllers
         // GET: WorkTimeSchedule/Create
         public async Task<ActionResult> Create()
         {
-            var model = new CreateApplicationVM();
+            var model = new CreateWorkTimeScheduleVM();
             var employees = await _employeeRepository.FindAll();
             var employeesItems = employees.Select(q => new SelectListItem
             {

@@ -110,23 +110,26 @@ namespace leave_management.Services.Components
 
         public IQueryable<T> FilterDbSetByView(DbSet<T> dbSet)
         {
-            var token = GetOrganizationToken();
-            return dbSet.Where(q => q.OrganizationToken == token);
+            var organizationToken = GetOrganizationToken();
+            var departmentToken = GetDepartmentToken();
+            return dbSet.Where(q => q.OrganizationToken == organizationToken && q.DepartmentToken == departmentToken);
         }
 
         public bool VerifyAccess(T entity)
         {   
-            var token = GetOrganizationToken();
+            var organizationToken = GetOrganizationToken();
+            var departmentToken = GetDepartmentToken();
 
             if (entity.OrganizationToken == null)
                 throw new Exception("OrganizationToken is null. Check if your model implements OrganizationToken field.");
 
-            return entity.OrganizationToken == token;
+            return entity.OrganizationToken == organizationToken && entity.DepartmentToken == departmentToken;
         }
 
         public T SetAccess(T entity)
         {
             entity.OrganizationToken = GetOrganizationToken();
+            entity.DepartmentToken = GetDepartmentToken();
             return entity;
         }
 
@@ -164,6 +167,11 @@ namespace leave_management.Services.Components
         public string GetOrganizationToken()
         {
             return _session.ExtGet<string>("organizationToken");
+        }
+
+        public string GetDepartmentToken()
+        {
+            return _session.ExtGet<string>("departmentToken");
         }
 
         public bool HasPrivilegeGranted()

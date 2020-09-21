@@ -28,7 +28,6 @@ namespace leave_management.Data
         [ForeignKey("TypeOfBillingId")]
         public TypeOfBilling TypeOfBilling { get; set; }
         public int TypeOfBillingId { get; set; }
-
-
+        public string DepartmentToken { get; set; }
     }
 }

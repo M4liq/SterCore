@@ -33,5 +33,6 @@ namespace leave_management.Data
         [ForeignKey("TransportVehicleId")]
         public TransportVehicle TransportVehicle { get; set; }
         public int TransportVehicleId { get; set; }
+        public string DepartmentToken { get; set; }
     }
 }

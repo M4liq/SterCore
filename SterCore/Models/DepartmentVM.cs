@@ -14,5 +14,6 @@ namespace leave_management.Models
         public bool InitialDepartment { get; }
         public string OrganizationToken { get; set; }
         public int OrganizationId { get; set; }
+        public string DepartmentToken { get; set; }
     }
 }

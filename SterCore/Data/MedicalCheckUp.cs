@@ -27,5 +27,6 @@ namespace leave_management.Data
         [ForeignKey("TypeOfMedicalCheckUpId")]
         public TypeOfMedicalCheckUp typeOfMedicalCheckUp { get; set; }
         public int TypeOfMedicalCheckUpId { get; set; }
+        public string DepartmentToken { get; set; }
     }
 }

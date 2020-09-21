@@ -78,6 +78,7 @@ namespace leave_management.Controllers
                 model.OrganizationId = organization.Id;
                 var department = _mapper.Map<Department>(model);
                 department.DateCreated = DateTime.Now;
+
                 if (!await _departmentRepository.Create(department))
                     throw new Exception("Błąd przy zapisywaniu danych. Skontaktuj się z administratorem.");
 

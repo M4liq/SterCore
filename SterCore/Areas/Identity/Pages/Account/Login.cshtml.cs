@@ -125,7 +125,9 @@ namespace leave_management.Areas.Identity.Pages.Account
                         _userManager.GetRolesAsync(user).Result.Contains("Agent"))
                     {
                         HttpContext.Session.ExtSet("organizationToken", organization.OrganizationToken);
+                        HttpContext.Session.ExtSet("departmentToken", user.Department.DepartmentToken);
                         HttpContext.Session.ExtSet<string>("organizationName", organization.Name);
+
 
                         return RedirectToPage("./ChangeOrganizationView");
                     }
@@ -133,6 +135,8 @@ namespace leave_management.Areas.Identity.Pages.Account
 
                     HttpContext.Session.ExtSet<string>("organizationName", organization.Name);
                     HttpContext.Session.ExtSet("organizationToken", organization.OrganizationToken);
+                    HttpContext.Session.ExtSet("departmentToken", user.Department.DepartmentToken);
+
                     return RedirectToPage("/");
                 }
 

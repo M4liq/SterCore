@@ -27,5 +27,6 @@ namespace leave_management.Data
         [ForeignKey("BusinessTravelId")]
         public BusinessTravel BusinessTravel { get; set; }
         public int BusinessTravelId { get; set; }
+        public string DepartmentToken { get; set; }
     }
 }

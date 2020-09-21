@@ -72,6 +72,7 @@ namespace leave_management.Data.Seeds
                         OrganizationToken = organizationToken,
                         InitialDepartment = true,
                         OrganizationId = initalOrganization.Id,
+                        DepartmentToken = _organizationManager.GenerateToken()
                     };
 
                     var successDep = _departmentRepository.Create(department, true).Result;

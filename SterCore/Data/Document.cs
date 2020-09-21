@@ -23,5 +23,6 @@ namespace leave_management.Data
         public bool ShowSelectedDepartment { get; set; }
         public bool ShowCompanyWide { get; set; }
         public string OrganizationToken { get; set; }
+        public string DepartmentToken { get; set; }
     }
 }

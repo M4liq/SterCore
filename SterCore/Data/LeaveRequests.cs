@@ -29,6 +29,6 @@ namespace leave_management.Data
         public string ApprovedById { get; set; }
         public string Comment { get; set; }
         public string OrganizationToken { get; set; }
-        
+        public string DepartmentToken { get; set; }
     }
 }

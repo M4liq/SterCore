@@ -14,6 +14,7 @@ namespace leave_management.Data
         public int Id { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
+        public string DepartmentToken { get; set; }
         public DateTime DateCreated { get; set; }
         public bool InitialDepartment { get; set; }
         public string OrganizationToken { get; set; }

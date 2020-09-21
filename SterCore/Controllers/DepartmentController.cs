@@ -74,10 +74,10 @@ namespace leave_management.Controllers
                 if (!ModelState.IsValid)
                     return View(model);
 
-                model.DateCreated = DateTime.Now;
                 var organization = await _organizationManager.GetCurrentOrganization();
                 model.OrganizationId = organization.Id;
                 var department = _mapper.Map<Department>(model);
+                department.DateCreated = DateTime.Now;
                 if (!await _departmentRepository.Create(department))
                     throw new Exception("Błąd przy zapisywaniu danych. Skontaktuj się z administratorem.");
 
@@ -113,8 +113,9 @@ namespace leave_management.Controllers
 
             var organization = await _organizationManager.GetCurrentOrganization();
             model.OrganizationId = organization.Id;
+                
+                var department = _mapper.Map<Department>(model);
 
-            var department = _mapper.Map<Department>(model);
                 var success = await _departmentRepository.Update(department);
 
                 if (!success)

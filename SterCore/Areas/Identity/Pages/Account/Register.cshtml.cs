@@ -193,6 +193,14 @@ namespace leave_management.Areas.Identity.Pages.Account
                     SystemRoles = systemRolesItems;
 
                 }
+                var departments = await _departmentRepository.FindAll();
+
+                var departmentItems = departments.Select(q => new SelectListItem
+                {
+                    Text = q.Name,
+                    Value = q.Id.ToString()
+                });
+                Departments = departmentItems;
 
                 var result = await _userManager.CreateAsync(user, "P@ssword1");
                 if (result.Succeeded)

@@ -54,6 +54,10 @@ namespace leave_management.Data
                 .HasMany<Employee>()
                 .WithOne(e => e.Department)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<Employee>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
         }
     }
 }

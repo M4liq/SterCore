@@ -18,9 +18,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Code)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </th>
+
             <th></th>
         </tr>
     </thead>
@@ -34,10 +32,7 @@
                 @Html.DisplayFor(modelItem => item.Code)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
-            </td>
-            <td>
-                <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id" asp-route-employeeId="@item.Id" asp-route-employeeId="@item.OrganizationToken" asp-route-dateCreated="@item.DateCreated" asp-route-organizationToken="@item.OrganizationToken">
+                <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id" asp-route-employeeId="@item.Id" asp-route-employeeId="@item.OrganizationToken" asp-route-organizationToken="@item.OrganizationToken">
                     <i class="fa fa-pencil-alt" aria-hidden="true"></i>
                 </a>
                 <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">

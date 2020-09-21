@@ -44,6 +44,7 @@ namespace leave_management.Data
         public DbSet<Resource> Resources { get; set; }
         public DbSet<ResourceType> ResourceTypes { get; set; }
         public DbSet<Application> Applications { get; set; }
+        public DbSet<AuthorizedDepartment> AuthorizedDepartments { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -54,6 +55,10 @@ namespace leave_management.Data
                 .HasMany<Employee>()
                 .WithOne(e => e.Department)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<Employee>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
         }
     }
 }

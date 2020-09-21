@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace leave_management.Data
 {
@@ -23,5 +24,6 @@ namespace leave_management.Data
         public bool ChangedPassword { get; set; }
         public string OrganizationToken { get; set; }
         public bool InitialAdministrator { get; set; }
+        public string DepartmentToken { get; set; }
     }
 }

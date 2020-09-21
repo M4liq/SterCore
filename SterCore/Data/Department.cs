@@ -14,11 +14,18 @@ namespace leave_management.Data
         public int Id { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
+        public string DepartmentToken { get; set; }
         public DateTime DateCreated { get; set; }
         public bool InitialDepartment { get; set; }
         public string OrganizationToken { get; set; }
         [ForeignKey("OrganizationId")]
         public Organization Organization { get; set; }
         public int OrganizationId { get; set; }
+
+        [ForeignKey("AuthorizedDepartmentId")] 
+        public AuthorizedDepartment? AuthorizedDepartment { get; set; }
+
+        public int? AuthorizedDepartmentId { get; set; }
+    
     }
 }

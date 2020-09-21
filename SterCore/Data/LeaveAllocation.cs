@@ -22,5 +22,6 @@ namespace leave_management.Data
         public int LeaveTypeId { get; set; }
         public int Period { get; set; }
         public string OrganizationToken { get; set; }
+        public string DepartmentToken { get; set; }
     }
 }

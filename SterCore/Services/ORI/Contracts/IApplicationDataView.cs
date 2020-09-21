@@ -9,5 +9,6 @@ namespace leave_management.Services.ORI.Contracts
     public interface IApplicationDataView
     {
         public string OrganizationToken { get; set; }
+        public string DepartmentToken { get; set; }
     }
 }

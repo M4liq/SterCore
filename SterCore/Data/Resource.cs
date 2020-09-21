@@ -23,5 +23,6 @@ namespace leave_management.Data
         public DateTime DateUntil { get; set; }
         public string AdditionalInfo { get; set; }
         public bool IsReturned { get; set; }
+        public string DepartmentToken { get; set; }
     }
 }

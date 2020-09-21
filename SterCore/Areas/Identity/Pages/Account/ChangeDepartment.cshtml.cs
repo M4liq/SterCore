@@ -17,58 +17,64 @@ using leave_management.Repository;
 using leave_management.Contracts;
 using System.Linq;
 using leave_management.Controllers;
+using leave_management.Services.Components.ORI;
 using leave_management.Services.Extensions;
 
 namespace leave_management.Areas.Identity.Pages.Account
 {
     [Authorize(Roles = "Administrator, Agent")]
-    public class ChangeOrganizationView : PageModel
+    public class ChangeDepartmentView : PageModel
     {
 
         [BindProperty]
         public InputModel Input { get; set; }
         public IEnumerable<SelectListItem> Organizations { get; set; }
         public IEnumerable<SelectListItem> Departments { get; set; }
-        private readonly IOrganizationRepository _organizationRepository;
-
-        public ChangeOrganizationView(IOrganizationRepository organizationRepository)
+        public IOrganizationResourceManager organizationResourceManager { get; }
+        public IDepartmentRepository departmentRepository { get; }
+        public ChangeDepartmentView(IOrganizationResourceManager organizationResourceManager, IDepartmentRepository departmentRepository)
         {
-            _organizationRepository = organizationRepository;
+            this.organizationResourceManager = organizationResourceManager;
+            this.departmentRepository = departmentRepository;
         }
         public string ReturnUrl { get; set; }
 
         public class InputModel
         {
-            [Display(Name = "Organizacja")]
+            [Display(Name = "Dział")]
             [Required]
-            public int OrganizationId { get; set; }
-
+            public int DepartmentId { get; set; }
         }
 
 
         public async Task OnGetAsync(string returnUrl = null)
         {
             this.ReturnUrl = returnUrl ?? Url.Content("~/");
-            var organizations = await _organizationRepository.FindAll();
-            var organizationItems = organizations.Select(q => new SelectListItem
+
+            //Issue: it gets all departments. Should get only those from this organization 
+            var departments = await departmentRepository.FindAll();
+            var token =  organizationResourceManager.GetOrganizationToken();
+
+            var departmentsItems = departments.Select(q => new SelectListItem
             {
                 Text = q.Name,
                 Value = q.Id.ToString()
             });
 
-            this.Organizations = organizationItems;
+            this.Departments = departmentsItems;
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             this.ReturnUrl = returnUrl ?? Url.Content("~/");
 
-            var organization = await _organizationRepository.FindById(Input.OrganizationId);
 
-            HttpContext.Session.ExtSet<string>("organizationToken", organization.OrganizationToken);
-            HttpContext.Session.ExtSet<string>("organizationName", organization.Name);
+            var department = await departmentRepository.FindById(Input.DepartmentId);
 
-            return RedirectToPage("./ChangeDepartment");
+            HttpContext.Session.ExtSet<string>("departmentToken", department.DepartmentToken);
+            HttpContext.Session.ExtSet<string>("departmentName", department.Name);
+
+            return LocalRedirect(this.ReturnUrl);
         }
     }
 }

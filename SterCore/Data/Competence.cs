@@ -21,5 +21,6 @@ namespace leave_management.Data
         public CompetenceType CompetenceType { get; set; }
         public int CompetenceTypeId { get; set; }
         public DateTime DateValidUntil { get; set; }
+        public string DepartmentToken { get; set; }
     }
 }

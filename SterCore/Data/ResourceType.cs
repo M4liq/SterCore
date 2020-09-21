@@ -17,5 +17,6 @@ namespace leave_management.Data
         public bool showDateFrom { get; set; }
         public bool showDateUntil { get; set; }
         public bool showReturned { get; set; }
+        public string DepartmentToken { get; set; }
     }
 }

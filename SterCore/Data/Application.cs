@@ -20,6 +20,6 @@ namespace leave_management.Data
         public string ApplicationName{ get; set; }
         public DateTime DateOfApplication{ get; set; }
         public bool Status{ get; set; }
-
+        public string DepartmentToken { get; set; }
     }
 }

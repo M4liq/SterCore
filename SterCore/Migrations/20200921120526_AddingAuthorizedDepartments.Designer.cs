@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using leave_management.Data;
 
 namespace leave_management.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200921120526_AddingAuthorizedDepartments")]
+    partial class AddingAuthorizedDepartments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -255,21 +257,6 @@ namespace leave_management.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("Applications");
-                });
-
-            modelBuilder.Entity("leave_management.Data.AuthorizedDepartment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AuthorizedDepartmentToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AuthorizedDepartments");
                 });
 
             modelBuilder.Entity("leave_management.Data.AuthorizedOrganizations", b =>
@@ -542,9 +529,6 @@ namespace leave_management.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AuthorizedDepartmentId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
 
@@ -567,8 +551,6 @@ namespace leave_management.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AuthorizedDepartmentId");
 
                     b.HasIndex("OrganizationId");
 
@@ -1285,10 +1267,6 @@ namespace leave_management.Migrations
 
             modelBuilder.Entity("leave_management.Data.Department", b =>
                 {
-                    b.HasOne("leave_management.Data.AuthorizedDepartment", "AuthorizedDepartment")
-                        .WithMany()
-                        .HasForeignKey("AuthorizedDepartmentId");
-
                     b.HasOne("leave_management.Data.Organization", "Organization")
                         .WithMany()
                         .HasForeignKey("OrganizationId")

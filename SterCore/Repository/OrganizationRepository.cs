@@ -27,13 +27,13 @@ namespace leave_management.Repository
 
         public async Task<bool> Create(Organization entity)
         {
-            //ORI separating data beetween organizations
+            //ORI separating data between organizations
             var token = _organizationManager.GetOrganizationToken();
             entity.OrganizationToken = _organizationManager.GenerateToken(); 
 
             var authorizedOrganizationId = await _organizationManager.GetAuthorizedOrganizationId(token);
 
-            //If our organization is not setted as authorized organization our organization must be set as superior organization 
+            //If our organization is not set as authorized organization our organization must be set as superior organization 
             //for created organization otherwise getting access to created organization would be impossible 
             if (authorizedOrganizationId == -1)
             {

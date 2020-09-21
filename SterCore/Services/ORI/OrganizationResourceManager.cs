@@ -64,13 +64,19 @@ namespace leave_management.Services.Components
         public async Task<Organization> GetCurrentOrganization()
         {
             var token = GetOrganizationToken();
-            var organization = await _db.Organization.Where(q => q.OrganizationToken == token).FirstOrDefaultAsync();
+            var organization = await _db.Organization
+                .Where(q => q.OrganizationToken == token)
+                .FirstOrDefaultAsync();
             return organization;
         }
 
         public string GetOrganizationToken()
         {
             return _session.ExtGet<string>("organizationToken");
+        }
+        public string GetDepartmentToken()
+        {
+            return _session.ExtGet<string>("departmentToken");
         }
 
         public bool HasPrivilegeGranted()
@@ -96,17 +102,6 @@ namespace leave_management.Services.Components
             _db = db;
         }
 
-        public async Task<AuthorizedOrganizations> Authorize(string ogranizationToken)
-        {
-            var authorize = new AuthorizedOrganizations
-            {
-                AuthorizedOrganizationToken = ogranizationToken
-            };
-
-            //requires to save
-            await _db.AuthorizedOrganizations.AddAsync(authorize);
-            return authorize;
-        }
 
         public IQueryable<T> FilterDbSetByView(DbSet<T> dbSet)
         {
@@ -120,8 +115,8 @@ namespace leave_management.Services.Components
             var organizationToken = GetOrganizationToken();
             var departmentToken = GetDepartmentToken();
 
-            if (entity.OrganizationToken == null)
-                throw new Exception("OrganizationToken is null. Check if your model implements OrganizationToken field.");
+            if (entity.OrganizationToken == null || entity.DepartmentToken == null)
+                throw new Exception("Token is null. Check if your model implements OrganizationToken and DepartmentToken.");
 
             return entity.OrganizationToken == organizationToken && entity.DepartmentToken == departmentToken;
         }
@@ -148,6 +143,20 @@ namespace leave_management.Services.Components
             var authorizedOrganization =
                 await _db.AuthorizedOrganizations
                 .Where(q => q.AuthorizedOrganizationToken == token)
+                .FirstOrDefaultAsync();
+
+            //In case authorizaton is not set
+            if (authorizedOrganization == null)
+                return -1;
+
+            return authorizedOrganization.Id;
+        }
+
+        public async Task<int> GetAuthorizedDepartmentId(string token)
+        { 
+                var authorizedOrganization =
+                await _db.AuthorizedDepartments
+                .Where(q => q.AuthorizedDepartmentToken == token)
                 .FirstOrDefaultAsync();
 
             //In case authorizaton is not set

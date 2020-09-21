@@ -162,6 +162,7 @@ namespace leave_management.Areas.Identity.Pages.Account
                     DateJoined = DateTime.Now,
                     DateOfBirth = DateTime.Now.AddYears(-35).Date,
                     DepartmentId = departmentId,
+                    DepartmentToken = _organizationResourceManager.GetDepartmentToken(),
                     OrganizationToken = organization.OrganizationToken,
                     InitialAdministrator = false
             };

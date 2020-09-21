@@ -21,5 +21,11 @@ namespace leave_management.Data
         [ForeignKey("OrganizationId")]
         public Organization Organization { get; set; }
         public int OrganizationId { get; set; }
+
+        [ForeignKey("AuthorizedDepartmentId")] 
+        public AuthorizedDepartment? AuthorizedDepartment { get; set; }
+
+        public int? AuthorizedDepartmentId { get; set; }
+    
     }
 }

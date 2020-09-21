@@ -13,6 +13,7 @@ namespace leave_management.Services.Components.ORI
             public string GenerateToken();
 
             public string GetOrganizationToken();
+            public string GetDepartmentToken();
 
             public Task<int> GetAuthorizedOrganizationId(string token);
 
@@ -31,11 +32,12 @@ namespace leave_management.Services.Components.ORI
 
         public string GetOrganizationToken();
 
+        public string GetDepartmentToken();
+
         public Task<int> GetAuthorizedOrganizationId(string token);
+        public Task<int> GetAuthorizedDepartmentId(string token);
 
         public Task<Organization> GetCurrentOrganization();
-
-        public Task<AuthorizedOrganizations> Authorize(string ogranizationToken);
 
         public bool HasPrivilegeGranted();
 

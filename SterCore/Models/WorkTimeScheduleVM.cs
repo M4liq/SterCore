@@ -55,5 +55,14 @@ namespace leave_management.Models
         public IEnumerable<SelectListItem> Employees { get; set; }
         public IEnumerable<SelectListItem> WorkingTimeSystems { get; set; }
     }
+    public class Step2WorkTimeScheduleVM
+    {
+        public int Id { get; set; }
+        public string OrganizationToken { get; set; }
+
+        public List<string> EmployeeIds { get; set; }
+        public List<string> EmployeeFullNames { get; set; }
+
+    }
 
 }

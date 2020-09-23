@@ -105,7 +105,7 @@ namespace leave_management.Controllers
                     }
                 }
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Step2", new { id = workTimeSchedule.Id });
             }
             catch
             {
@@ -229,6 +229,53 @@ namespace leave_management.Controllers
                 return BadRequest();
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: WorkTimeSchedule/Step2/5
+        public async Task<ActionResult> Step2(int id)
+        {
+            var success = await _workTimeScheduleRepository.Exists(id);
+            if (!success)
+            {
+                return NotFound();
+            }
+            var workTimeSchedule = await _workTimeScheduleRepository.FindById(id);
+            var workTimeScheduleEmployees = await _workTimeScheduleEmployeesRepository.FindAll();
+            var EmployeeIds = new List<string>();
+            var model = new Step2WorkTimeScheduleVM();
+            foreach (var item in workTimeScheduleEmployees)
+            {   
+                if(item.ScheduleId == id)
+                {
+                    EmployeeIds.Add(item.EmployeeId); 
+                }
+            }
+            var ListOfNames = new List<string>();
+            foreach (var item in EmployeeIds)
+            {
+                var Employee = await _employeeRepository.FindById(item);
+                ListOfNames.Add(String.Format("{0} {1}", Employee.Lastname, Employee.Firstname));
+            }
+            model.EmployeeFullNames = ListOfNames;
+            model.EmployeeIds = EmployeeIds;
+            return View(model);
+        }
+
+        // POST: WorkTimeSchedule/Step2/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Step2(int id, IFormCollection collection)
+        {
+            try
+            {
+                // TODO: Add delete logic here
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
         }
     }
 }

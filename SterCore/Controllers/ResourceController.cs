@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
+    [Authorize]
     public class ResourceController : Controller
     {
         private readonly IResourceRepository _resourceRepository;

@@ -28,12 +28,13 @@ namespace leave_management.Areas.Identity.Pages.Account
         [BindProperty]
         public InputModel Input { get; set; }
         public IEnumerable<SelectListItem> Organizations { get; set; }
-        public IEnumerable<SelectListItem> Departments { get; set; }
         private readonly IOrganizationRepository _organizationRepository;
+        private readonly IDepartmentRepository _departmentRepository;
 
-        public ChangeOrganizationView(IOrganizationRepository organizationRepository)
+        public ChangeOrganizationView(IOrganizationRepository organizationRepository, IDepartmentRepository departmentRepository)
         {
             _organizationRepository = organizationRepository;
+            _departmentRepository = departmentRepository;
         }
         public string ReturnUrl { get; set; }
 
@@ -64,9 +65,11 @@ namespace leave_management.Areas.Identity.Pages.Account
             this.ReturnUrl = returnUrl ?? Url.Content("~/");
 
             var organization = await _organizationRepository.FindById(Input.OrganizationId);
+            var department = await _departmentRepository.FindInitialDepartment(organization);
 
             HttpContext.Session.ExtSet<string>("organizationToken", organization.OrganizationToken);
             HttpContext.Session.ExtSet<string>("organizationName", organization.Name);
+            HttpContext.Session.ExtSet<string>("departmentToken", department.DepartmentToken);
 
             return RedirectToPage("./ChangeDepartment");
         }

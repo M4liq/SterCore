@@ -95,7 +95,8 @@ namespace leave_management.Controllers
                     DateCreated = DateTime.Now,
                     OrganizationToken = record.OrganizationToken,
                     InitialDepartment = true,
-                    OrganizationId = record.Id
+                    OrganizationId = record.Id,
+                    DepartmentToken = _organizationManager.GenerateToken()
                 };
 
                 var successDep = await _departmentRepostory.Create(department, true);

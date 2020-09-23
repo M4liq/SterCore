@@ -5,80 +5,82 @@
 }
 
 <h1>Umowy</h1>
-
-<p>
-    <a class="btn btn-success" asp-action="Create"><i class="fa fa-user-plus"></i> Dodaj nową umowę</a>
-</p>
-<table id="tblData" class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfContractAgreement)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateValidFrom)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateValidUntil)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AdditionalInfo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShowSelectedEmployee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ShowSelectedDepartment)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmployeeFullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ContractTypeName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@if (User.IsInRole("Administrator") || User.IsInRole("Agent") || User.IsInRole("Employer"))
+{
+    <p>
+        <a class="btn btn-success" asp-action="Create"><i class="fa fa-user-plus"></i> Dodaj nową umowę</a>
+    </p>
+}
+    <table id="tblData" class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateOfContractAgreement)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateValidFrom)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateValidUntil)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AdditionalInfo)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ShowSelectedEmployee)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ShowSelectedDepartment)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EmployeeFullName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ContractTypeName)
-                </td>
-                <td>
-                    <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">
-                        <i class="fa fa-pencil-alt" aria-hidden="true"></i>
-                    </a>
-                    <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">
-                        <i class="fa fa-info-circle" aria-hidden="true"></i>
-                    </a>
-                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz usunąć ten wpis?')">
-                        <i class="fa fa-trash" aria-hidden="true"></i>
-                    </a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateOfContractAgreement)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateValidFrom)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateValidUntil)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AdditionalInfo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ShowSelectedEmployee)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ShowSelectedDepartment)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EmployeeFullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ContractTypeName)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateOfContractAgreement)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateValidFrom)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateValidUntil)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AdditionalInfo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ShowSelectedEmployee)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ShowSelectedDepartment)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmployeeFullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ContractTypeName)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">
+                            <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                        </a>
+                        <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        </a>
+                        <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz usunąć ten wpis?')">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

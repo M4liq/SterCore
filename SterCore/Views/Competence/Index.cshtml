@@ -4,46 +4,49 @@
     ViewData["Title"] = "Kompetencje";
 }
 
-    <h1>Kompetencje</h1>
-
-<p>
-    <a class="btn btn-success" asp-action="Create"><i class="fa fa-user-plus"></i> Przypisz Kompetencję</a>
-    <a class="btn btn-success" asp-action="Index" asp-controller="CompetenceType"><i class="fa fa-plus-circle"></i> Dodaj rodzaj kompetencji</a>
-</p>
-<table id="tblData" class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.EmployeeFullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CompetenceName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.EmployeeFullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CompetenceName)
-            </td>
-            <td>
-                <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id" asp-route-employeeId="@item.EmployeeId" asp-route-organizationToken="@item.OrganizationToken">
-                    <i class="fa fa-pencil-alt" aria-hidden="true"></i>
-                </a>
-                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                </a>
-                <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz usunąć ten wpis?')">
-                    <i class="fa fa-trash" aria-hidden="true"></i>
-                </a>
-            </td>
-        </tr>
+<h1>Kompetencje</h1>
+@if (User.IsInRole("Administrator") || User.IsInRole("Agent") || User.IsInRole("Employer"))
+{
+    <p>
+        <a class="btn btn-success" asp-action="Create"><i class="fa fa-user-plus"></i> Przypisz Kompetencję</a>
+        <a class="btn btn-success" asp-action="Index" asp-controller="CompetenceType"><i class="fa fa-plus-circle"></i> Dodaj rodzaj kompetencji</a>
+    </p>
 }
-    </tbody>
-</table>
+    <table id="tblData" class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.EmployeeFullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CompetenceName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmployeeFullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CompetenceName)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id" asp-route-employeeId="@item.EmployeeId" asp-route-organizationToken="@item.OrganizationToken">
+                            <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                        </a>
+                        <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        </a>
+                        <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz usunąć ten wpis?')">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

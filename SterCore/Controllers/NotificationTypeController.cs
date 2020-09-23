@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator, Employer, Agent")]
     public class NotificationTypeController : Controller
     {
         private readonly INotificationTypeRepository _notificationTypeRepository;

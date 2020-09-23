@@ -74,7 +74,6 @@ namespace leave_management.Controllers
             model.ApplicationId = businessTravels.FirstOrDefault(q => q.Id == model.BusinessTravelId).ApplicationId;
             return View(model);
         }
-        [Authorize(Roles = "Administrator, Employer, Agent")]
         // GET: BillingBusinessTravel/Create
         public async Task<ActionResult> Create(int businessTravelId)
         {

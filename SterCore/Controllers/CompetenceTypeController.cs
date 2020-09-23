@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator, Employer, Agent")]
     public class CompetenceTypeController : Controller
     {
         private readonly ICompetenceTypeRepository _competenceTypeRepository;

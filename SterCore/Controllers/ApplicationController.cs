@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
-    [Authorize(Roles = "Administrator, Agent, Employer")]
     public class ApplicationController : Controller
     {
         private readonly IApplicationRepository _applicationRepository;
@@ -59,7 +58,6 @@ namespace leave_management.Controllers
             model.EmployeeFullName = employeeFulName;
             return View(model);
         }
-        [Authorize(Roles = "Administrator, Employer, Agent")]
         // GET: Application/Create
         public async Task<ActionResult> Create()
         {

@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator, Employer, Agent")]
     public class ResourceTypeController : Controller
     {
         private readonly IResourceTypeRepository _resourceTypeRepository;

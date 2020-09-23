@@ -6,6 +6,7 @@ using AutoMapper;
 using leave_management.Contracts;
 using leave_management.Data;
 using leave_management.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
-    [Authorize(Roles = "Administrator, Agent, Employer")]
+    [Authorize]
     public class ContractController : Controller
     {
         private readonly IContractRepository _contractRepository;
@@ -66,7 +67,7 @@ namespace leave_management.Controllers
             model.EmployeeFullName = employeeFulName;
             return View(model);
         }
-
+        [Authorize(Roles = "Administrator, Agent, Employer")]
         // GET: Contract/Create
         public async Task<ActionResult> Create()
         {

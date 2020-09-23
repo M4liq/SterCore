@@ -346,31 +346,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <p>Kalendarz</p>
                                             </a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a asp-controller="Competence" asp-action="Index" class="nav-link">
-                                                <i class="fas fa-list nav-icon"></i>
-                                                <p>Kompetencje</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a asp-controller="Resource" asp-action="Index" class="nav-link">
-                                                <i class="fas fa-list nav-icon"></i>
-                                                <p>Zasoby</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a asp-controller="Document" asp-action="Index" class="nav-link">
-                                                <i class="fas fa-list nav-icon"></i>
-                                                <p>Dokumenty</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a asp-controller="Notification" asp-action="Index" class="nav-link">
-                                                <i class="fas fa-list nav-icon"></i>
-                                                <p>Powiadomienia</p>
-                                            </a>
-                                        </li>
-                                    </ul>
+                                        @if (User.IsInRole("Administrator") || User.IsInRole("Agent") || User.IsInRole("Employer"))
+                                        {
+                                            <li class="nav-item">
+                                                <a asp-controller="Competence" asp-action="Index" class="nav-link">
+                                                    <i class="fas fa-list nav-icon"></i>
+                                                    <p>Kompetencje</p>
+                                                </a>
+                                            </li>
+                                        }
+                                            <li class="nav-item">
+                                                <a asp-controller="Resource" asp-action="Index" class="nav-link">
+                                                    <i class="fas fa-list nav-icon"></i>
+                                                    <p>Zasoby</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a asp-controller="Document" asp-action="Index" class="nav-link">
+                                                    <i class="fas fa-list nav-icon"></i>
+                                                    <p>Dokumenty</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a asp-controller="Notification" asp-action="Index" class="nav-link">
+                                                    <i class="fas fa-list nav-icon"></i>
+                                                    <p>Powiadomienia</p>
+                                                </a>
+                                            </li>
+                                        </ul>
                                 </li>
                             }
                             if (User.IsInRole("Administrator") || User.IsInRole("Agent"))

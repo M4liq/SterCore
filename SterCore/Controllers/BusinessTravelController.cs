@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
+    [Authorize]
     public class BusinessTravelController : Controller
     {
         private readonly IBusinessTravelRepository _repo;
@@ -85,7 +86,7 @@ namespace leave_management.Controllers
             model.TransportVehicle = transportVehicles.FirstOrDefault(q => q.Id == model.TransportVehicleId).Name;
             return View(model);
         }
-
+        [Authorize(Roles = "Administrator, Employer, Agent")]
         // GET: PWS/Create
         public async Task<ActionResult> Create()
         {

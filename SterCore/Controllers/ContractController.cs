@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
+    [Authorize(Roles = "Administrator, Agent, Employer")]
     public class ContractController : Controller
     {
         private readonly IContractRepository _contractRepository;

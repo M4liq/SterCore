@@ -2,6 +2,7 @@
 using leave_management.Contracts;
 using leave_management.Data;
 using leave_management.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace leave_management.Controllers
 {
+    [Authorize]
     public class ExpenseController : Controller
     {
         private readonly IExpenseRepository _expenseRepository;
@@ -68,7 +70,7 @@ namespace leave_management.Controllers
             model.ApplicationId = businessTravels.FirstOrDefault(q => q.Id == model.BusinessTravelId).ApplicationId;
             return View(model);
         }
-
+        [Authorize(Roles = "Administrator, Employer, Agent")]
         // GET: Expense/Create
         public async Task<ActionResult> Create(int businessTravelId)
         {

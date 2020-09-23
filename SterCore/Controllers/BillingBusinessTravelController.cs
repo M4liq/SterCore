@@ -7,12 +7,14 @@ using leave_management.Contracts;
 using leave_management.Data;
 using leave_management.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
+    [Authorize]
     public class BillingBusinessTravelController : Controller
     {
         private readonly IBillingBusinessTravelRepository _billingBusinessTravelRepo;
@@ -72,7 +74,7 @@ namespace leave_management.Controllers
             model.ApplicationId = businessTravels.FirstOrDefault(q => q.Id == model.BusinessTravelId).ApplicationId;
             return View(model);
         }
-
+        [Authorize(Roles = "Administrator, Employer, Agent")]
         // GET: BillingBusinessTravel/Create
         public async Task<ActionResult> Create(int businessTravelId)
         {

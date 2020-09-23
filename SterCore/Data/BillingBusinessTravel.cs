@@ -17,7 +17,9 @@ namespace leave_management.Data
         [ForeignKey("BusinessTravelId")]
         public BusinessTravel BusinessTravel { get; set; }
         public int BusinessTravelId { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Amount { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal ExchangeRate { get; set; }
         public bool IsPaid { get; set; }
 

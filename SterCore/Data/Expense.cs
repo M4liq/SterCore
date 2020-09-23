@@ -17,7 +17,9 @@ namespace leave_management.Data
         public int Id { get; set; }
         public string OrganizationToken { get; set; }
         public string Name { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Amount { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
         public decimal ExchangeRate { get; set; }
 
         [ForeignKey("CurrencyId")]

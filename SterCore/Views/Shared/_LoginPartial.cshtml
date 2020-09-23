@@ -8,7 +8,7 @@
         {
             <li class="nav-item">
                 <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Manage/Index" title="Zarządzaj">
-                    <i class="fas fa-user-alt"></i>
+                    <i class="fas fa-user-alt nav-icon"></i>
                     <p>@User.Identity.Name!</p>
                 </a>
             </li>
@@ -16,16 +16,26 @@
             {
             <li class="nav-item">
                 <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/ChangeOrganizationView">
-                    <i class="fas fa-binoculars"></i>
+                    <i class="fas fa-binoculars nav-icon"></i>
                     <p>Zmień widok organizacji</p>
                 </a>
             </li>
             }
 
+            if (User.IsInRole("Administrator") || User.IsInRole("Agent") || User.IsInRole("Employer"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Identity" asp-page="/Account/ChangeDepartment">
+                        <i class="fas fa-project-diagram nav-icon"></i>
+                        <p>Zmień widok działu</p>
+                    </a>
+                </li>
+            }
+
             <li class="nav-item">
                 <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout">
                     <button type="submit" class="nav-link btn btn-link text-white">
-                        <i class="fas fa-sign-out-alt"></i>
+                        <i class="fas fa-sign-out-alt nav-icon"></i>
                         <p>Wyloguj się</p>
                     </button>
                 </form>
@@ -36,7 +46,7 @@
             <li class="nav-item active">
 
                 <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">
-                    <i class="fas fa-user"></i>
+                    <i class="fas fa-user nav-icon"></i>
                     <p>Login</p>
                 </a>
             </li>

@@ -17,6 +17,7 @@ namespace leave_management.Data.Seeds
         private readonly IOrganizationResourceManager _organizationManager;
         private readonly IOrganizationRepository _organizationRepository;
         private readonly IAuthorizedOrganizationRepository _authorizedOrganizationRepository;
+        private readonly IAuthorizedDepartmentRepository _authorizedDepartmentRepository;
         private readonly IDepartmentRepository _departmentRepository;
 
         public SeedUsersAndOrganizations(
@@ -24,12 +25,14 @@ namespace leave_management.Data.Seeds
             IOrganizationResourceManager organizationManager,
             IOrganizationRepository organizationRepository,
             IAuthorizedOrganizationRepository authorizedOrganizationRepository,
+            IAuthorizedDepartmentRepository authorizedDepartmentRepository,
             IDepartmentRepository departmentRepository)
         {
             _userManager = userManager;
             _organizationManager = organizationManager;
             _organizationRepository = organizationRepository;
             _authorizedOrganizationRepository = authorizedOrganizationRepository;
+            _authorizedDepartmentRepository = authorizedDepartmentRepository;
             _departmentRepository = departmentRepository;
 
         }
@@ -61,7 +64,17 @@ namespace leave_management.Data.Seeds
 
                     var successOrg = _organizationRepository.Create(initalOrganization, organizationToken).Result;
 
-                //There is potential of using State Pattern
+
+                var departmentToken = _organizationManager.GenerateToken();
+
+                    var initialAuthorizedDepartment = new AuthorizedDepartment()
+                    {
+                        AuthorizedDepartmentToken = departmentToken
+                    };
+
+                    var successAuthDep = _authorizedDepartmentRepository.Create(initialAuthorizedDepartment).Result;
+
+                //There is potential of using Strategy Pattern
                 if (successOrg)
                 {
                     var department = new Department
@@ -72,10 +85,11 @@ namespace leave_management.Data.Seeds
                         OrganizationToken = organizationToken,
                         InitialDepartment = true,
                         OrganizationId = initalOrganization.Id,
-                        DepartmentToken = _organizationManager.GenerateToken()
+                        DepartmentToken = departmentToken
                     };
 
-                    var successDep = _departmentRepository.Create(department, true).Result;
+                    var successDep = _departmentRepository.Create(department, departmentToken).Result;
+
 
                     var user = new Employee
                     {

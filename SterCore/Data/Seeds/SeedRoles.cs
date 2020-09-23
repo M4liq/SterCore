@@ -50,7 +50,16 @@ namespace leave_management.Services.DataSeeds
                     };
                     var result = _roleManager.CreateAsync(role).Result;
                 }
-            
+
+                if (!_roleManager.RoleExistsAsync("Manager").Result)
+                {
+                    var role = new IdentityRole
+                    {
+                        Name = "Manager"
+                    };
+                    var result = _roleManager.CreateAsync(role).Result;
+                }
+
         }
     }
 }

@@ -32,10 +32,15 @@ namespace leave_management.Areas.Identity.Pages.Account
         public IEnumerable<SelectListItem> Departments { get; set; }
         public IOrganizationResourceManager organizationResourceManager { get; }
         public IDepartmentRepository departmentRepository { get; }
-        public ChangeDepartmentView(IOrganizationResourceManager organizationResourceManager, IDepartmentRepository departmentRepository)
+        public UserManager<Employee> userManager { get; }   
+        public ChangeDepartmentView(
+            IOrganizationResourceManager organizationResourceManager, 
+            IDepartmentRepository departmentRepository, 
+            UserManager<Employee> userManager)
         {
             this.organizationResourceManager = organizationResourceManager;
             this.departmentRepository = departmentRepository;
+            this.userManager = userManager;
         }
         public string ReturnUrl { get; set; }
 
@@ -50,12 +55,13 @@ namespace leave_management.Areas.Identity.Pages.Account
         public async Task OnGetAsync(string returnUrl = null)
         {
             this.ReturnUrl = returnUrl ?? Url.Content("~/");
+            var allDepartments = await departmentRepository.FindAll();
+            var organization = await organizationResourceManager.GetCurrentOrganization();
+            var departments = allDepartments.Where(q => q.Organization.Id == organization.Id || 
+                                                        q.Organization.AuthorizedOrganizationId == organization.Id);
+      //  Issue: it gets all departments. Should get only those from this organization
 
-            //Issue: it gets all departments. Should get only those from this organization 
-            var departments = await departmentRepository.FindAll();
-            var token =  organizationResourceManager.GetOrganizationToken();
-
-            var departmentsItems = departments.Select(q => new SelectListItem
+        var departmentsItems = departments.Select(q => new SelectListItem
             {
                 Text = q.Name,
                 Value = q.Id.ToString()

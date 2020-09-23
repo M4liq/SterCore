@@ -85,7 +85,9 @@ namespace leave_management.Repository
 
             //ORI Filtring leave types by their tokens to get scope
             var organizations = _db.Department
-                .Where(q => q.AuthorizedDepartment.AuthorizedDepartmentToken == departmentToken || q.DepartmentToken == departmentToken);
+                .Where(q => q.AuthorizedDepartment.AuthorizedDepartmentToken == departmentToken ||
+                            q.DepartmentToken == departmentToken)
+                .Include(q => q.Organization);
 
             return await organizations.ToListAsync();
 
@@ -99,6 +101,14 @@ namespace leave_management.Repository
             return await _db.Department
                 .Where(q => q.AuthorizedDepartment.AuthorizedDepartmentToken == departmentToken || q.DepartmentToken == departmentToken)
                 .FirstOrDefaultAsync(q => q.Id == id);
+        }
+
+        public async Task<Department> FindInitialDepartment(Organization organization)
+        {
+            return await _db.Department
+                .Where(q => q.OrganizationId == organization.Id)
+                .Where(q => q.InitialDepartment == true)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<bool> Save()

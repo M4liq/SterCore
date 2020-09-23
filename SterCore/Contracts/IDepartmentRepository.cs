@@ -10,5 +10,6 @@ namespace leave_management.Contracts
     {   
         //The reason of this method is to bypass token verification in dataSeeding
         public Task<bool> Create(Department entity, bool areTokensProvided);
+        public Task<Department> FindInitialDepartment(Organization organization);
     }
 }

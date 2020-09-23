@@ -9,7 +9,8 @@ namespace leave_management.Contracts
     public interface IDepartmentRepository : IRepositoryBase<Department>
     {   
         //The reason of this method is to bypass token verification in dataSeeding
-        public Task<bool> Create(Department entity, bool areTokensProvided);
+        public Task<bool> Create(Department entity, string authorizedToken);
         public Task<Department> FindInitialDepartment(Organization organization);
+
     }
 }

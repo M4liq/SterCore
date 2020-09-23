@@ -22,20 +22,20 @@ namespace leave_management.Controllers
         private readonly IOrganizationRepository _organizationRepostory;
         private readonly IDepartmentRepository _departmentRepostory;
         private readonly IOrganizationResourceManager _organizationManager;
+        public IAuthorizedDepartmentRepository _authorizedDepartmentRepository { get; }
         private readonly IMapper _mapper;
-        private readonly IEmployeeRepository _employeeRepository;
 
         public OrganizationController(IMapper mapper, 
-            IOrganizationRepository organizationRepostory, 
-            IEmployeeRepository employeeRepository, 
+            IOrganizationRepository organizationRepostory,
             IDepartmentRepository departmentRepostory,
-            IOrganizationResourceManager organizationManager)
+            IOrganizationResourceManager organizationManager, 
+            IAuthorizedDepartmentRepository authorizedDepartmentRepository)
         {
             _organizationRepostory = organizationRepostory;
             _mapper = mapper;
-            _employeeRepository = employeeRepository;
             _departmentRepostory = departmentRepostory;
             _organizationManager = organizationManager;
+            _authorizedDepartmentRepository = authorizedDepartmentRepository;
         }
 
         // GET: Organization
@@ -77,11 +77,27 @@ namespace leave_management.Controllers
                 {
                     return View(model);
                 }
+
                 model.Disabled = false;
                 model.InitialOrganization = true;
 
                 var record = _mapper.Map<Organization>(model);
                 var isSuccess = await _organizationRepostory.Create(record);
+                if (!isSuccess)
+                {
+                    ModelState.AddModelError("", "Coś poszło nie tak. Skontaktuj się z Administratorem...");
+                    return View(model);
+                }
+
+                var departmentToken = _organizationManager.GenerateToken();
+
+                var authorizedDepartment = new AuthorizedDepartment()
+                {
+                    AuthorizedDepartmentToken = departmentToken
+                };
+
+                isSuccess = await _authorizedDepartmentRepository.Create(authorizedDepartment);
+
                 if (!isSuccess)
                 {
                     ModelState.AddModelError("", "Coś poszło nie tak. Skontaktuj się z Administratorem...");
@@ -96,10 +112,12 @@ namespace leave_management.Controllers
                     OrganizationToken = record.OrganizationToken,
                     InitialDepartment = true,
                     OrganizationId = record.Id,
-                    DepartmentToken = _organizationManager.GenerateToken()
+                    DepartmentToken = departmentToken
+
                 };
 
-                var successDep = await _departmentRepostory.Create(department, true);
+                var successDep =
+                    await _departmentRepostory.Create(department, departmentToken);
 
                 if (!successDep)
                 {
@@ -107,17 +125,19 @@ namespace leave_management.Controllers
                     return View(model);
                 }
 
+
+
                 return RedirectToAction(nameof(Index));
-        }
+            }
             catch
             {
                 ModelState.AddModelError("", "coś poszło nie tak. skontaktuj się z administratorem...");
                 return View(model);
-    }
-}
+            }
+        }
 
-        // GET: Organization/Edit/5
-        public async Task<ActionResult> Edit(int id)
+// GET: Organization/Edit/5
+public async Task<ActionResult> Edit(int id)
         {
             var organization = await _organizationRepostory.FindById(id);
             var model = _mapper.Map<OrganizationVM>(organization);

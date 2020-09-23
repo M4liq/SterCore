@@ -22,7 +22,7 @@ using leave_management.Services.Extensions;
 
 namespace leave_management.Areas.Identity.Pages.Account
 {
-    [Authorize(Roles = "Administrator, Agent")]
+    [Authorize(Roles = "Administrator, Agent, Employer")]
     public class ChangeDepartmentView : PageModel
     {
 
@@ -57,8 +57,10 @@ namespace leave_management.Areas.Identity.Pages.Account
             this.ReturnUrl = returnUrl ?? Url.Content("~/");
             var allDepartments = await departmentRepository.FindAll();
             var organization = await organizationResourceManager.GetCurrentOrganization();
-            var departments = allDepartments.Where(q => q.Organization.Id == organization.Id || 
-                                                        q.Organization.AuthorizedOrganizationId == organization.Id);
+            var departments = allDepartments
+                .Where(q => q.Organization.Id == organization.Id)
+                .Where(q => q.Organization.AuthorizedOrganizationId == organization.Id);
+                
       //  Issue: it gets all departments. Should get only those from this organization
 
         var departmentsItems = departments.Select(q => new SelectListItem
@@ -72,7 +74,23 @@ namespace leave_management.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+
             this.ReturnUrl = returnUrl ?? Url.Content("~/");
+            var allDepartments = await departmentRepository.FindAll();
+            var organization = await organizationResourceManager.GetCurrentOrganization();
+            var departments = allDepartments
+                .Where(q => q.Organization.Id == organization.Id)
+                .Where(q => q.Organization.AuthorizedOrganizationId == organization.Id);
+
+            //  Issue: it gets all departments. Should get only those from this organization
+
+            var departmentsItems = departments.Select(q => new SelectListItem
+            {
+                Text = q.Name,
+                Value = q.Id.ToString()
+            });
+
+            this.Departments = departmentsItems;
 
 
             var department = await departmentRepository.FindById(Input.DepartmentId);

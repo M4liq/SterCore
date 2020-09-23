@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace leave_management.Repository
 {
@@ -47,17 +48,12 @@ namespace leave_management.Repository
             return await Save();
         }
 
-        public async Task<bool> Create(Department entity, bool areTokensProvided)
+        public async Task<bool> Create(Department entity, string authorizedToken)
         {
-            if(!areTokensProvided)
-            {
-                _organizationManager.SetAccess(entity);
+            entity.AuthorizedDepartmentId = await _organizationManager.GetAuthorizedDepartmentId(authorizedToken);
+
                 await _db.Department.AddAsync(entity);
                 return await Save();
-            }
-
-            await _db.Department.AddAsync(entity);
-            return await Save();
         }
 
         public async Task<bool> Delete(Department entity)
@@ -86,7 +82,8 @@ namespace leave_management.Repository
             //ORI Filtring leave types by their tokens to get scope
             var organizations = _db.Department
                 .Where(q => q.AuthorizedDepartment.AuthorizedDepartmentToken == departmentToken ||
-                            q.DepartmentToken == departmentToken)
+                            q.DepartmentToken == departmentToken || 
+                            q.DepartmentToken == q.AuthorizedDepartment.AuthorizedDepartmentToken)
                 .Include(q => q.Organization);
 
             return await organizations.ToListAsync();
@@ -99,7 +96,9 @@ namespace leave_management.Repository
             var departmentToken = _organizationManager.GetDepartmentToken();
 
             return await _db.Department
-                .Where(q => q.AuthorizedDepartment.AuthorizedDepartmentToken == departmentToken || q.DepartmentToken == departmentToken)
+                .Where(q => q.AuthorizedDepartment.AuthorizedDepartmentToken == departmentToken 
+                            || q.DepartmentToken == departmentToken
+                            || q.DepartmentToken == q.AuthorizedDepartment.AuthorizedDepartmentToken)
                 .FirstOrDefaultAsync(q => q.Id == id);
         }
 
@@ -107,7 +106,6 @@ namespace leave_management.Repository
         {
             return await _db.Department
                 .Where(q => q.OrganizationId == organization.Id)
-                .Where(q => q.InitialDepartment == true)
                 .FirstOrDefaultAsync();
         }
 
@@ -128,5 +126,6 @@ namespace leave_management.Repository
                 _db.Department.Update(entity);
             return await Save();
         }
+
     }
 }

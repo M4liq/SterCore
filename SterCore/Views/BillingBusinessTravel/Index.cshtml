@@ -5,62 +5,63 @@
 
 <h1>Szczegóły rozliczeń</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-success"> <i class="fa fa-plus" aria-hidden="true"></i> Dodaj rozliczenie</a>
-</p>
-<table id="tblData" class="table">
-    <thead>
-        <tr>
+    <p>
+        <a asp-action="Create" class="btn btn-success"> <i class="fa fa-plus" aria-hidden="true"></i> Dodaj rozliczenie</a>
+    </p>
 
-            <th>
-                @Html.DisplayNameFor(model => model.ApplicationId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TypeOfBillingName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Amount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CurrencyName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsPaid)
-            </th>
-            <th>Akcje</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TypeOfBillingName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CurrencyName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsPaid)
-            </td>
-            <td>
-                <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">
-                    <i class="fa fa-pencil-alt" aria-hidden="true"></i>
-                </a>
-                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                </a>
-                <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz usunąć ten wpis?')">
-                    <i class="fa fa-trash" aria-hidden="true"></i>
-                </a>
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
+    <table id="tblData" class="table">
+        <thead>
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicationId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TypeOfBillingName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Amount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CurrencyName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsPaid)
+                </th>
+                <th>Akcje</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TypeOfBillingName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CurrencyName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsPaid)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">
+                            <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                        </a>
+                        <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        </a>
+                        <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz usunąć ten wpis?')">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

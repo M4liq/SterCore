@@ -8,11 +8,13 @@ using leave_management.Data;
 using leave_management.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
+    [Authorize]
     public class ResourceController : Controller
     {
         private readonly IResourceRepository _resourceRepository;
@@ -65,7 +67,7 @@ namespace leave_management.Controllers
             model.EmployeeFullName = employeeFulName;
             return View(model);
         }
-
+        [Authorize(Roles = "Administrator, Employer, Agent")]
         // GET: Resource/Create
         public async Task<ActionResult> Create()
         {

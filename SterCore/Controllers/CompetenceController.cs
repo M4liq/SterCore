@@ -7,12 +7,14 @@ using leave_management.Contracts;
 using leave_management.Data;
 using leave_management.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
+    [Authorize]
     public class CompetenceController : Controller
     {
         private readonly ICompetenceRepository _competenceRepository;
@@ -68,7 +70,7 @@ namespace leave_management.Controllers
             model.CompetenceName = competenceTypes.FirstOrDefault(q => q.Id == competence.CompetenceTypeId).name;
             return View(model);
         }
-
+        [Authorize(Roles = "Administrator, Employer, Agent")]
         // GET: Competence/Create
         public async Task<ActionResult> Create()
         {

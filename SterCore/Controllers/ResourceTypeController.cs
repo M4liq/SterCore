@@ -8,11 +8,13 @@ using leave_management.Data;
 using leave_management.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
+    [Authorize(Roles = "Administrator, Employer, Agent")]
     public class ResourceTypeController : Controller
     {
         private readonly IResourceTypeRepository _resourceTypeRepository;
@@ -43,7 +45,7 @@ namespace leave_management.Controllers
             var model = _mapper.Map<ResourceTypeVM>(resourceTypes);
             return View(model);
         }
-
+        [Authorize(Roles = "Administrator, Employer, Agent")]
         // GET: resourceType/Create
         public async Task<ActionResult> Create()
         {

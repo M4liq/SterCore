@@ -6,12 +6,14 @@ using AutoMapper;
 using leave_management.Contracts;
 using leave_management.Data;
 using leave_management.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 namespace leave_management.Controllers
 {
+    [Authorize]
     public class DocumentController : Controller
     {
         private readonly IDocumentsRepository _documentsRepository;
@@ -65,6 +67,7 @@ namespace leave_management.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Administrator, Employer, Agent")]
         // GET: Document/Create
         public async Task<ActionResult> Create()
         {

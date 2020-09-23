@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
+    [Authorize]
     public class BusinessTravelController : Controller
     {
         private readonly IBusinessTravelRepository _repo;

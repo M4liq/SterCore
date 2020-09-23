@@ -4,87 +4,88 @@
     ViewData["Title"] = "Wyjazdy służbowe";
 }
 
-    <h1>Wyjazdy służbowe</h1>
+<h1>Wyjazdy służbowe</h1>
+    <p>
+        <a class="btn btn-success" asp-action="Create"><i class="fa fa-user-plus"></i> Dodaj wyjazd służbowy</a>
+    </p>
 
-<p>
-    <a class="btn btn-success" asp-action="Create"><i class="fa fa-user-plus"></i> Dodaj wyjazd służbowy</a>
-</p>
-<table id="tblData" class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DateFrom)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateTo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DestinationCountry)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DestinationCity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PurposeOfTravel)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ApplicationId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmployeeFullName)
-            </th>            
-            <th>
-                @Html.DisplayNameFor(model => model.DifferenceOfCostsAndBillings)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateFrom)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateTo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DestinationCountry)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DestinationCity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PurposeOfTravel)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmployeeFullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DifferenceOfCostsAndBillings)
-            </td>
-            
-            <td>
-                <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">
-                    <i class="fa fa-pencil-alt" aria-hidden="true"></i>
-                </a>
-                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                </a>
-                <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz usunąć ten wpis?')">
-                    <i class="fa fa-trash" aria-hidden="true"></i>
-                </a>
-                <a asp-action="Create" class="btn btn-success" asp-controller="BillingBusinessTravel" asp-route-businessTravelId="@item.Id">
-                    <i class="fa fa-plus" aria-hidden="true"></i> <i class="fa fa-hand-holding-usd" aria-hidden="true"></i>
-                </a>
-                <a asp-action="Create" class="btn btn-success" asp-controller="Expense" asp-route-businessTravelId="@item.Id">
-                    <i class="fa fa-plus" aria-hidden="true"></i> <i class="fa fa-coins" aria-hidden="true"></i>
-                </a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <table id="tblData" class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateFrom)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateTo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DestinationCountry)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DestinationCity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PurposeOfTravel)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApplicationId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EmployeeFullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DifferenceOfCostsAndBillings)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateFrom)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateTo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DestinationCountry)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DestinationCity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PurposeOfTravel)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ApplicationId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmployeeFullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DifferenceOfCostsAndBillings)
+                    </td>
+
+                    <td>
+                        <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">
+                            <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                        </a>
+                        <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        </a>
+                        <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Jesteś pewny że chcesz usunąć ten wpis?')">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a>
+                        <a asp-action="Create" class="btn btn-success" asp-controller="BillingBusinessTravel" asp-route-businessTravelId="@item.Id">
+                            <i class="fa fa-plus" aria-hidden="true"></i> <i class="fa fa-hand-holding-usd" aria-hidden="true"></i>
+                        </a>
+                        <a asp-action="Create" class="btn btn-success" asp-controller="Expense" asp-route-businessTravelId="@item.Id">
+                            <i class="fa fa-plus" aria-hidden="true"></i> <i class="fa fa-coins" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

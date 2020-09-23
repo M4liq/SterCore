@@ -5,55 +5,58 @@
 }
 
 <h1>Badania Lekarskie</h1>
-
-<p>
-    <a class="btn btn-success" asp-action="Create"><i class="fa fa-plus-circle"></i> Dodaj badanie lekarskie</a>
-</p>
-<table id="tblData" class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TypeOfMedicalCheckUpName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfMedicalExamination)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ValidUntil)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmployeeFullName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TypeOfMedicalCheckUpName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfMedicalExamination)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ValidUntil)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmployeeFullName)
-            </td>
-            <td>
-                <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id" asp-route-typeOfMedicalCheckUpId="@item.TypeOfMedicalCheckUpId" asp-route-employeeId="@item.EmployeeId" asp-route-organizationToken="@item.OrganizationToken">
-                    <i class="fa fa-pencil-alt" aria-hidden="true"></i>
-                </a>
-                <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">
-                    <i class="fa fa-info-circle" aria-hidden="true"></i>
-                </a>
-                <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Are you sure you want to delete this record?')">
-                    <i class="fa fa-trash" aria-hidden="true"></i>
-                </a>
-            </td>
-        </tr>
+@if (User.IsInRole("Administrator") || User.IsInRole("Agent") || User.IsInRole("Employer"))
+{
+    <p>
+        <a class="btn btn-success" asp-action="Create"><i class="fa fa-plus-circle"></i> Dodaj badanie lekarskie</a>
+    </p>
 }
-    </tbody>
-</table>
+    <table id="tblData" class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.TypeOfMedicalCheckUpName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateOfMedicalExamination)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ValidUntil)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EmployeeFullName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TypeOfMedicalCheckUpName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateOfMedicalExamination)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ValidUntil)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmployeeFullName)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id" asp-route-typeOfMedicalCheckUpId="@item.TypeOfMedicalCheckUpId" asp-route-employeeId="@item.EmployeeId" asp-route-organizationToken="@item.OrganizationToken">
+                            <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                        </a>
+                        <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id">
+                            <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        </a>
+                        <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Are you sure you want to delete this record?')">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>

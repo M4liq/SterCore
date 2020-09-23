@@ -202,7 +202,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         {
                             
                                 <li class="nav-item has-treeview">
-                                    <a href="#" class="nav-link active">
+                                    <a id="businnesTravel" href="#" class="nav-link active drop-state">
                                         <i class="fas fa-user-lock nav-icon"></i>
                                         <p>
                                             Wyjazdy Służbowe
@@ -232,7 +232,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </li>
 
                                 <li class="nav-item has-treeview">
-                                    <a href="#" class="nav-link active">
+                                    <a id="holiday" href="#" class="nav-link active drop-state">
                                         <i class="fas fa-plane nav-icon"></i>
                                         <p>
                                             Urlopy
@@ -278,7 +278,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             if (User.IsInRole("Administrator") || User.IsInRole("Agent") || User.IsInRole("Employer"))
                             {
                     <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link active">
+                        <a id="organization" href="#" class="nav-link active drop-state">
                             <i class="fas fa-building nav-icon"></i>
                             <p>
                                 Organizacja
@@ -307,7 +307,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             if (User.IsInRole("Administrator") || User.IsInRole("Agent") || User.IsInRole("Employer"))
                             {
                                 <li class="nav-item has-treeview">
-                                    <a href="#" class="nav-link active">
+                                    <a id="CardIndex" href="#" class="nav-link active drop-state">
                                         <i class="fas fa-folder-open nav-icon"></i>
                                         <p>
                                             Kartoteka
@@ -378,8 +378,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             }
                             if (User.IsInRole("Administrator") || User.IsInRole("Agent"))
                             {
-                                    <li class="nav-item has-treeview">
-                                        <a href="#" class="nav-link active">
+                                    <li  class="nav-item has-treeview">
+                                        <a id="administration" href="#" class="nav-link active drop-state">
                                             <i class="fas fa-user-lock nav-icon"></i>
                                             <p>
                                                 Administracja
@@ -454,5 +454,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     @RenderSection("Scripts", required: false)
+    <script>
+        $(document).ready(function () {
+            $('.drop-state').each(function () {
+                var retrievedObject = localStorage.getItem('dropdown-open-#' + this.id);
+                console.log(retrievedObject);
+                if (retrievedObject=='true') {
+                    this.parentNode.classList = this.parentNode.classList + ' menu-open';
+                }
+            });
+
+                                
+            $('.drop-state').click(function () {
+                    if (this.parentNode.className.includes('menu')) {
+                        console.log("deleting");
+                        localStorage.setItem('dropdown-open-#' + this.id, false);
+                    }
+                    else {
+                        console.log("saving");
+                        localStorage.setItem('dropdown-open-#' + this.id, true);
+                    }
+                });
+                
+            });
+        
+    </script>
 </body>
 </html>

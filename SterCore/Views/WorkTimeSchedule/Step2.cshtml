@@ -27,40 +27,66 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <!-- Essential JS 2 Scheduler's dependent script -->
-    <script src="https://cdn.syncfusion.com/ej2/ej2-base/dist/global/ej2-base.min.js" type="text/javascript"></script>
-    <script src="https://cdn.syncfusion.com/ej2/ej2-data/dist/global/ej2-data.min.js" type="text/javascript"></script>
-    <script src="https://cdn.syncfusion.com/ej2/ej2-inputs/dist/global/ej2-inputs.min.js" type="text/javascript"></script>
-    <script src="https://cdn.syncfusion.com/ej2/ej2-buttons/dist/global/ej2-buttons.min.js" type="text/javascript"></script>
-    <script src="https://cdn.syncfusion.com/ej2/ej2-dropdowns/dist/global/ej2-dropdowns.min.js" type="text/javascript"></script>
-    <script src="https://cdn.syncfusion.com/ej2/ej2-compression/dist/global/ej2-dropdowns.min.js" type="text/javascript"></script>
-    <script src="https://cdn.syncfusion.com/ej2/ej2-file-utils/dist/global/ej2-dropdowns.min.js" type="text/javascript"></script>
-    <script src="https://cdn.syncfusion.com/ej2/ej2-splitbuttons/dist/global/ej2-splitbuttons.min.js" type="text/javascript"></script>
-    <script src="https://cdn.syncfusion.com/ej2/ej2-lists/dist/global/ej2-lists.min.js" type="text/javascript"></script>
-    <script src="https://cdn.syncfusion.com/ej2/ej2-popups/dist/global/ej2-popups.min.js" type="text/javascript"></script>
-    <script src="https://cdn.syncfusion.com/ej2/ej2-navigations/dist/global/ej2-navigations.min.js" type="text/javascript"></script>
-    <script src="https://cdn.syncfusion.com/ej2/ej2-calendars/dist/global/ej2-calendars.min.js" type="text/javascript"></script>
-    <script src="https://cdn.syncfusion.com/ej2/ej2-exel-export/dist/global/ej2-lists.min.js" type="text/javascript"></script>
+    <!-- Essential JS 2 Scheduler's dependent scripts -->
+    @*<script src="~/lib/scheduler/js/ej2-base.min.js" type="text/javascript"></script>
+    <script src="~/lib/scheduler/js/ej2-data.min.js" type="text/javascript"></script>
+    <script src="~/lib/scheduler/js/ej2-inputs.min.js" type="text/javascript"></script>
+    <script src="~/lib/scheduler/js/ej2-buttons.min.js" type="text/javascript"></script>
+    <script src="~/lib/scheduler/js/ej2-dropdowns.min.js" type="text/javascript"></script>
+    <script src="~/lib/scheduler/js/ej2-compression.min.js" type="text/javascript"></script>
+    <script src="~/lib/scheduler/js/ej2-file-utils.min.js" type="text/javascript"></script>
+    <script src="~/lib/scheduler/js/ej2-splitbuttons.min.js" type="text/javascript"></script>
+    <script src="~/lib/scheduler/js/ej2-lists.min.js" type="text/javascript"></script>
+    <script src="~/lib/scheduler/js/ej2-popups.min.js" type="text/javascript"></script>
+    <script src="~/lib/scheduler/js/ej2-navigations.min.js" type="text/javascript"></script>
+    <script src="~/lib/scheduler/js/ej2-calendars.min.js" type="text/javascript"></script>
+    <script src="~/lib/scheduler/js/ej2-excel-export.min.js" type="text/javascript"></script>*@
     <!-- Essential JS 2 Scheduler's global script -->
-    <script src="https://cdn.syncfusion.com/ej2/ej2-schedule/dist/global/ej2-schedule.min.js" type="text/javascript"></script>
+    @*<script src="~/lib/scheduler/js/ej2-schedule.min.js" type="text/javascript"></script>*@
+    <!-- Essential JS 2 all script -->
+    <script src="~/lib/scheduler/js/ej2/dist/ej2.min.js" type="text/javascript"></script>
+
 
     <script>
-        ej.schedule.Schedule.Inject(ej.schedule.Day, ej.schedule.Week, ej.schedule.WorkWeek, ej.schedule.Month, ej.schedule.Agenda);
-        var scheduleObj = new ej.schedule.Schedule();
+       // ej.schedule.Schedule.Inject(ej.schedule.TimelineMonth);
+        ej.schedule.Schedule.Inject(ej.schedule.Day, ej.schedule.Week, ej.schedule.WorkWeek, ej.schedule.Month, ej.schedule.Agenda, ej.schedule.TimelineMonth);
+        var scheduleObj = new ej.schedule.Schedule({
+            views: ['TimelineMonth', 'Month'],
+            height: '550px',
+            currentView: 'TimelineMonth',
+            group: {
+                resources: ['Employees']
+            },
+            resources: [{
+                field: 'EmployeeId', title: 'Employee',
+                name: 'Employees', allowMultiple: true,
+                dataSource: [
+                    @foreach(var item in Model.EmployeeIds) { 
+                        //todo take employee name and id i random color!
+                    }
+                    { EmployeeText: 'Nancy', Id: 1, EmployeeColor: '#ffaa00' },
+                    { EmployeeText: 'Steven', Id: 2, EmployeeColor: '#f8a398' },
+                    { EmployeeText: 'Michael', Id: 3, EmployeeColor: '#7499e1' }
+                ],
+                textField: 'EmployeeText', idField: 'Id', colorField: 'EmployeeColor'
+            }],
+            eventSettings: { dataSource: resourceData }
+        });
         scheduleObj.appendTo('#Schedule');
     </script>
 }
 @section Head {
     <!-- Essential JS 2 Scheduler's dependent material theme -->
-    <link href="https://cdn.syncfusion.com/ej2/ej2-base/styles/material.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.syncfusion.com/ej2/ej2-buttons/styles/material.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.syncfusion.com/ej2/ej2-calendars/styles/material.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.syncfusion.com/ej2/ej2-dropdowns/styles/material.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.syncfusion.com/ej2/ej2-inputs/styles/material.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.syncfusion.com/ej2/ej2-splitbuttons/styles/material.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.syncfusion.com/ej2/ej2-lists/styles/material.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.syncfusion.com/ej2/ej2-popups/styles/material.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.syncfusion.com/ej2/ej2-navigations/styles/material.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/scheduler/styles/base/material.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/scheduler/styles/buttons/material.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/scheduler/styles/calendars/material.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/scheduler/styles/dropdowns/material.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/scheduler/styles/inputs/material.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/scheduler/styles/splitbuttons/material.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/scheduler/styles/lists/material.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/scheduler/styles/popups/material.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/scheduler/styles/navigations/material.css" rel="stylesheet" type="text/css" />
     <!-- Essential JS 2 Scheduler's material theme -->
-    <link href="https://cdn.syncfusion.com/ej2/ej2-schedule/styles/material.css" rel="stylesheet" type="text/css" />
+    <link href="~/lib/scheduler/styles/schedule/material.css" rel="stylesheet" type="text/css" />
+
 }

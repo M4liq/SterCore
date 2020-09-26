@@ -11,7 +11,7 @@
     <div class="col-md-4">
         <form asp-action="Step2">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
+
 
 
             <div class="form-group">
@@ -27,7 +27,8 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="Scripts/ej2/ej2.min.js"></script>
+    <script src="Scripts/ej2/datasource.js"></script>
 
 
-    
 }

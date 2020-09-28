@@ -258,6 +258,10 @@ namespace leave_management.Controllers
             }
             model.EmployeeFullNames = ListOfNames;
             model.EmployeeIds = EmployeeIds;
+            model.ScheduleId = id;
+            model.DateFrom = workTimeSchedule.DateFrom;
+            model.DateTo= workTimeSchedule.DateTo;
+
             return View(model);
         }
 

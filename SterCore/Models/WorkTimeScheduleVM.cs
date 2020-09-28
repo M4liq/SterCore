@@ -63,6 +63,10 @@ namespace leave_management.Models
         public List<string> EmployeeIds { get; set; }
         public List<string> EmployeeFullNames { get; set; }
 
+        public int ScheduleId { get; set; }
+        public DateTime DateFrom { get; set; }
+        public DateTime DateTo { get; set; }
+
     }
 
 }

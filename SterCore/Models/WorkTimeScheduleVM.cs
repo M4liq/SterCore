@@ -67,6 +67,8 @@ namespace leave_management.Models
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
 
+        public IEnumerable<SelectListItem> Employees { get; set; }
+
     }
 
 }

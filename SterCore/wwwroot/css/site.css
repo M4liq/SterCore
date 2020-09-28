@@ -102,3 +102,11 @@ textarea {
     background-color: #3da5d9;
     color: white;
 }
+.e-schedule .e-timeline-view .e-appointment, .e-schedule .e-timeline-month-view .e-appointment-wrapper .e-appointment {
+    height: 60px;
+    text-align: center;
+    border-radius: 5px;
+}
+.e-schedule .e-timeline-view .e-appointment .e-time, .e-schedule .e-timeline-month-view .e-appointment .e-time{
+    white-space:initial;
+}

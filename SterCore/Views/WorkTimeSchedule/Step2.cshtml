@@ -11,6 +11,41 @@
     <div class="col-md-12">
         <form asp-action="Step2">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div id="add"></div>
+            <div class="col-md-12">
+                <p class="d-inline-block">od:</p>
+                <div class="d-inline-block ">
+                    <input id="timeFrom" />
+                </div>
+                <p class="d-inline-block">do:</p>
+                <div class="d-inline-block ">
+                    <input id="timeTo" />
+                </div>
+                <p class="d-inline-block">od:</p>
+                <div class="d-inline-block">
+                    <input type="text" id="dateFrom" />
+                </div>
+                <p class="d-inline-block">do:</p>
+                <div class="d-inline-block">
+                    <input type="text" id="dateTo" />
+                </div>
+                <p class="d-inline-block">w tym przerwa (min.):</p>
+                <div class="d-inline-block ">
+                    <input id="pauseTime" />
+                </div>
+                <p class="d-inline-block">pomiń dni wolne:</p>
+                <div class="d-inline-block ">
+                    <input type="checkbox" id="skipFreeDays" />
+                </div>
+                <p class="d-inline-block">dla:</p>
+                <div class="d-inline-block ">
+                    @Html.DropDownListFor(q => q.EmployeeIds, new SelectList(Model.Employees, "Value", "Text"), "Wybierz pracownika", new { @class = "form-control", id="employeeDropDownList" })
+                </div>
+                <div class="d-inline-block ">
+                    <button class="btn btn-success" type="button" id="addEventsToSchedule">Dodaj</button>
+                </div>
+            </div>
             <div id="Schedule"></div>
 
 
@@ -27,36 +62,13 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <!-- Essential JS 2 Scheduler's dependent scripts -->
-    @*<script src="~/lib/scheduler/js/ej2-base.min.js" type="text/javascript"></script>
-    <script src="~/lib/scheduler/js/ej2-data.min.js" type="text/javascript"></script>
-    <script src="~/lib/scheduler/js/ej2-inputs.min.js" type="text/javascript"></script>
-    <script src="~/lib/scheduler/js/ej2-buttons.min.js" type="text/javascript"></script>
-    <script src="~/lib/scheduler/js/ej2-dropdowns.min.js" type="text/javascript"></script>
-    <script src="~/lib/scheduler/js/ej2-compression.min.js" type="text/javascript"></script>
-    <script src="~/lib/scheduler/js/ej2-file-utils.min.js" type="text/javascript"></script>
-    <script src="~/lib/scheduler/js/ej2-splitbuttons.min.js" type="text/javascript"></script>
-    <script src="~/lib/scheduler/js/ej2-lists.min.js" type="text/javascript"></script>
-    <script src="~/lib/scheduler/js/ej2-popups.min.js" type="text/javascript"></script>
-    <script src="~/lib/scheduler/js/ej2-navigations.min.js" type="text/javascript"></script>
-    <script src="~/lib/scheduler/js/ej2-calendars.min.js" type="text/javascript"></script>
-    <script src="~/lib/scheduler/js/ej2-excel-export.min.js" type="text/javascript"></script>*@
-    <!-- Essential JS 2 Scheduler's global script -->
-    @*<script src="~/lib/scheduler/js/ej2-schedule.min.js" type="text/javascript"></script>*@
-    <!-- Essential JS 2 all script -->
     <script src="~/lib/scheduler/js/ej2/dist/ej2.min.js" type="text/javascript"></script>
-
-
     <script>
-        ej.base.setCulture('pl');
-        var ajax = new ej.base.Ajax('/lib/scheduler/localization/pl.json', 'GET', true);
-        ajax.onSuccess = function (value) {
-                //Assigning locale text value for Essential JS 2 components
-                ej.base.L10n.load(value);
-            };
-        ajax.send();
-        var EmployeeIds = [];
-        var colors = ["#aa1155", "#ffee88", "#dd1155","#00cc99","#e6af2e","#CA7DF9","#724CF9","#5da271","#",];
+        var selectedDateFrom = new Date('@String.Format("{0}, {1}, {2}", Model.DateFrom.Year, Model.DateFrom.Month, Model.DateFrom.Day)');
+        var selectedDateTo = new Date('@String.Format("{0}, {1}, {2}",Model.DateTo.Year,Model.DateTo.Month,Model.DateTo.Day)');
+        var selectedEmployeeId;
+        var selectedTimeTo = new Date(2020, 1, 1, 16, 0);
+        var selectedTimeFrom = new Date(2020, 1, 1, 8, 0);
         var dataSources = [];
         var i = 1;
         @for(var i = 0; i<Model.EmployeeIds.Count();i++) {
@@ -68,9 +80,8 @@
             views: ['TimelineMonth'],
             height: '550px',
             currentView: 'TimelineMonth',
-            locale: 'pl',
+            allowResizing: false,
             minDate: "@String.Format("{0}, {1}, {2}",Model.DateFrom.Year,Model.DateFrom.Month,Model.DateFrom.Day)",
-
             maxDate: "@String.Format("{0}, {1}, {2}",Model.DateTo.Year,Model.DateTo.Month,Model.DateTo.Day)",
             group: {
                 resources: ['Employees']
@@ -81,9 +92,91 @@
                 dataSource: dataSources,
                 textField: 'EmployeeText', idField: 'Id', colorField: 'EmployeeColor'
             }],
-            //eventSettings: { dataSource:  }
         });
         scheduleObj.appendTo('#Schedule');
+
+        var add = new ej.buttons.Button();
+        add.appendTo('#add');
+        add.element.onclick = function() {
+        var Data = {Id: 3,Subject: 'Conference',
+            StartTime: new Date(2020, 8, 1, 0, 0),
+            EndTime: new Date(2020, 8, 1, 14, 0),
+            IsAllDay: false,
+            EmployeeId: "@Model.EmployeeIds[0]"
+        };
+            scheduleObj.addEvent(Data);
+        };
+
+        ej.base.enableRipple(true);
+        var timepickerFrom = new ej.calendars.TimePicker({
+            value: '08:00',
+            step: 15,
+            format: 'HH:mm',
+            change: function (args) {
+                selectedTimeFrom = args.value;
+                console.log(selectedTimeFrom)
+            }
+        });
+        timepickerFrom.appendTo('#timeFrom');
+
+        var timepickerTo = new ej.calendars.TimePicker({
+            value: '16:00',
+            step: 15,
+            format: 'HH:mm',
+            change: function (args) {
+                selectedTimeTo = args.value;
+                console.log(selectedTimeFrom)
+            }
+        });
+        timepickerTo.appendTo('#timeTo');
+
+        var calendarDateTo = new ej.calendars.DatePicker({
+            change: function (args) {
+                //selectedDateTo = args.value.toLocaleDateString('pl-PL');
+                selectedDateTo = new Date(args.value);
+                console.log(selectedDateTo);
+        },
+        min: new Date('@String.Format("{0}/{1}/{2}", @Model.DateFrom.Month, @Model.DateFrom.Day, @Model.DateFrom.Year)'),
+        max:new Date('@String.Format("{0}/{1}/{2}", @Model.DateTo.Month, @Model.DateTo.Day, @Model.DateTo.Year)'),
+        value: new Date('@String.Format("{0}/{1}/{2}", @Model.DateTo.Month, @Model.DateTo.Day, @Model.DateTo.Year)'),
+        });
+        calendarDateTo.appendTo('#dateTo');
+
+        var calendarDateFrom = new ej.calendars.DatePicker({
+            change: function (args) {
+                //selectedDateFrom = args.value.toLocaleDateString('pl-PL');
+                selectedDateFrom = new Date(args.value);
+                console.log(selectedDateFrom);
+            },
+            min: new Date('@String.Format("{0}/{1}/{2}", @Model.DateFrom.Month, @Model.DateFrom.Day, @Model.DateFrom.Year)'),
+            max: new Date('@String.Format("{0}/{1}/{2}", @Model.DateTo.Month, @Model.DateTo.Day, @Model.DateTo.Year)'),
+            value: new Date('@String.Format("{0}/{1}/{2}", @Model.DateFrom.Month, @Model.DateFrom.Day, @Model.DateFrom.Year)'),
+        });
+        calendarDateFrom.appendTo('#dateFrom');
+
+        $(document).ready(function () {
+            var i = 1;
+            $("#employeeDropDownList").change(function () {
+                selectedEmployeeId = this.value;
+            });
+            $("#addEventsToSchedule").click(function () {
+                var Events = [];
+                for (var d = selectedDateFrom; d <= selectedDateTo; d.setDate(d.getDate() + 1)) {
+                    var MyEvent ={
+                        Id: i,
+                        Subject: '+',
+                        StartTime: new Date(selectedDateFrom.getFullYear(), selectedDateFrom.getMonth(), selectedDateFrom.getDate(), selectedTimeFrom.getHours(), selectedTimeFrom.getMinutes()),
+                        EndTime: new Date(selectedDateFrom.getFullYear(), selectedDateFrom.getMonth(), selectedDateFrom.getDate(), selectedTimeTo.getHours(), selectedTimeTo.getMinutes()),
+                        IsAllDay: false,
+                        EmployeeId: selectedEmployeeId
+                    }
+                    i++;
+                    Events.push(MyEvent)
+                }
+                 
+                  scheduleObj.addEvent(Events);
+              });
+        });
     </script>
 }
 @section Head {

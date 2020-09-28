@@ -256,12 +256,29 @@ namespace leave_management.Controllers
                 var Employee = await _employeeRepository.FindById(item);
                 ListOfNames.Add(String.Format("{0} {1}", Employee.Lastname, Employee.Firstname));
             }
+            var employees = await _employeeRepository.FindAll();
+            
+            List<SelectListItem> employeeItems = new List<SelectListItem>();
+            for (int i = 0; i<EmployeeIds.Count;i++)
+            {
+                employeeItems.Add(new SelectListItem
+                {
+                    Text = ListOfNames[i],
+                    Value = EmployeeIds[i]
+                });
+            }
+            //var employeesItems = employees.Select(q => new SelectListItem
+            //{
+            //    Text = String.Format("{0} {1}", q.Firstname, q.Lastname),
+            //    Value = q.Id.ToString()
+            //});
+
             model.EmployeeFullNames = ListOfNames;
             model.EmployeeIds = EmployeeIds;
             model.ScheduleId = id;
             model.DateFrom = workTimeSchedule.DateFrom;
             model.DateTo= workTimeSchedule.DateTo;
-
+            model.Employees = employeeItems;
             return View(model);
         }
 

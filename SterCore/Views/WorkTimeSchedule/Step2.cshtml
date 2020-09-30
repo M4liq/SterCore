@@ -64,17 +64,23 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/lib/scheduler/js/ej2/dist/ej2.min.js" type="text/javascript"></script>
     <script>
-        var selectedDateFrom = new Date('@String.Format("{0}, {1}, {2}", Model.DateFrom.Year, Model.DateFrom.Month, Model.DateFrom.Day)');
-        var selectedDateTo = new Date('@String.Format("{0}, {1}, {2}",Model.DateTo.Year,Model.DateTo.Month,Model.DateTo.Day)');
+        var selectedDateFrom = new Date('@String.Format("{0}/{1}/{2}", Model.DateFrom.Month, Model.DateFrom.Day, Model.DateFrom.Year)');
+        var selectedDateTo = new Date('@String.Format("{0}/{1}/{2}",Model.DateTo.Month,Model.DateTo.Day,Model.DateTo.Year)');
         var selectedEmployeeId;
         var selectedTimeTo = new Date(2020, 1, 1, 16, 0);
         var selectedTimeFrom = new Date(2020, 1, 1, 8, 0);
         var dataSources = [];
+        var unAvailableDates = [];
         var i = 1;
         @for(var i = 0; i<Model.EmployeeIds.Count();i++) {
             @: var temp = { EmployeeText: "@Model.EmployeeFullNames[i]", Id: "@Model.EmployeeIds[i]", EmployeeColor: "#275dad" };
             @: dataSources.push(temp);
          }
+
+         @foreach (var item in Model.UnavailableDates)
+	      {
+             @: unAvailableDates.push(new Date('@String.Format("{0}/{1}/{2}", item.Month, item.Day, item.Year)'))
+	      }
         ej.schedule.Schedule.Inject(ej.schedule.TimelineMonth);
         var scheduleObj = new ej.schedule.Schedule({
             views: ['TimelineMonth'],
@@ -162,18 +168,27 @@
             $("#addEventsToSchedule").click(function () {
                 var Events = [];
                 for (var d = selectedDateFrom; d <= selectedDateTo; d.setDate(d.getDate() + 1)) {
-                    var MyEvent ={
+                    var thisDayIsAvailable = true;
+                    if ($("#skipFreeDays").prop('checked')) {
+                        unAvailableDates.forEach(function(unAvailableDay){
+                            if (d.getTime() === unAvailableDay.getTime()) {
+                                thisDayIsAvailable = false;
+                            }
+                        })
+                    }
+                    if(thisDayIsAvailable){
+                        var MyEvent ={
                         Id: i,
                         Subject: '+',
                         StartTime: new Date(selectedDateFrom.getFullYear(), selectedDateFrom.getMonth(), selectedDateFrom.getDate(), selectedTimeFrom.getHours(), selectedTimeFrom.getMinutes()),
                         EndTime: new Date(selectedDateFrom.getFullYear(), selectedDateFrom.getMonth(), selectedDateFrom.getDate(), selectedTimeTo.getHours(), selectedTimeTo.getMinutes()),
                         IsAllDay: false,
                         EmployeeId: selectedEmployeeId
-                    }
-                    i++;
-                    Events.push(MyEvent)
+                        }
+                        i++;
+                        Events.push(MyEvent)
+                    } 
                 }
-                 
                   scheduleObj.addEvent(Events);
               });
         });

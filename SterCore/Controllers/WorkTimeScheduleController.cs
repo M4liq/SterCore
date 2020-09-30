@@ -6,6 +6,7 @@ using AutoMapper;
 using leave_management.Contracts;
 using leave_management.Data;
 using leave_management.Models;
+using leave_management.Services.LeaveHelper.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,17 +20,20 @@ namespace leave_management.Controllers
         private readonly IWorkTimeScheduleEmployeesRepository _workTimeScheduleEmployeesRepository;
         private readonly IWorkingTimeSystemRepository _workingTimeSystemRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly ILeaveHelper _leaveHelper;
         private readonly IMapper _mapper;
         public WorkTimeScheduleController(IWorkTimeScheduleRepository workTimeScheduleRepository, 
             IWorkTimeScheduleEmployeesRepository workTimeScheduleEmployeesRepository,
             IWorkingTimeSystemRepository workingTimeSystemRepository,
-            IEmployeeRepository employeeRepository, 
+            IEmployeeRepository employeeRepository,
+            ILeaveHelper leaveHelper,
             IMapper mapper)
         {
             _workTimeScheduleRepository = workTimeScheduleRepository;
             _workTimeScheduleEmployeesRepository = workTimeScheduleEmployeesRepository;
             _workingTimeSystemRepository = workingTimeSystemRepository;
             _employeeRepository = employeeRepository;
+            _leaveHelper = leaveHelper;
             _mapper = mapper;
         }
         // GET: WorkTimeSchedule
@@ -273,12 +277,16 @@ namespace leave_management.Controllers
             //    Value = q.Id.ToString()
             //});
 
+            List<DateTime> UnavailableDates = new List<DateTime>();
+            UnavailableDates = _leaveHelper.ListUnavailableDates(workTimeSchedule.DateFrom, workTimeSchedule.DateTo);
+
             model.EmployeeFullNames = ListOfNames;
             model.EmployeeIds = EmployeeIds;
             model.ScheduleId = id;
             model.DateFrom = workTimeSchedule.DateFrom;
             model.DateTo= workTimeSchedule.DateTo;
             model.Employees = employeeItems;
+            model.UnavailableDates = UnavailableDates;
             return View(model);
         }
 

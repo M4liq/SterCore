@@ -66,6 +66,7 @@ namespace leave_management.Models
         public int ScheduleId { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
+        public List<DateTime> UnavailableDates { get; set; }
 
         public IEnumerable<SelectListItem> Employees { get; set; }
 

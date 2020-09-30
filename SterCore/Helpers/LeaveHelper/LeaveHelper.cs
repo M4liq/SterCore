@@ -34,5 +34,17 @@ namespace leave_management.Services.LeaveHelper
             for (var day = from.Date; day.Date <= thru.Date; day = day.AddDays(1))
                 yield return day;
         }
+        public List<DateTime> ListUnavailableDates(DateTime from, DateTime to)
+        {
+            List<DateTime> UnavailableDates = new List<DateTime>();
+            for(var day = from.Date; day <= to.Date; day = day.AddDays(1))
+            {
+                if (day.ExtIsHoliday())
+                {
+                    UnavailableDates.Add(day);
+                }
+            }
+            return UnavailableDates;
+        }
     }
 }

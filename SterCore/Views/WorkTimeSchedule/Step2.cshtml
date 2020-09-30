@@ -34,13 +34,17 @@
                 <div class="d-inline-block ">
                     <input id="pauseTime" />
                 </div>
+                <p class="d-inline-block">Komentarz:</p>
+                <div class="d-inline-block ">
+                    <input id="description" />
+                </div>
                 <p class="d-inline-block">pomiń dni wolne:</p>
                 <div class="d-inline-block ">
                     <input type="checkbox" id="skipFreeDays" />
                 </div>
                 <p class="d-inline-block">dla:</p>
                 <div class="d-inline-block ">
-                    @Html.DropDownListFor(q => q.EmployeeIds, new SelectList(Model.Employees, "Value", "Text"), "Wybierz pracownika", new { @class = "form-control", id="employeeDropDownList" })
+                    @Html.DropDownListFor(q => q.EmployeeIds, new SelectList(Model.Employees, "Value", "Text"), "Wybierz pracownika", new { @class = "form-control", id = "employeeDropDownList" })
                 </div>
                 <div class="d-inline-block ">
                     <button class="btn btn-success" type="button" id="addEventsToSchedule">Dodaj</button>
@@ -63,7 +67,22 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/lib/scheduler/js/ej2/dist/ej2.min.js" type="text/javascript"></script>
+    
+    <script id="apptemplate" type="text/x-template">
+        <div class="template-wrap" style="background:${PrimaryColor}">
+            <div class="subject" style="background:${PrimaryColor}">${Subject}</div>
+            <div class="e-time" style="background:${PrimaryColor}">${getTimeString(StartTime)} - ${getTimeString(EndTime)}</div>
+            
+            <div class="workTime" style="background:${PrimaryColor}">(${WorkTimeLength})</div>
+        </div>
+    </script>
+
     <script>
+        var instance = new ej.base.Internationalization();
+        window.getTimeString = function (value) {
+            return instance.formatDate(value, { skeleton: 'hm' });
+        };
+
         var selectedDateFrom = new Date('@String.Format("{0}/{1}/{2}", Model.DateFrom.Month, Model.DateFrom.Day, Model.DateFrom.Year)');
         var selectedDateTo = new Date('@String.Format("{0}/{1}/{2}",Model.DateTo.Month,Model.DateTo.Day,Model.DateTo.Year)');
         var selectedEmployeeId;
@@ -98,20 +117,12 @@
                 dataSource: dataSources,
                 textField: 'EmployeeText', idField: 'Id', colorField: 'EmployeeColor'
             }],
+            eventSettings: {
+            template: '#apptemplate'
+            }
         });
         scheduleObj.appendTo('#Schedule');
 
-        var add = new ej.buttons.Button();
-        add.appendTo('#add');
-        add.element.onclick = function() {
-        var Data = {Id: 3,Subject: 'Conference',
-            StartTime: new Date(2020, 8, 1, 0, 0),
-            EndTime: new Date(2020, 8, 1, 14, 0),
-            IsAllDay: false,
-            EmployeeId: "@Model.EmployeeIds[0]"
-        };
-            scheduleObj.addEvent(Data);
-        };
 
         ej.base.enableRipple(true);
         var timepickerFrom = new ej.calendars.TimePicker({
@@ -167,6 +178,13 @@
             });
             $("#addEventsToSchedule").click(function () {
                 var Events = [];
+                var pauseTimeVal = 0;
+                if($('#pauseTime').val()){
+                    pauseTimeVal = parseInt($('#pauseTime').val(), 10);
+                }
+                var workTimeValue = (selectedTimeTo.getHours()*60+selectedTimeTo.getMinutes())-(selectedTimeFrom.getHours()*60+selectedTimeFrom.getMinutes())- pauseTimeVal;
+                var descriptionText  = $('#description').val();
+                     
                 for (var d = selectedDateFrom; d <= selectedDateTo; d.setDate(d.getDate() + 1)) {
                     var thisDayIsAvailable = true;
                     if ($("#skipFreeDays").prop('checked')) {
@@ -176,14 +194,16 @@
                             }
                         })
                     }
-                    if(thisDayIsAvailable){
+                if(thisDayIsAvailable){
                         var MyEvent ={
                         Id: i,
                         Subject: '+',
                         StartTime: new Date(selectedDateFrom.getFullYear(), selectedDateFrom.getMonth(), selectedDateFrom.getDate(), selectedTimeFrom.getHours(), selectedTimeFrom.getMinutes()),
                         EndTime: new Date(selectedDateFrom.getFullYear(), selectedDateFrom.getMonth(), selectedDateFrom.getDate(), selectedTimeTo.getHours(), selectedTimeTo.getMinutes()),
                         IsAllDay: false,
-                        EmployeeId: selectedEmployeeId
+                        EmployeeId: selectedEmployeeId,
+                        Description: descriptionText,
+                        WorkTimeLength: time_convert(workTimeValue)
                         }
                         i++;
                         Events.push(MyEvent)
@@ -192,7 +212,44 @@
                   scheduleObj.addEvent(Events);
               });
         });
+
+
+        // Restricts input for each element in the set of matched elements to the given inputFilter.
+        (function($) {
+          $.fn.inputFilter = function(inputFilter) {
+            return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
+              if (inputFilter(this.value)) {
+                this.oldValue = this.value;
+                this.oldSelectionStart = this.selectionStart;
+                this.oldSelectionEnd = this.selectionEnd;
+              } else if (this.hasOwnProperty("oldValue")) {
+                this.value = this.oldValue;
+                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+              } else {
+                this.value = "";
+              }
+            });
+          };
+        }(jQuery));
+
+
+        // Install input filters.
+        $("#pauseTime").inputFilter(function(value) {
+          return /^-?\d*$/.test(value); });
+        
+        function time_convert(num)
+         { 
+          var hours = Math.floor(num / 60);  
+          var minutes = num % 60;
+          if (minutes<10){
+            minutes='0'+minutes;  
+          }
+          return hours + ":" + minutes;         
+        }
+
+
     </script>
+
 }
 @section Head {
     <!-- Essential JS 2 Scheduler's dependent material theme -->

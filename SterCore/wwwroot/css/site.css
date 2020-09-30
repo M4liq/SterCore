@@ -103,7 +103,7 @@ textarea {
     color: white;
 }
 .e-schedule .e-timeline-view .e-appointment, .e-schedule .e-timeline-month-view .e-appointment-wrapper .e-appointment {
-    height: 60px;
+    height: 80px;
     text-align: center;
     border-radius: 5px;
 }

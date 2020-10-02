@@ -85,7 +85,7 @@
 
         var selectedDateFrom = new Date('@String.Format("{0}/{1}/{2}", Model.DateFrom.Month, Model.DateFrom.Day, Model.DateFrom.Year)');
         var selectedDateTo = new Date('@String.Format("{0}/{1}/{2}",Model.DateTo.Month,Model.DateTo.Day,Model.DateTo.Year)');
-        var selectedEmployeeId;
+        var selectedEmployeeId="";
         var selectedTimeTo = new Date(2020, 1, 1, 16, 0);
         var selectedTimeFrom = new Date(2020, 1, 1, 8, 0);
         var dataSources = [];
@@ -181,13 +181,17 @@
             $("#addEventsToSchedule").click(function () {
                 var Events = [];
                 var pauseTimeVal = 0;
+                var success = true;
                 if($('#pauseTime').val()){
                     pauseTimeVal = parseInt($('#pauseTime').val(), 10);
                 }
                 var workTimeValue = (selectedTimeTo.getHours()*60+selectedTimeTo.getMinutes())-(selectedTimeFrom.getHours()*60+selectedTimeFrom.getMinutes())- pauseTimeVal;
                 var descriptionText  = $('#description').val();
-                     
-                for (var d = selectedDateFrom; d <= selectedDateTo; d.setDate(d.getDate() + 1)) {
+                if (selectedEmployeeId == "" ) {
+                    success = false;
+                }
+                if (success) {
+                    for (var d = selectedDateFrom; d <= selectedDateTo; d.setDate(d.getDate() + 1)) {
                     var thisDayIsAvailable = true;
                     if ($("#skipFreeDays").prop('checked')) {
                         unAvailableDates.forEach(function(unAvailableDay){
@@ -196,22 +200,24 @@
                             }
                         })
                     }
-                if(thisDayIsAvailable){
-                        var MyEvent ={
-                        Id: i,
-                        Subject: '+',
-                        StartTime: new Date(selectedDateFrom.getFullYear(), selectedDateFrom.getMonth(), selectedDateFrom.getDate(), selectedTimeFrom.getHours(), selectedTimeFrom.getMinutes()),
-                        EndTime: new Date(selectedDateFrom.getFullYear(), selectedDateFrom.getMonth(), selectedDateFrom.getDate(), selectedTimeTo.getHours(), selectedTimeTo.getMinutes()),
-                        IsAllDay: false,
-                        EmployeeId: selectedEmployeeId,
-                        Description: descriptionText,
-                        WorkTimeLength: time_convert(workTimeValue)
-                        }
-                        i++;
-                        Events.push(MyEvent)
-                    } 
+                    if(thisDayIsAvailable){
+                            var MyEvent ={
+                            Id: i,
+                            Subject: '+',
+                            StartTime: new Date(selectedDateFrom.getFullYear(), selectedDateFrom.getMonth(), selectedDateFrom.getDate(), selectedTimeFrom.getHours(), selectedTimeFrom.getMinutes()),
+                            EndTime: new Date(selectedDateFrom.getFullYear(), selectedDateFrom.getMonth(), selectedDateFrom.getDate(), selectedTimeTo.getHours(), selectedTimeTo.getMinutes()),
+                            IsAllDay: false,
+                            EmployeeId: selectedEmployeeId,
+                            Description: descriptionText,
+                            WorkTimeLength: time_convert(workTimeValue)
+                            }
+                            i++;
+                            Events.push(MyEvent)
+                        } 
+                    }
+                    scheduleObj.addEvent(Events);
                 }
-                  scheduleObj.addEvent(Events);
+                
               });
         });
 

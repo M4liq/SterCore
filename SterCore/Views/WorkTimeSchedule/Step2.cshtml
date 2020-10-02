@@ -14,6 +14,12 @@
 
             <div id="add"></div>
             <div class="col-md-12">
+                <div class="d-inline-block ">
+                    <select name="actions" id="actions">
+                        <option value="delete">Usuń</option>
+                        <option value="add">Dodaj</option>
+                    </select>
+                </div>
                 <p class="d-inline-block">od:</p>
                 <div class="d-inline-block ">
                     <input id="timeFrom" />
@@ -47,7 +53,7 @@
                     @Html.DropDownListFor(q => q.EmployeeIds, new SelectList(Model.Employees, "Value", "Text"), "Wybierz pracownika", new { @class = "form-control", id = "employeeDropDownList" })
                 </div>
                 <div class="d-inline-block ">
-                    <button class="btn btn-success" type="button" id="addEventsToSchedule">Dodaj</button>
+                    <button class="btn btn-success" type="button" id="execute">Wykonaj</button>
                 </div>
             </div>
             <div id="Schedule"></div>
@@ -281,50 +287,73 @@
             $("#employeeDropDownList").change(function () {
                 selectedEmployeeId = this.value;
             });
-            $("#addEventsToSchedule").click(function () {
-                var Events = [];
-                var pauseTimeVal = 0;
-                var success = true;
-                if($('#pauseTime').val()){
-                    pauseTimeVal = parseInt($('#pauseTime').val(), 10);
-                }
-                var workTimeValue = (selectedTimeTo.getHours()*60+selectedTimeTo.getMinutes())-(selectedTimeFrom.getHours()*60+selectedTimeFrom.getMinutes())- pauseTimeVal;
-                var descriptionText  = $('#description').val();
-                if (selectedEmployeeId == "" ) {
-                    success = false;
-                }
-                if (selectedDateFrom.getTime() >selectedDateTo.getTime() ) {
-                    success = false;
-                }
-                if (success) {
-                    for (var d = selectedDateFrom; d <= selectedDateTo; d.setDate(d.getDate() + 1)) {
-                    var thisDayIsAvailable = true;
-                    if ($("#skipFreeDays").prop('checked')) {
-                        unAvailableDates.forEach(function(unAvailableDay){
-                            if (d.getTime() === unAvailableDay.getTime()) {
-                                thisDayIsAvailable = false;
+            $("#execute").click(function () {
+                if ($("#actions").val() == 'add') {
+                    var Events = [];
+                    var pauseTimeVal = 0;
+                    var success = true;
+                    if ($('#pauseTime').val()) {
+                        pauseTimeVal = parseInt($('#pauseTime').val(), 10);
+                    }
+                    var workTimeValue = (selectedTimeTo.getHours() * 60 + selectedTimeTo.getMinutes()) - (selectedTimeFrom.getHours() * 60 + selectedTimeFrom.getMinutes()) - pauseTimeVal;
+                    var descriptionText = $('#description').val();
+                    if (selectedEmployeeId == "") {
+                        success = false;
+                    }
+                    if (selectedDateFrom.getTime() > selectedDateTo.getTime()) {
+                        success = false;
+                    }
+                    if (success) {
+                        var d = new Date(selectedDateFrom.getTime());
+                        for ( d; d <= selectedDateTo; d.setDate(d.getDate() + 1)) {
+                            var thisDayIsAvailable = true;
+                            if ($("#skipFreeDays").prop('checked')) {
+                                unAvailableDates.forEach(function (unAvailableDay) {
+                                    if (d.getTime() === unAvailableDay.getTime()) {
+                                        thisDayIsAvailable = false;
+                                    }
+                                })
                             }
+                            if (thisDayIsAvailable) {
+                                var MyEvent = {
+                                    Id: i,
+                                    Subject: '+',
+                                    StartTime: new Date(d.getFullYear(), d.getMonth(), d.getDate(), selectedTimeFrom.getHours(), selectedTimeFrom.getMinutes()),
+                                    EndTime: new Date(d.getFullYear(), d.getMonth(), d.getDate(), selectedTimeTo.getHours(), selectedTimeTo.getMinutes()),
+                                    IsAllDay: false,
+                                    EmployeeId: selectedEmployeeId,
+                                    Description: descriptionText,
+                                    PauseTimeLength: pauseTimeVal,
+                                    WorkTimeLength: time_convert(workTimeValue)
+                                }
+                                i++;
+                                Events.push(MyEvent)
+                                scheduleObj.addEvent(MyEvent)
+                            }
+                        }
+                    }
+                }
+                else if ($("#actions").val() == 'delete') {
+                    var AllEvents = scheduleObj.getEvents();
+                    var EventToDelete;
+                    var d = new Date(selectedDateFrom.getTime());
+                    for ( d; d <= selectedDateTo; d.setDate(d.getDate() + 1)) {
+                        AllEvents.forEach(function (event) {
+                            var tempHour = event.StartTime.getHours();
+                            var tempMinutes = event.StartTime.getMinutes();
+                            event.StartTime.setHours(0);
+                            event.StartTime.setMinutes(0);
+                            if (d.getTime() == event.StartTime.getTime()) {
+                                EventToDelete = event;
+                            }
+                            event.StartTime.setHours(tempHour);
+                            event.StartTime.setMinutes(tempMinutes);
                         })
+                        if (typeof EventToDelete !== 'undefined') {
+                            scheduleObj.deleteEvent(EventToDelete);
+                        }
                     }
-                    if(thisDayIsAvailable){
-                            var MyEvent ={
-                            Id: i,
-                            Subject: '+',
-                            StartTime: new Date(selectedDateFrom.getFullYear(), selectedDateFrom.getMonth(), selectedDateFrom.getDate(), selectedTimeFrom.getHours(), selectedTimeFrom.getMinutes()),
-                            EndTime: new Date(selectedDateFrom.getFullYear(), selectedDateFrom.getMonth(), selectedDateFrom.getDate(), selectedTimeTo.getHours(), selectedTimeTo.getMinutes()),
-                            IsAllDay: false,
-                            EmployeeId: selectedEmployeeId,
-                            Description: descriptionText,
-                            PauseTimeLength: pauseTimeVal,
-                            WorkTimeLength: time_convert(workTimeValue)
-                            }
-                            i++;
-                            Events.push(MyEvent)
-                        } 
-                    }
-                    scheduleObj.addEvent(Events);
                 }
-                
               });
         });
 

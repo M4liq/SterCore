@@ -159,11 +159,15 @@
                 if (args.type === 'Editor') {
                     var startElement = args.element.querySelector('#StartTime');
                     if (!startElement.classList.contains('e-datetimepicker')) {
-                        new ej.calendars.DateTimePicker({ value: new Date(startElement.value) || new Date() }, startElement);
+                        var startDate = new Date(startElement.value);
+                        startDate.setHours(8);
+                        new ej.calendars.DateTimePicker({ value: startDate || new Date() }, startElement);
                     }
                     var endElement = args.element.querySelector('#EndTime');
                     if (!endElement.classList.contains('e-datetimepicker')) {
-                        new ej.calendars.DateTimePicker({ value: new Date(endElement.value) || new Date() }, endElement);
+                        var endDate = new Date(endElement.value);
+                        endDate.setHours(16);
+                        new ej.calendars.DateTimePicker({ value: endDate || new Date() }, endElement);
                     }
                     var processElement = args.element.querySelector('#EmployeeId');
                     if (!processElement.classList.contains('e-multiselect')) {
@@ -189,14 +193,16 @@
                                 pauseTimeVal = parseInt(data.PauseTimeLength, 10);
                             }
                             data.WorkTimeLength = time_convert(args.data[0].EndTime.getHours() * 60 + args.data[0].EndTime.getMinutes() - args.data[0].StartTime.getHours() * 60 + args.data[0].StartTime.getMinutes() - pauseTimeVal);
-
-                            console.log(args.data[0]);
-                            console.log(args.data);
-
                         } else if (args.requestType === 'eventChange') {
                             data = args.data;
+                            var pauseTimeVal = 0;
+                            if (data.PauseTimeLength) {
+                                pauseTimeVal = parseInt(data.PauseTimeLength, 10);
+                            }
+                            data.WorkTimeLength = time_convert(data.EndTime.getHours() * 60 + data.EndTime.getMinutes() - data.StartTime.getHours() * 60 + data.StartTime.getMinutes() - pauseTimeVal);
+
                         }
-                        if (!scheduleObj.isSlotAvailable(data.StartTime, data.EndTime)) {
+                        if (!scheduleObj.isSlotAvailable(data)) {
                             args.cancel = true;
                         }
                     }

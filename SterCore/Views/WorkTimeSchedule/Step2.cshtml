@@ -105,7 +105,9 @@
             views: ['TimelineMonth'],
             height: '550px',
             currentView: 'TimelineMonth',
+            showQuickInfo: false,
             allowResizing: false,
+            selectedDate: new Date(@String.Format("{0}, {1}, {2}",Model.DateFrom.Year,Model.DateFrom.Month-1,Model.DateFrom.Day)),
             minDate: "@String.Format("{0}, {1}, {2}",Model.DateFrom.Year,Model.DateFrom.Month,Model.DateFrom.Day)",
             maxDate: "@String.Format("{0}, {1}, {2}",Model.DateTo.Year,Model.DateTo.Month,Model.DateTo.Day)",
             group: {

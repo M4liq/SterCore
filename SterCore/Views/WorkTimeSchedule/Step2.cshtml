@@ -230,6 +230,7 @@
             }],
             eventSettings: {
                 template: '#apptemplate',
+
             }
         });
         scheduleObj.appendTo('#Schedule');
@@ -289,7 +290,7 @@
             });
             $("#execute").click(function () {
                 if ($("#actions").val() == 'add') {
-                    var Events = [];
+                    
                     var pauseTimeVal = 0;
                     var success = true;
                     if ($('#pauseTime').val()) {
@@ -327,7 +328,7 @@
                                     WorkTimeLength: time_convert(workTimeValue)
                                 }
                                 i++;
-                                Events.push(MyEvent)
+                                
                                 scheduleObj.addEvent(MyEvent)
                             }
                         }

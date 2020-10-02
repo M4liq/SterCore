@@ -77,6 +77,53 @@
         </div>
     </script>
 
+    <script id="EventEditorTemplate" type="text/x-template">
+        <table class="custom-event-editor" width="100%" cellpadding="5">
+            <tbody>
+                <tr>
+                    <td class="e-textlabel">Tytuł</td>
+                    <td colspan="4">
+                        <input id="Subject" class="e-field e-input" type="text" value="+" name="Subject" style="width: 100%" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="e-textlabel">w tym przerwa (min.):</td>
+                    <td colspan="4">
+                        <input type="text" id="pauseTimeEdit" name="PauseTimeLength" class="e-field" style="width: 100%" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="e-textlabel">Od</td>
+                    <td colspan="4">
+                        <input id="StartTime" class="e-field" type="text" name="StartTime" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="e-textlabel">Do</td>
+                    <td colspan="4">
+                        <input id="EndTime" class="e-field" type="text" name="EndTime" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="e-textlabel">Komentarz</td>
+                    <td colspan="4">
+                        <textarea id="Description" class="e-field e-input" name="Description" rows="3" cols="50"
+                                  style="width: 100%; height: 60px !important; resize: vertical"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="e-textlabel">Pracownik</td>
+                    <td colspan="4">
+                        <input type="text" id="EmployeeId" name="EmployeeId" class="e-field" style="width: 100%" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </script>
+
+
+
+
     <script>
         var instance = new ej.base.Internationalization();
         window.getTimeString = function (value) {
@@ -107,6 +154,56 @@
             currentView: 'TimelineMonth',
             showQuickInfo: false,
             allowResizing: false,
+            editorTemplate: '#EventEditorTemplate',
+              popupOpen: function (args) {
+                if (args.type === 'Editor') {
+                    var startElement = args.element.querySelector('#StartTime');
+                    if (!startElement.classList.contains('e-datetimepicker')) {
+                        new ej.calendars.DateTimePicker({ value: new Date(startElement.value) || new Date() }, startElement);
+                    }
+                    var endElement = args.element.querySelector('#EndTime');
+                    if (!endElement.classList.contains('e-datetimepicker')) {
+                        new ej.calendars.DateTimePicker({ value: new Date(endElement.value) || new Date() }, endElement);
+                    }
+                    var processElement = args.element.querySelector('#EmployeeId');
+                    if (!processElement.classList.contains('e-multiselect')) {
+                    var multiSelectObject = new ej.dropdowns.MultiSelect({
+                        placeholder: 'Wybierz pracownika',
+                        dataSource: dataSources,
+                        fields: { text: 'EmployeeText', value: 'Id' },
+                        value: (args.data.EmployeeId instanceof Array) ? args.data.EmployeeId : [args.data.EmployeeId]
+                    });
+                    multiSelectObject.appendTo(processElement);
+                    }
+
+                }
+            },
+
+                actionBegin: function (args) {
+                    if (args.requestType === 'eventCreate' || args.requestType === 'eventChange') {
+                        var data;
+                        if (args.requestType === 'eventCreate') {
+                            data = args.data[0];
+                            var pauseTimeVal = 0;
+                            if (data.PauseTimeLength) {
+                                pauseTimeVal = parseInt(data.PauseTimeLength, 10);
+                            }
+                            data.WorkTimeLength = time_convert(args.data[0].EndTime.getHours() * 60 + args.data[0].EndTime.getMinutes() - args.data[0].StartTime.getHours() * 60 + args.data[0].StartTime.getMinutes() - pauseTimeVal);
+
+                            console.log(args.data[0]);
+                            console.log(args.data);
+
+                        } else if (args.requestType === 'eventChange') {
+                            data = args.data;
+                        }
+                        if (!scheduleObj.isSlotAvailable(data.StartTime, data.EndTime)) {
+                            args.cancel = true;
+                        }
+                    }
+                },
+
+
+
             selectedDate: new Date(@String.Format("{0}, {1}, {2}",Model.DateFrom.Year,Model.DateFrom.Month-1,Model.DateFrom.Day)),
             minDate: "@String.Format("{0}, {1}, {2}",Model.DateFrom.Year,Model.DateFrom.Month,Model.DateFrom.Day)",
             maxDate: "@String.Format("{0}, {1}, {2}",Model.DateTo.Year,Model.DateTo.Month,Model.DateTo.Day)",
@@ -120,7 +217,7 @@
                 textField: 'EmployeeText', idField: 'Id', colorField: 'EmployeeColor'
             }],
             eventSettings: {
-            template: '#apptemplate'
+                template: '#apptemplate',
             }
         });
         scheduleObj.appendTo('#Schedule');
@@ -212,6 +309,7 @@
                             IsAllDay: false,
                             EmployeeId: selectedEmployeeId,
                             Description: descriptionText,
+                            PauseTimeLength: pauseTimeVal,
                             WorkTimeLength: time_convert(workTimeValue)
                             }
                             i++;
@@ -246,6 +344,20 @@
 
         // Install input filters.
         $("#pauseTime").inputFilter(function(value) {
+          return /^-?\d*$/.test(value); });
+        
+        function time_convert(num)
+         { 
+          var hours = Math.floor(num / 60);  
+          var minutes = num % 60;
+          if (minutes<10){
+            minutes='0'+minutes;  
+          }
+          return hours + ":" + minutes;         
+        }
+
+         // Install input filters.
+        $("#pauseTimeEdit").inputFilter(function(value) {
           return /^-?\d*$/.test(value); });
         
         function time_convert(num)

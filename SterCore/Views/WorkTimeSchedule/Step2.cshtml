@@ -192,7 +192,6 @@
                 }
                 if (selectedDateFrom.getTime() >selectedDateTo.getTime() ) {
                     success = false;
-                    console.log("no success")
                 }
                 if (success) {
                     for (var d = selectedDateFrom; d <= selectedDateTo; d.setDate(d.getDate() + 1)) {

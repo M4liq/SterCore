@@ -110,3 +110,9 @@ textarea {
 .e-schedule .e-timeline-view .e-appointment .e-time, .e-schedule .e-timeline-month-view .e-appointment .e-time{
     white-space:initial;
 }
+.e-popup .e-calendar .e-footer-container {
+display:none;
+}
+.e-schedule .e-schedule-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn .e-tbar-btn-text{
+    display:none;
+}

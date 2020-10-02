@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using leave_management.Data
+@using leave_management.Helpers.Enums
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Components 
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
@@ -12,8 +13,6 @@
 
 }
 
-
-
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -25,7 +24,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>@ViewData["Title"] - Core Leave Management</title>
+    <title>@ViewData["Title"] - System Stercore</title>
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="~/css/fa-all.min.css">
@@ -252,30 +251,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <p>Moje Urlopy</p>
                                             </a>
                                         </li>
-                                        @if (User.IsInRole("Administrator") || User.IsInRole("Agent") || User.IsInRole("Employer"))
+                                        @if (User.IsInRole(RoleEnum.Administrator) || 
+                                             User.IsInRole(RoleEnum.Agent) || 
+                                             User.IsInRole(RoleEnum.Employer))
                                         {
-                                        <li class="nav-item">
-                                            <a asp-controller="LeaveTypes" asp-action="Index" class="nav-link">
-                                                <i class="fas fa-list nav-icon"></i>
-                                                <p>Typy Urlopów</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a asp-controller="LeaveAllocation" asp-action="Index" class="nav-link">
-                                                <i class="fas fa-user-plus nav-icon"></i>
-                                                <p>Przydziały urlopów</p>
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a asp-controller="LeaveRequest" asp-action="Index" class="nav-link">
-                                                <i class="fas fa-cogs nav-icon"></i>
-                                                <p>Wnioski o urlop</p>
-                                            </a>
-                                        </li>
+                                            <li class="nav-item">
+                                                <a asp-controller="LeaveRequest" asp-action="Index" class="nav-link">
+                                                    <i class="fas fa-cogs nav-icon"></i>
+                                                    <p>Wnioski o urlop</p>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a asp-controller="ExplicitLeaveType" asp-action="Index" class="nav-link">
+                                                    <i class="fas fa-cogs nav-icon"></i>
+                                                    <p>Wnioski o urlop</p>
+                                                </a>
+                                            </li>
                                         }
                                     </ul>
                                 </li>
-                            if (User.IsInRole("Administrator") || User.IsInRole("Agent") || User.IsInRole("Employer"))
+                            if (User.IsInRole(RoleEnum.Administrator) || 
+                                User.IsInRole(RoleEnum.Agent) || 
+                                User.IsInRole(RoleEnum.Employer))
                             {
                     <li class="nav-item has-treeview">
                         <a id="organization" href="#" class="nav-link active drop-state">
@@ -304,7 +301,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </li>
                             }
 
-                            if (User.IsInRole("Administrator") || User.IsInRole("Agent") || User.IsInRole("Employer"))
+                            if (User.IsInRole(RoleEnum.Administrator) ||
+                                User.IsInRole(RoleEnum.Agent) || 
+                                User.IsInRole(RoleEnum.Employer))
                             {
                                 <li class="nav-item has-treeview">
                                     <a id="CardIndex" href="#" class="nav-link active drop-state">
@@ -346,7 +345,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <p>Kalendarz</p>
                                             </a>
                                         </li>
-                                        @if (User.IsInRole("Administrator") || User.IsInRole("Agent") || User.IsInRole("Employer"))
+                                        @if (User.IsInRole(RoleEnum.Administrator) || 
+                                             User.IsInRole(RoleEnum.Agent) || 
+                                             User.IsInRole(RoleEnum.Employer))
                                         {
                                             <li class="nav-item">
                                                 <a asp-controller="Competence" asp-action="Index" class="nav-link">
@@ -376,7 +377,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </ul>
                                 </li>
                             }
-                            if (User.IsInRole("Administrator") || User.IsInRole("Agent"))
+                            if (User.IsInRole(RoleEnum.Administrator) || User.IsInRole(RoleEnum.Agent))
                             {
                                     <li  class="nav-item has-treeview">
                                         <a id="administration" href="#" class="nav-link active drop-state">
@@ -395,7 +396,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             </li>
                                         </ul>
                                     </li>
-                                }
+                            }
+                            if (User.IsInRole(RoleEnum.Administrator))
+                            {
+                                <li  class="nav-item has-treeview">
+                                    <a id="administration" href="#" class="nav-link active drop-state">
+                                        <i class="fas fa-tools nav-icon"></i>
+                                        <p>
+                                            Ustawienia Systemu
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a asp-controller="LeaveTypes" asp-action="Index" class="nav-link">
+                                                <i class="fas fa-business-time"></i>
+                                                <p>Typy urlopów</p>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            }
                         }
                     </ul>
                 </nav>

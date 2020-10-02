@@ -9,14 +9,12 @@ using System.Threading.Tasks;
 
 namespace leave_management.Data
 {
-    public class LeaveType  : IApplicationDataView
+    public class CommonLeaveTypes 
     {   
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public int DefaultDays { get; set; }
+        public int DefaultLimit { get; set; }
         public DateTime DateCreated { get; set; }
-        public string OrganizationToken { get; set; }
-        public string DepartmentToken { get; set; }
     }
 }

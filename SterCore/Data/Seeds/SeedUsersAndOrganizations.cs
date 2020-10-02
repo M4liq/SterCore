@@ -7,7 +7,10 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using leave_management.Helpers.Enums;
+using leave_management.Services.LeaveHelper.Contracts;
 
 namespace leave_management.Data.Seeds
 {
@@ -34,13 +37,13 @@ namespace leave_management.Data.Seeds
             _authorizedOrganizationRepository = authorizedOrganizationRepository;
             _authorizedDepartmentRepository = authorizedDepartmentRepository;
             _departmentRepository = departmentRepository;
-
         }
+
         public void Seed()
         {
-            if (_userManager.FindByNameAsync("admin@stercore.pl").Result == null)
-            {
-
+            if (_userManager.FindByNameAsync("admin@stercore.pl").Result != null)
+                return;
+            
                 var organizationToken = _organizationManager.GenerateToken();
 
                 var initalAuthorizedOrganization = new AuthorizedOrganizations
@@ -63,7 +66,6 @@ namespace leave_management.Data.Seeds
                 };
 
                     var successOrg = _organizationRepository.Create(initalOrganization, organizationToken).Result;
-
 
                 var departmentToken = _organizationManager.GenerateToken();
 
@@ -90,23 +92,23 @@ namespace leave_management.Data.Seeds
 
                     var successDep = _departmentRepository.Create(department, departmentToken).Result;
 
-
                     var user = new Employee
                     {
                         UserName = "admin@stercore.pl",
                         Email = "admin@stercore.pl",
                         DepartmentId = department.Id,
                         ChangedPassword = true,
-                        InitialAdministrator = true
+                        InitialAdministrator = true,
+                        DepartmentToken = departmentToken,
+                        OrganizationToken = organizationToken
                     };
-                    
 
                     if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
                     {
                         var result = _userManager.CreateAsync(user, Environment.GetEnvironmentVariable("ADMINISTRATOR_PASSWORD")).Result;
                         if (result.Succeeded)
                         {
-                            _userManager.AddToRoleAsync(user, "Administrator").Wait();
+                            _userManager.AddToRoleAsync(user, RoleEnum.Administrator).Wait();
                         }
                     }
 
@@ -115,13 +117,10 @@ namespace leave_management.Data.Seeds
                         var result = _userManager.CreateAsync(user, "P@ssword1").Result;
                         if (result.Succeeded)
                         {
-                            _userManager.AddToRoleAsync(user, "Administrator").Wait();
+                            _userManager.AddToRoleAsync(user, RoleEnum.Administrator).Wait();
                         }
                     }
-
-
                 }
-            }
         }
     }
 }

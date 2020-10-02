@@ -18,12 +18,13 @@ namespace leave_management.Data
 
         public DbSet<Employee> Employees { get; set; }
         public DbSet<LeaveRequests> LeaveRequests { get; set; }
-        public DbSet<LeaveType> LeaveTypes { get; set; }
+        public DbSet<CommonLeaveTypes> CommonLeaveTypes { get; set; }
+        public DbSet<ExplicitLeaveTypes> ExplicitLeaveTypes { get; set; }
         public DbSet<LeaveAllocations> LeaveAllocations { get; set; }
         public DbSet<Organization> Organization { get; set; }
         public DbSet<Department> Department { get; set; }
         public DbSet<BusinessTravel> BusinessTravel { get; set; }
-        public DbSet<BillingBusinessTravel> billingBusinessTravels { get; set; }
+        public DbSet<BillingBusinessTravel> BillingBusinessTravels { get; set; }
         public DbSet<TypeOfMedicalCheckUp> TypeOfMedicalCheckUps { get; set; }
         public DbSet<MedicalCheckUp> MedicalCheckUps { get; set; }
         public DbSet<Document> Documents { get; set; }

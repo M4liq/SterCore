@@ -22,14 +22,14 @@ namespace leave_management.Repository
 
         public async Task<bool> CheckAllocation(int leavetypeid, string employeeid)
         {
-            
             var period = DateTime.Now.Year;
 
             //ORI filtering in find all 
             var leaveAllocations =  await FindAll();
 
             return leaveAllocations
-                .Where(q => q.EmployeeId == employeeid && q.LeaveTypeId == leavetypeid && q.Period == period).Any();
+                .Where(q => q.EmployeeId == employeeid && q.LeaveTypeId == leavetypeid && q.Period == period)
+                .Any();
         }
 
         public async Task<bool> Create(LeaveAllocations entity)

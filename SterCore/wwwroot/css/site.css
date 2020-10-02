@@ -113,6 +113,7 @@ textarea {
 .e-popup .e-calendar .e-footer-container {
 display:none;
 }
-.e-schedule .e-schedule-toolbar .e-toolbar-items .e-toolbar-item .e-tbar-btn .e-tbar-btn-text{
-    display:none;
+.e-schedule .e-schedule-toolbar .e-toolbar-items.e-tbar-pos .e-toolbar-right {
+    display: none;
 }
+

@@ -230,7 +230,9 @@
             }],
             eventSettings: {
                 template: '#apptemplate',
-
+                fields: {
+                    subject: { name: 'Subject', title: 'Tytul', default: '+' }
+                }
             }
         });
         scheduleObj.appendTo('#Schedule');

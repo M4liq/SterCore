@@ -77,8 +77,7 @@
     <script id="apptemplate" type="text/x-template">
         <div class="template-wrap" style="background:${PrimaryColor}">
             <div class="subject" style="background:${PrimaryColor}">${Subject}</div>
-            <div class="e-time" style="background:${PrimaryColor}">${getTimeString(StartTime)} - ${getTimeString(EndTime)}</div>
-            
+            <div class="e-time" style="background:${PrimaryColor}">${ShiftStartTime} - ${ShiftEndTime}</div>
             <div class="workTime" style="background:${PrimaryColor}">(${WorkTimeLength})</div>
         </div>
     </script>
@@ -86,28 +85,42 @@
     <script id="EventEditorTemplate" type="text/x-template">
         <table class="custom-event-editor" width="100%" cellpadding="5">
             <tbody>
-                <tr>
+                <tr class="none">
                     <td class="e-textlabel">Tytuł</td>
                     <td colspan="4">
                         <input id="Subject" class="e-field e-input" type="text" value="+" name="Subject" style="width: 100%" />
                     </td>
                 </tr>
-                <tr>
-                    <td class="e-textlabel">w tym przerwa (min.):</td>
-                    <td colspan="4">
-                        <input type="text" id="pauseTimeEdit" name="PauseTimeLength" class="e-field" style="width: 100%" />
-                    </td>
-                </tr>
-                <tr>
+
+                <tr class="none">
                     <td class="e-textlabel">Od</td>
                     <td colspan="4">
                         <input id="StartTime" class="e-field" type="text" name="StartTime" />
                     </td>
                 </tr>
-                <tr>
+                <tr class="none">
                     <td class="e-textlabel">Do</td>
                     <td colspan="4">
                         <input id="EndTime" class="e-field" type="text" name="EndTime" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="e-textlabel">Godzina od</td>
+                    <td colspan="4">
+                        <input id="ShiftStartTime" class="e-field" type="text" name="ShiftStartTime" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="e-textlabel">Godzina do</td>
+                    <td colspan="4">
+                        <input id="ShiftEndTime" class="e-field" type="text" name="ShiftEndTime" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="e-textlabel">w tym przerwa (min.):</td>
+                    <td colspan="4">
+                        <input type="text" id="pauseTimeEdit" name="PauseTimeLength" class="e-field" style="width: 60%" />
                     </td>
                 </tr>
                 <tr>
@@ -162,7 +175,28 @@
             allowResizing: false,
             editorTemplate: '#EventEditorTemplate',
               popupOpen: function (args) {
-                if (args.type === 'Editor') {
+                  if (args.type === 'Editor') {
+                      var shiftTime= args.element.querySelector('#ShiftStartTime');
+                      if (!shiftTime.classList.contains('e-timepicker')) {
+                           var startTime = shiftTime.value;
+                          new ej.calendars.TimePicker({
+                              value: startTime || '8:00',
+                              step: 15,
+                              format: 'HH:mm'
+                          }, shiftTime);
+                            
+                      }
+                      shiftTime= args.element.querySelector('#ShiftEndTime');
+                      if (!shiftTime.classList.contains('e-timepicker')) {
+                           var endTime = shiftTime.value;
+                          new ej.calendars.TimePicker({
+                              value: endTime || '16:00',
+                              step: 15,
+                              format: 'HH:mm'
+                          }, shiftTime);
+                            
+                      }
+
                     var startElement = args.element.querySelector('#StartTime');
                     if (!startElement.classList.contains('e-datetimepicker')) {
                         var startDate = new Date(startElement.value);
@@ -198,14 +232,17 @@
                             if (data.PauseTimeLength) {
                                 pauseTimeVal = parseInt(data.PauseTimeLength, 10);
                             }
-                            data.WorkTimeLength = time_convert(args.data[0].EndTime.getHours() * 60 + args.data[0].EndTime.getMinutes() - args.data[0].StartTime.getHours() * 60 + args.data[0].StartTime.getMinutes() - pauseTimeVal);
+                            let resultTime = getDifferenceWorkTime(data);
+                            data.WorkTimeLength = time_convert(resultTime - pauseTimeVal);
                         } else if (args.requestType === 'eventChange') {
                             data = args.data;
                             var pauseTimeVal = 0;
                             if (data.PauseTimeLength) {
                                 pauseTimeVal = parseInt(data.PauseTimeLength, 10);
                             }
-                            data.WorkTimeLength = time_convert(data.EndTime.getHours() * 60 + data.EndTime.getMinutes() - data.StartTime.getHours() * 60 + data.StartTime.getMinutes() - pauseTimeVal);
+
+                            let resultTime = getDifferenceWorkTime(data);
+                            data.WorkTimeLength = time_convert(resultTime - pauseTimeVal);
 
                         }
                         if (!scheduleObj.isSlotAvailable(data)) {
@@ -323,6 +360,8 @@
                                     Subject: '+',
                                     StartTime: new Date(d.getFullYear(), d.getMonth(), d.getDate(), selectedTimeFrom.getHours(), selectedTimeFrom.getMinutes()),
                                     EndTime: new Date(d.getFullYear(), d.getMonth(), d.getDate(), selectedTimeTo.getHours(), selectedTimeTo.getMinutes()),
+                                    ShiftStartTime: selectedTimeFrom.getHours() + ":" + selectedTimeFrom.getMinutes(),
+                                    ShiftEndTime: selectedTimeTo.getHours() + ":" + selectedTimeTo.getMinutes(),
                                     IsAllDay: false,
                                     EmployeeId: selectedEmployeeId,
                                     Description: descriptionText,
@@ -378,6 +417,28 @@
             });
           };
         }(jQuery));
+
+        function getDifferenceWorkTime(data) {
+            let timeReg = /(\d+)\:(\d+)/;
+            let startTime = data.ShiftStartTime.match(timeReg);
+            let endTime = data.ShiftEndTime.match(timeReg);
+
+            let startTimeDate = new Date();
+            startTimeDate.setHours(startTime[1]);
+            startTimeDate.setMinutes(startTime[2]);
+                            
+            let endTimeDate = new Date();
+            endTimeDate.setHours(endTime[1]);
+            endTimeDate.setMinutes(endTime[2]);
+            let resultTime = 0;
+            if (startTimeDate > endTimeDate) {
+                resultTime = startTimeDate.getHours() * 60 + startTimeDate.getMinutes() - endTimeDate.getHours() * 60 + endTimeDate.getMinutes();
+            }
+            else {
+                 resultTime = endTimeDate.getHours() * 60 + endTimeDate.getMinutes() - startTimeDate.getHours() * 60 - startTimeDate.getMinutes();
+            }
+            return resultTime;
+        }
 
 
         // Install input filters.

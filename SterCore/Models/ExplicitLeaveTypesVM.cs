@@ -6,18 +6,17 @@ using System.Threading.Tasks;
 
 namespace leave_management.Models
 {
-    public class LeaveTypeVM
+    public class ExplicitLeaveTypesVM
     {
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
         [Display(Name = "Domyślna liczba Dni)")]
-        [Range(1,25, ErrorMessage = "Wprowadź popdawną domyslna liczbe dnie")]
-        public int DefaultLimit { get; set; }
-        [Display(Name="Date Created")]
+        [Range(1, 25, ErrorMessage = "Wprowadź popdawną domyslna liczbe dnie")]
+        public int Limit { get; set; }
+        [Display(Name = "Date Created")]
         public DateTime? DateCreated { get; set; }
         public string OrganizationToken { get; set; }
     }
-
 }

@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using leave_management.Helpers.Enums;
 
 namespace leave_management.Services.Components
 {
@@ -81,10 +82,7 @@ namespace leave_management.Services.Components
 
         public bool HasPrivilegeGranted()
         {
-            if (_session.HttpContext.User.IsInRole("Administrator"))
-                return true;
-
-            return false;
+            return _session.HttpContext.User.IsInRole(RoleEnum.Administrator);
         }
 
     }
@@ -185,10 +183,7 @@ namespace leave_management.Services.Components
 
         public bool HasPrivilegeGranted()
         {
-            if (_session.HttpContext.User.IsInRole("Administrator"))
-                return true;
-
-            return false;
+            return _session.HttpContext.User.IsInRole(RoleEnum.Administrator);
         }
 
     }

@@ -17,61 +17,45 @@ namespace leave_management.Repository
     public class LeaveTypeRepository : ILeaveTypeRepository
     {
         private readonly ApplicationDbContext _db;
-        private readonly IOrganizationResourceManager<LeaveType> _organizationManager;
 
-        public LeaveTypeRepository(ApplicationDbContext db, IOrganizationResourceManager<LeaveType> organizationManager)
+        public LeaveTypeRepository(ApplicationDbContext db)
         {
             _db = db;
-            _organizationManager = organizationManager;
         } 
 
-        public async Task<bool> Create(LeaveType entity)
+        public async Task<bool> Create(CommonLeaveTypes entity)
         {
-
-            //ORI separating data beetween organizations
-            _organizationManager.SetAccess(entity);
-
-            await _db.LeaveTypes.AddAsync(entity); 
+            entity.DateCreated = DateTime.Now;
+            await _db.CommonLeaveTypes.AddAsync(entity); 
             return await Save();
         }
 
-        public async Task<bool> Delete(LeaveType entity)
+        public async Task<bool> Delete(CommonLeaveTypes entity)
         {
-            //ORI checking if data is from appropirate organization scope
-            if (!_organizationManager.VerifyAccess(entity))
-            {
-                throw new UnauthorizedAccessException();
-            }
-
-            _db.LeaveTypes.Remove(entity);
+            _db.CommonLeaveTypes.Remove(entity);
             return await Save();
         }
 
-        public async Task<ICollection<LeaveType>> FindAll()
+        public async Task<ICollection<CommonLeaveTypes>> FindAll()
         {
-            var leaveTypes = _organizationManager.FilterDbSetByView(_db.LeaveTypes);
+            var leaveTypes = _db.CommonLeaveTypes;
             return await leaveTypes.ToListAsync(); 
         }
 
-        public async Task<LeaveType> FindById(int id)
+        public async Task<CommonLeaveTypes> FindById(int id)
         {
-
-            var leaveType = _organizationManager.FilterDbSetByView(_db.LeaveTypes);
-
+            var leaveType = _db.CommonLeaveTypes;
             return await leaveType.FirstOrDefaultAsync(q => q.Id == id); ;
         }
 
-        public ICollection<LeaveType> GetEmployeesByLeaveType(int id)
+        public ICollection<CommonLeaveTypes> GetEmployeesByLeaveType(int id)
         {
             throw new NotImplementedException();
         }
 
         public async Task<bool> Exists(int id)
         {
-            if (await FindById(id) == null)
-                return false;
-            else
-                return true;
+            return await FindById(id) != null;
         }
 
         public async Task<bool> Save()
@@ -80,15 +64,9 @@ namespace leave_management.Repository
             return changes > 0;
         }
 
-        public async Task<bool> Update(LeaveType entity)
+        public async Task<bool> Update(CommonLeaveTypes entity)
         {
-            //ORI checking if data is from appropirate organization scope
-            if (!_organizationManager.VerifyAccess(entity))
-            {
-                throw new UnauthorizedAccessException();
-            }
-
-            _db.LeaveTypes.Update(entity);
+            _db.CommonLeaveTypes.Update(entity);
             return await Save();
         }
 

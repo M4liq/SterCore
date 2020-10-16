@@ -5,31 +5,27 @@ using System.Threading.Tasks;
 using AutoMapper;
 using leave_management.Contracts;
 using leave_management.Data;
-using leave_management.Helpers.Enums;
 using leave_management.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace leave_management.Controllers
 {
-    [Authorize(Roles = RoleEnum.Administrator)]
-    public class LeaveTypesController : Controller
+    public class ExplicitLeaveTypeController : Controller
     {
-        private readonly ILeaveTypeRepository _repo;
+        private readonly IExplicitLeaveTypeRepository _repo;
         private readonly IMapper _mapper;
 
-        public LeaveTypesController(ILeaveTypeRepository repo, IMapper mapper)
+        public ExplicitLeaveTypeController(IExplicitLeaveTypeRepository repo, IMapper mapper)
         {
             _repo = repo;
             _mapper = mapper;
         }
-        
+
         // GET: LeaveTypes
         public async Task<ActionResult> Index()
         {
             var leavetypes = await _repo.FindAll();
-            var model = _mapper.Map<List<CommonLeaveTypes>, List<LeaveTypeVM>>(leavetypes.ToList());
+            var model = _mapper.Map<List<ExplicitLeaveTypes>, List<ExplicitLeaveTypesVM>>(leavetypes.ToList());
             return View(model);
         }
 
@@ -42,7 +38,7 @@ namespace leave_management.Controllers
                 return NotFound();
             }
             var leavetype = await _repo.FindById(id);
-            var model = _mapper.Map<LeaveTypeVM>(leavetype);
+            var model = _mapper.Map<ExplicitLeaveTypesVM>(leavetype);
             return View(model);
         }
 
@@ -55,17 +51,16 @@ namespace leave_management.Controllers
         // POST: LeaveTypes/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(LeaveTypeVM model)
+        public async Task<ActionResult> Create(ExplicitLeaveTypesVM model)
         {
             try
             {
-                // TODO: Add insert logic here
                 if (!ModelState.IsValid)
                 {
                     return View(model);
                 }
 
-                var leaveType = _mapper.Map<CommonLeaveTypes>(model);
+                var leaveType = _mapper.Map<ExplicitLeaveTypes>(model);
                 leaveType.DateCreated = DateTime.Now;
 
                 var isSuccess = await _repo.Create(leaveType);
@@ -93,14 +88,14 @@ namespace leave_management.Controllers
                 return NotFound();
             }
             var leavetype = await _repo.FindById(id);
-            var model = _mapper.Map<LeaveTypeVM>(leavetype);
+            var model = _mapper.Map<ExplicitLeaveTypesVM>(leavetype);
             return View(model);
         }
 
         // POST: LeaveTypes/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(LeaveTypeVM model)
+        public async Task<ActionResult> Edit(ExplicitLeaveTypesVM model)
         {
             try
             {
@@ -108,7 +103,7 @@ namespace leave_management.Controllers
                 {
                     return View(model);
                 }
-                var leaveType = _mapper.Map<CommonLeaveTypes>(model);
+                var leaveType = _mapper.Map<ExplicitLeaveTypes>(model);
                 var isSuccess = await _repo.Update(leaveType);
                 if (!isSuccess)
                 {
@@ -122,7 +117,7 @@ namespace leave_management.Controllers
                 ModelState.AddModelError("", "Coś poszło nie tak skontaktuj się z administratorem...");
                 return View(model);
             }
-}
+        }
 
         // GET: LeaveTypes/Delete/5
         public async Task<ActionResult> Delete(int id)
@@ -143,16 +138,16 @@ namespace leave_management.Controllers
         // POST: LeaveTypes/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id, LeaveTypeVM model)
+        public async Task<ActionResult> Delete(int id, ExplicitLeaveTypesVM model)
         {
             try
             {
-                var leavetype = await _repo.FindById(id);
-                if(leavetype == null)
+                var leaveType = await _repo.FindById(id);
+                if (leaveType == null)
                 {
                     return NotFound();
                 }
-                var isSuccess = await _repo.Delete(leavetype);
+                var isSuccess = await _repo.Delete(leaveType);
                 if (!isSuccess)
                 {
                     return View(model);

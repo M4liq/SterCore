@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using leave_management.Helpers.Enums;
 
 namespace leave_management.Services.DataSeeds
 {
@@ -16,50 +17,49 @@ namespace leave_management.Services.DataSeeds
         }
         public void Seed()
         {
-                if (!_roleManager.RoleExistsAsync("Administrator").Result)
+                if (!_roleManager.RoleExistsAsync(RoleEnum.Administrator).Result)
                 {
                     var role = new IdentityRole
                     {
-                        Name = "Administrator"
+                        Name = RoleEnum.Administrator
                     };
                     var result = _roleManager.CreateAsync(role).Result;
                 }
 
-                if (!_roleManager.RoleExistsAsync("Agent").Result)
+                if (!_roleManager.RoleExistsAsync(RoleEnum.Agent).Result)
                 {
                     var role = new IdentityRole
                     {
-                        Name = "Agent"
+                        Name = RoleEnum.Agent
                     };
                     var result = _roleManager.CreateAsync(role).Result;
                 }
 
-                if (!_roleManager.RoleExistsAsync("Employee").Result)
+                if (!_roleManager.RoleExistsAsync(RoleEnum.Employee).Result)
                 {
                     var role = new IdentityRole
                     {
-                        Name = "Employee"
+                        Name = RoleEnum.Employee
                     };
                     var result = _roleManager.CreateAsync(role).Result;
                 }
-                if (!_roleManager.RoleExistsAsync("Employer").Result)
+                if (!_roleManager.RoleExistsAsync(RoleEnum.Employer).Result)
                 {
                     var role = new IdentityRole
                     {
-                        Name = "Employer"
-                    };
-                    var result = _roleManager.CreateAsync(role).Result;
-                }
-
-                if (!_roleManager.RoleExistsAsync("Manager").Result)
-                {
-                    var role = new IdentityRole
-                    {
-                        Name = "Manager"
+                        Name = RoleEnum.Employer
                     };
                     var result = _roleManager.CreateAsync(role).Result;
                 }
 
+                if (!_roleManager.RoleExistsAsync(RoleEnum.Manager).Result)
+                {
+                    var role = new IdentityRole
+                    {
+                        Name = RoleEnum.Manager
+                    };
+                    var result = _roleManager.CreateAsync(role).Result;
+                }
         }
     }
 }

@@ -11,6 +11,7 @@ using leave_management.Data;
 using leave_management.Repository;
 using leave_management.Services.Components;
 using leave_management.Services.Components.ORI;
+using leave_management.Services.LeaveHelper.Contracts;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -165,9 +166,7 @@ namespace leave_management.Areas.Identity.Pages.Account
                     DepartmentToken = _organizationResourceManager.GetDepartmentToken(),
                     OrganizationToken = organization.OrganizationToken,
                     InitialAdministrator = false
-            };
-
-
+                };
 
                 if (roles.Contains("Agent"))
                 {

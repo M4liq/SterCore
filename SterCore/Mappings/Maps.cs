@@ -12,7 +12,7 @@ namespace leave_management.Mappings
     {
         public Maps()
         {
-            CreateMap<LeaveType, LeaveTypeVM>().ReverseMap(); 
+            CreateMap<CommonLeaveTypes, LeaveTypeVM>().ReverseMap(); 
             CreateMap<LeaveRequests, LeaveRequestVM>().ReverseMap();
             CreateMap<LeaveRequests, AdministratorLeaveRequestVM>().ReverseMap();
             CreateMap<LeaveRequests, CreateLeaveRequestVM>().ReverseMap();
@@ -52,6 +52,7 @@ namespace leave_management.Mappings
             CreateMap<ResourceType, ResourceTypeVM>().ReverseMap();
             CreateMap<Application, ApplicationVM>().ReverseMap();
             CreateMap<Application, CreateApplicationVM>().ReverseMap();
+            CreateMap <ExplicitLeaveTypes, ExplicitLeaveTypesVM>().ReverseMap();
         }
     }
 }

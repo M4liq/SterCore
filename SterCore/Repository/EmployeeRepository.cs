@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using leave_management.Services.LeaveHelper.Contracts;
 
 namespace leave_management.Repository
 {
@@ -16,7 +17,10 @@ namespace leave_management.Repository
         private readonly ApplicationDbContext _db;
         private readonly IOrganizationResourceManager<Employee> _organizationManager;
 
-        public EmployeeRepository(ApplicationDbContext db, IOrganizationResourceManager<Employee> organizationManager)
+        public EmployeeRepository(
+            ApplicationDbContext db, 
+            IOrganizationResourceManager<Employee> organizationManager, 
+            ILeaveHelper leaveHelper)
         {
             _db = db;
             _organizationManager = organizationManager;
@@ -25,7 +29,6 @@ namespace leave_management.Repository
         public async Task<bool> Create(Employee entity)
         {
             _organizationManager.SetAccess(entity);
-
             await _db.Employees.AddAsync(entity);
             return await Save();
         }
@@ -93,7 +96,6 @@ namespace leave_management.Repository
         public async Task<IEnumerable<IdentityRole>> GetAdministratorIdentityRoles()
         {   
             //ORI not included 
-
             var roles = await _db.Roles.ToListAsync();
             return roles;
         }
@@ -101,7 +103,6 @@ namespace leave_management.Repository
         public async Task<IEnumerable<IdentityRole>> GetAgentIdentityRoles()
         {
             //ORI not included 
-
             var roles = await _db.Roles.Where(q => q.Name != "Agent" && q.Name != "Administrator").ToListAsync();
             return roles;
         }

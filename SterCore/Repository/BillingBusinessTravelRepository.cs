@@ -21,7 +21,7 @@ namespace leave_management.Repository
         public async Task<bool> Create(BillingBusinessTravel entity)
         {
             _organizationManager.SetAccess(entity);
-            await _db.billingBusinessTravels.AddAsync(entity);
+            await _db.BillingBusinessTravels.AddAsync(entity);
             return await Save();
         }
 
@@ -33,7 +33,7 @@ namespace leave_management.Repository
                 throw new UnauthorizedAccessException();
             }
 
-            _db.billingBusinessTravels.Remove(entity);
+            _db.BillingBusinessTravels.Remove(entity);
             return await Save();
         }
 
@@ -47,13 +47,13 @@ namespace leave_management.Repository
 
         public async Task<ICollection<BillingBusinessTravel>> FindAll()
         {
-            var BillingBusinessTravel = _organizationManager.FilterDbSetByView(_db.billingBusinessTravels);
+            var BillingBusinessTravel = _organizationManager.FilterDbSetByView(_db.BillingBusinessTravels);
             return await BillingBusinessTravel.Include(q => q.BusinessTravel).ToListAsync(); 
         }
 
         public async Task<BillingBusinessTravel> FindById(int id)
         {
-            var BillingBusinessTravel = _organizationManager.FilterDbSetByView(_db.billingBusinessTravels);
+            var BillingBusinessTravel = _organizationManager.FilterDbSetByView(_db.BillingBusinessTravels);
             return await BillingBusinessTravel.FirstOrDefaultAsync(q => q.Id == id);
         }
 
@@ -75,7 +75,7 @@ namespace leave_management.Repository
             {
                 throw new UnauthorizedAccessException();
             }
-            _db.billingBusinessTravels.Update(entity);
+            _db.BillingBusinessTravels.Update(entity);
             return await Save();
         }
     }

@@ -15,6 +15,7 @@ namespace leave_management.Data
         public int Id { get; set; }
         public string OrganizationToken { get; set; }
         public string DepartmentToken { get; set; }
+        public int SchedulerId { get; set; }
         public int EventId { get; set; }
         public string Subject { get; set; }
         public string Guid { get; set; }

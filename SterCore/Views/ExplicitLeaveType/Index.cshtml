@@ -40,6 +40,9 @@
                 <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Czy napewno chcesz usunąć ten typ urlopu?')"> 
                     <i class="fa fa-trash" aria-hidden="true"></i>
                 </a>
+                <a class="btn btn-outline-success" asp-controller="LeaveAllocation" asp-action="SetExplicitLeave" asp-route-id="@item.Id" asp-route-explicit="@item.IsExplicit">
+                    Allocate To Employees
+                </a>
             </td>
         </tr>
     }

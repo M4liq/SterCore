@@ -25,7 +25,8 @@ namespace leave_management.Data.Seeds
             var unpaidLeave = new ExplicitLeaveTypes()
             {
                 Name = ExplicitLeaveTypesEnum.UnpaidLeave,
-                Limit = 0
+                Limit = 0,
+                AssignedYearly = true
             };
 
             var result = _leaveTypeRepository.Create(unpaidLeave).Result;

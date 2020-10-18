@@ -5,11 +5,14 @@ using System.Threading.Tasks;
 using AutoMapper;
 using leave_management.Contracts;
 using leave_management.Data;
+using leave_management.Helpers.Attributes;
+using leave_management.Helpers.Enums;
 using leave_management.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace leave_management.Controllers
 {
+    [Roles(RoleEnum.Administrator, RoleEnum.Employer, RoleEnum.Agent, RoleEnum.Manager)]
     public class ExplicitLeaveTypeController : Controller
     {
         private readonly IExplicitLeaveTypeRepository _repo;

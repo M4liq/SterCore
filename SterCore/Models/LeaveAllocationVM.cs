@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace leave_management.Models
 {
-    public class LeaveAllocationVM
+    public class CommonLeaveAllocationVM
     {
         public int Id { get; set; }
         [Display(Name = "Number Of Days")]
@@ -19,9 +19,23 @@ namespace leave_management.Models
         public EmployeeVM Employee { get; set; }
         public string EmployeeId { get; set; }
         
-        public LeaveTypeVM LeaveType { get; set; }
-        public int LeaveTypeId { get; set; }
+        public LeaveTypeVM CommonLeaveType { get; set; }
+        public int CommonLeaveTypeId { get; set; }
     }
+
+    public class ExplicitLeaveAllocationVM
+    {
+        public int Id { get; set; }
+        [Display(Name = "Number Of Days")]
+        public int NumberOfDays { get; set; }
+        public DateTime DateCreated { get; set; }
+        public int Period { get; set; }
+        public EmployeeVM Employee { get; set; }
+        public string EmployeeId { get; set; }
+        public ExplicitLeaveTypesVM ExplicitLeaveType { get; set; }
+        public int ExplicitLeaveTypeId { get; set; }
+    }
+
 
     public class CreateLeaveAllocationVM
     {
@@ -46,6 +60,6 @@ namespace leave_management.Models
     {
         public EmployeeVM Employee { get; set; }
         public string EmployeeId { get; set; }
-        public List<LeaveAllocationVM> LeaveAllocations { get; set; }
+        public List<CommonLeaveAllocationVM> LeaveAllocations { get; set; }
     }
 }

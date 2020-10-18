@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DefaultLimit)
+                @Html.DisplayNameFor(model => model.Limit)
             </th>
             <th>Actions</th>
         </tr>
@@ -28,7 +28,7 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DefaultLimit)
+                @Html.DisplayFor(modelItem => item.Limit)
             </td>
             <td>
                 <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id"> 
@@ -40,7 +40,7 @@
                 <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id" onclick="return confirm('Czy napewno chcesz usunąć ten typ urlopu?')"> 
                     <i class="fa fa-trash" aria-hidden="true"></i>
                 </a>
-                <a class="btn btn-outline-success" asp-controller="LeaveAllocation" asp-action="SetLeave" asp-route-id="@item.Id">
+                <a class="btn btn-outline-success" asp-controller="LeaveAllocation" asp-action="SetCommonLeave" asp-route-id="@item.Id">
                     Allocate To Employees
                     </a>
             </td>

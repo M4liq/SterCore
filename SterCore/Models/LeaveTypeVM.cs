@@ -14,10 +14,11 @@ namespace leave_management.Models
         [Required]
         [Display(Name = "Domyślna liczba Dni)")]
         [Range(1,25, ErrorMessage = "Wprowadź popdawną domyslna liczbe dnie")]
-        public int DefaultLimit { get; set; }
-        [Display(Name="Date Created")]
+        public int Limit { get; set; }
+        [Display(Name="Data utworzenia")]
         public DateTime? DateCreated { get; set; }
         public string OrganizationToken { get; set; }
+        public string DepartmentToken { get; set; }
     }
 
 }

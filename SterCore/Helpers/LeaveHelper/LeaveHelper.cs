@@ -7,17 +7,12 @@ using System.Threading.Tasks;
 using leave_management.Contracts;
 using leave_management.Data;
 using leave_management.Helpers.Enums;
+using leave_management.Helpers.LeaveHelper.Contracts;
 
 namespace leave_management.Services.LeaveHelper
 {
     public class LeaveHelper : ILeaveHelper
     {
-        private readonly ILeaveTypeRepository _leaveTypeRepository;
-
-        public LeaveHelper(ILeaveTypeRepository leaveTypeRepository)
-        {
-            _leaveTypeRepository = leaveTypeRepository;
-        }
         public int CountLeaveDays(DateTime from, DateTime to)
         {
             var numberOfDays = 0;
@@ -25,6 +20,13 @@ namespace leave_management.Services.LeaveHelper
                 if (!day.ExtIsHoliday()) numberOfDays++;
 
             return numberOfDays;
+        }
+
+        public int DivideByCycle(ILeaveType leaveType)
+        {
+            return (leaveType.AssignedMonthly) ? leaveType.Limit / 12 :
+                (leaveType.AssignedYearly) ? leaveType.Limit / 4 :
+                leaveType.Limit;
         }
 
         public IEnumerable<DateTime> EachDay(DateTime from, DateTime thru)

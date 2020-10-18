@@ -17,6 +17,8 @@ namespace leave_management.Models
         public int Limit { get; set; }
         [Display(Name = "Date Created")]
         public DateTime? DateCreated { get; set; }
+        public bool IsExplicit { get; set; }
         public string OrganizationToken { get; set; }
+        public string DepartmentToken { get; set; }
     }
 }

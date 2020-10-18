@@ -14,11 +14,11 @@ using System.Threading.Tasks;
 
 namespace leave_management.Repository
 {
-    public class LeaveTypeRepository : ILeaveTypeRepository
+    public class CommonLeaveTypeRepository : ICommonLeaveTypeRepository
     {
         private readonly ApplicationDbContext _db;
 
-        public LeaveTypeRepository(ApplicationDbContext db)
+        public CommonLeaveTypeRepository(ApplicationDbContext db)
         {
             _db = db;
         } 

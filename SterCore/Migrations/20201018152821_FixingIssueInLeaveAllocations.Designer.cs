@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using leave_management.Data;
 
 namespace leave_management.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201018152821_FixingIssueInLeaveAllocations")]
+    partial class FixingIssueInLeaveAllocations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -723,6 +725,9 @@ namespace leave_management.Migrations
                     b.Property<int?>("CommonLeaveTypeId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("CommonTypeId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -746,7 +751,7 @@ namespace leave_management.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommonLeaveTypeId");
+                    b.HasIndex("CommonTypeId");
 
                     b.HasIndex("EmployeeId");
 
@@ -1360,7 +1365,7 @@ namespace leave_management.Migrations
                 {
                     b.HasOne("leave_management.Data.CommonLeaveTypes", "CommonLeaveType")
                         .WithMany()
-                        .HasForeignKey("CommonLeaveTypeId");
+                        .HasForeignKey("CommonTypeId");
 
                     b.HasOne("leave_management.Data.Employee", "Employee")
                         .WithMany()

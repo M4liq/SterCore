@@ -28,7 +28,10 @@ namespace leave_management.Repository
             var leaveAllocations =  await FindAll();
 
             return leaveAllocations
-                .Where(q => q.EmployeeId == employeeid && q.LeaveTypeId == leavetypeid && q.Period == period)
+                .Where(q => q.EmployeeId == employeeid &&
+                            q.CommonLeaveTypeId == leavetypeid &&
+                            q.ExplicitLeaveTypeId == leavetypeid&&
+                            q.Period == period)
                 .Any();
         }
 
@@ -50,7 +53,8 @@ namespace leave_management.Repository
         public async Task<ICollection<LeaveAllocations>> FindAll()
         {
             var LeaveAllocations = await _organizationManager.FilterDbSetByView(_db.LeaveAllocations)
-                .Include(q => q.LeaveType)
+                .Include(q => q.CommonLeaveType)
+                .Include(q => q.ExplicitLeaveType)
                 .Include(q => q.Employee)
                 .ToListAsync();
 
@@ -60,7 +64,8 @@ namespace leave_management.Repository
         public async Task<LeaveAllocations> FindById(int id)
         {
             var LeaveAllocation = await _organizationManager.FilterDbSetByView(_db.LeaveAllocations)
-                .Include(q => q.LeaveType)
+                .Include(q => q.CommonLeaveType)
+                .Include(q => q.ExplicitLeaveType)
                 .Include(q => q.Employee)
                 .FirstOrDefaultAsync(q => q.Id == id);
 
@@ -76,20 +81,17 @@ namespace leave_management.Repository
                 .ToList();
         }
 
-        public async Task<LeaveAllocations> GetLeaveAllocationsByEmployeeAndType(string id, int leavetypeid)
+        public async Task<LeaveAllocations> GetLeaveAllocationsByEmployeeAndType(string id, int leaveTypeId)
         {
             //ORI implemented in find all
             var period = DateTime.Now.Year;
             var allocations = await FindAll();
-            return allocations.FirstOrDefault(q => q.EmployeeId == id && q.Period == period && q.LeaveTypeId == leavetypeid);
+            return allocations.FirstOrDefault(q => q.EmployeeId == id && q.Period == period && q.CommonLeaveTypeId == leaveTypeId);
         }
 
         public async Task<bool> Exists(int id)
-        {
-            if (await FindById(id) == null)
-                return false;
-            else
-                return true;
+        { 
+            return (await FindById(id) != null);
         }
 
         public async Task<bool> Save()

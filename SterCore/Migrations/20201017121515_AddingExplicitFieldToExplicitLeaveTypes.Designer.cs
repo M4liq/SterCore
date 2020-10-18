@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using leave_management.Data;
 
 namespace leave_management.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201017121515_AddingExplicitFieldToExplicitLeaveTypes")]
+    partial class AddingExplicitFieldToExplicitLeaveTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -699,6 +701,9 @@ namespace leave_management.Migrations
                     b.Property<string>("DepartmentToken")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsExplicit")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Limit")
                         .HasColumnType("int");
 
@@ -720,7 +725,7 @@ namespace leave_management.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CommonLeaveTypeId")
+                    b.Property<int>("CommonLeaveTypeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateCreated")
@@ -732,7 +737,10 @@ namespace leave_management.Migrations
                     b.Property<string>("EmployeeId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("ExplicitLeaveTypeId")
+                    b.Property<int>("ExplicitLeaveTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LeaveTypeId")
                         .HasColumnType("int");
 
                     b.Property<int>("NumberOfDays")
@@ -746,11 +754,11 @@ namespace leave_management.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommonLeaveTypeId");
-
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("ExplicitLeaveTypeId");
+
+                    b.HasIndex("LeaveTypeId");
 
                     b.ToTable("LeaveAllocations");
                 });
@@ -1358,17 +1366,19 @@ namespace leave_management.Migrations
 
             modelBuilder.Entity("leave_management.Data.LeaveAllocations", b =>
                 {
-                    b.HasOne("leave_management.Data.CommonLeaveTypes", "CommonLeaveType")
-                        .WithMany()
-                        .HasForeignKey("CommonLeaveTypeId");
-
                     b.HasOne("leave_management.Data.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId");
 
                     b.HasOne("leave_management.Data.ExplicitLeaveTypes", "ExplicitLeaveType")
                         .WithMany()
-                        .HasForeignKey("ExplicitLeaveTypeId");
+                        .HasForeignKey("ExplicitLeaveTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("leave_management.Data.CommonLeaveTypes", "CommonLeaveType")
+                        .WithMany()
+                        .HasForeignKey("LeaveTypeId");
                 });
 
             modelBuilder.Entity("leave_management.Data.LeaveRequests", b =>

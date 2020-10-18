@@ -357,6 +357,7 @@
                             if (thisDayIsAvailable) {
                                 var MyEvent = {
                                     Id: i,
+                                    SchedulerId: @Model.ScheduleId,
                                     Subject: '+',
                                     StartTime: new Date(d.getFullYear(), d.getMonth(), d.getDate(), selectedTimeFrom.getHours(), selectedTimeFrom.getMinutes()),
                                     EndTime: new Date(d.getFullYear(), d.getMonth(), d.getDate(), selectedTimeTo.getHours(), selectedTimeTo.getMinutes()),

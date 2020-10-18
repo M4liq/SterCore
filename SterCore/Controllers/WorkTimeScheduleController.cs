@@ -20,6 +20,7 @@ namespace leave_management.Controllers
     public class SchedulerEvent
     {
         public int Id { get; set; }
+        public int SchedulerId { get; set; }
         public string Subject { get; set; }
         public string Guid { get; set; }
         public string StartTime { get; set; }
@@ -42,7 +43,7 @@ namespace leave_management.Controllers
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ILeaveHelper _leaveHelper;
         private readonly IMapper _mapper;
-        public WorkTimeScheduleController(IWorkTimeScheduleRepository workTimeScheduleRepository, 
+        public WorkTimeScheduleController(IWorkTimeScheduleRepository workTimeScheduleRepository,
             IWorkTimeScheduleEmployeesRepository workTimeScheduleEmployeesRepository,
             IWorkTimeScheduleEventRepository workTimeScheduleEventRepository,
             IWorkingTimeSystemRepository workingTimeSystemRepository,
@@ -270,10 +271,10 @@ namespace leave_management.Controllers
             var EmployeeIds = new List<string>();
             var model = new Step2WorkTimeScheduleVM();
             foreach (var item in workTimeScheduleEmployees)
-            {   
-                if(item.ScheduleId == id)
+            {
+                if (item.ScheduleId == id)
                 {
-                    EmployeeIds.Add(item.EmployeeId); 
+                    EmployeeIds.Add(item.EmployeeId);
                 }
             }
             var ListOfNames = new List<string>();
@@ -283,9 +284,9 @@ namespace leave_management.Controllers
                 ListOfNames.Add(String.Format("{0} {1}", Employee.Lastname, Employee.Firstname));
             }
             var employees = await _employeeRepository.FindAll();
-            
+
             List<SelectListItem> employeeItems = new List<SelectListItem>();
-            for (int i = 0; i<EmployeeIds.Count;i++)
+            for (int i = 0; i < EmployeeIds.Count; i++)
             {
                 employeeItems.Add(new SelectListItem
                 {
@@ -306,7 +307,7 @@ namespace leave_management.Controllers
             model.EmployeeIds = EmployeeIds;
             model.ScheduleId = id;
             model.DateFrom = workTimeSchedule.DateFrom;
-            model.DateTo= workTimeSchedule.DateTo;
+            model.DateTo = workTimeSchedule.DateTo;
             model.Employees = employeeItems;
             model.UnavailableDates = UnavailableDates;
             return View(model);
@@ -314,17 +315,18 @@ namespace leave_management.Controllers
 
         // POST: WorkTimeSchedule/Step2/5
         [HttpPost]
-        
-      
+
+
         public async Task<ActionResult> Step2([FromBody]List<SchedulerEvent> schedulerEvents)
         {
             try
             {
-                var ScheduleEventData = new WorkTimeScheduleEvent();
-                var Scheduler = await _workTimeScheduleRepository.FindById(14);
 
+                var Scheduler = await _workTimeScheduleRepository.FindById(schedulerEvents[0].SchedulerId);
+                await _workTimeScheduleEventRepository.RemoveBySchedulerId(Scheduler.Id);
                 foreach (var item in schedulerEvents)
                 {
+                    var ScheduleEventData = new WorkTimeScheduleEvent();
                     ScheduleEventData.EventId = item.Id;
                     ScheduleEventData.Subject = item.Subject;
                     ScheduleEventData.Guid = item.Guid;
@@ -333,20 +335,18 @@ namespace leave_management.Controllers
                     ScheduleEventData.ShiftStartTime = item.ShiftStartTime;
                     ScheduleEventData.ShiftEndTime = item.ShiftEndTime;
                     ScheduleEventData.IsAllDay = item.IsAllDay;
-                    ScheduleEventData.EmployeeId= item.EmployeeId;
-                    ScheduleEventData.Description= item.Description;
-                    ScheduleEventData.PauseTimeLength= item.PauseTimeLength;
-                    ScheduleEventData.WorkTimeLength= item.WorkTimeLength;
+                    ScheduleEventData.EmployeeId = item.EmployeeId;
+                    ScheduleEventData.Description = item.Description;
+                    ScheduleEventData.PauseTimeLength = item.PauseTimeLength;
+                    ScheduleEventData.WorkTimeLength = item.WorkTimeLength;
 
                     ScheduleEventData.OrganizationToken = Scheduler.OrganizationToken;
                     ScheduleEventData.DepartmentToken = Scheduler.DepartmentToken;
                     ScheduleEventData.SchedulerId = Scheduler.Id;
 
-
                     await _workTimeScheduleEventRepository.Create(ScheduleEventData);
-
                 }
-                return  RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
             catch
             {

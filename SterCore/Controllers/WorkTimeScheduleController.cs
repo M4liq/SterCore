@@ -346,6 +346,7 @@ namespace leave_management.Controllers
 
                     await _workTimeScheduleEventRepository.Create(ScheduleEventData);
                 }
+                return Json(true);
                 return RedirectToAction("Index");
             }
             catch

@@ -479,7 +479,12 @@
                  
                  dataType: 'JSON',
                 data: jsonData,
-                url: "/WorkTimeSchedule/Step2"                                  
+                 url: "/WorkTimeSchedule/Step2",
+                success: function (response) {  
+                   if (response == true) {
+                            window.location = "/WorkTimeSchedule";
+                        }
+               }
             });
 
         })

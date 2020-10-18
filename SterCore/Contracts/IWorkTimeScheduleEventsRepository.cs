@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace leave_management.Contracts
 {
-    public interface IWorkTimeScheduleEventsRepository : IRepositoryBase<WorkTimeScheduleEvents>
+    public interface IWorkTimeScheduleEventsRepository : IRepositoryBase<WorkTimeScheduleEvent>
     {
     }
 }

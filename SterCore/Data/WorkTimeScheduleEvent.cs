@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace leave_management.Data
 {
-    public class WorkTimeScheduleEvents : IApplicationDataView
+    public class WorkTimeScheduleEvent : IApplicationDataView
     {
         [Key]
         public int Id { get; set; }

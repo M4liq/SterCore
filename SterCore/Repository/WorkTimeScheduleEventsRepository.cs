@@ -12,20 +12,20 @@ namespace leave_management.Repository
     public class WorkTimeScheduleEventsRepository : IWorkTimeScheduleEventsRepository
     {
         private readonly ApplicationDbContext _db;
-        private readonly IOrganizationResourceManager<WorkTimeScheduleEvents> _organizationManager;
-        public WorkTimeScheduleEventsRepository(ApplicationDbContext db, IOrganizationResourceManager<WorkTimeScheduleEvents> organizationManager)
+        private readonly IOrganizationResourceManager<WorkTimeScheduleEvent> _organizationManager;
+        public WorkTimeScheduleEventsRepository(ApplicationDbContext db, IOrganizationResourceManager<WorkTimeScheduleEvent> organizationManager)
         {
             _db = db;
             _organizationManager = organizationManager;
         }
-        public async Task<bool> Create(WorkTimeScheduleEvents entity)
+        public async Task<bool> Create(WorkTimeScheduleEvent entity)
         {
             _organizationManager.SetAccess(entity);
             await _db.WorkTimeScheduleEvents.AddAsync(entity);
             return await Save();
         }
 
-        public async Task<bool> Delete(WorkTimeScheduleEvents entity)
+        public async Task<bool> Delete(WorkTimeScheduleEvent entity)
         {
             if (!_organizationManager.VerifyAccess(entity))
             {
@@ -43,13 +43,13 @@ namespace leave_management.Repository
                 return true;
         }
 
-        public async Task<ICollection<WorkTimeScheduleEvents>> FindAll()
+        public async Task<ICollection<WorkTimeScheduleEvent>> FindAll()
         {
             var WorkTimeScheduleEvents = _organizationManager.FilterDbSetByView(_db.WorkTimeScheduleEvents);
             return await WorkTimeScheduleEvents.ToListAsync();
         }
 
-        public async Task<WorkTimeScheduleEvents> FindById(int id)
+        public async Task<WorkTimeScheduleEvent> FindById(int id)
         {
             var WorkTimeScheduleEvents = _organizationManager.FilterDbSetByView(_db.WorkTimeScheduleEvents);
             return await WorkTimeScheduleEvents.FirstOrDefaultAsync(q => q.Id == id);
@@ -63,7 +63,7 @@ namespace leave_management.Repository
 
 
 
-        public async Task<bool> Update(WorkTimeScheduleEvents entity)
+        public async Task<bool> Update(WorkTimeScheduleEvent entity)
         {
             //ORI checking if data is from appropirate organization scope
             if (!_organizationManager.VerifyAccess(entity))

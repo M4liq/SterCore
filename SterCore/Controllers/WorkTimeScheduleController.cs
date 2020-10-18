@@ -317,6 +317,7 @@ namespace leave_management.Controllers
         {
             try
             {
+                var ScheduleEventData = new WorkTimeScheduleEvent();
                 //var model = new W
                 //var workTimeSchedule = _mapper.Map<WorkTimeSchedule>(model);
                 //foreach (var item in schedulerEvents)

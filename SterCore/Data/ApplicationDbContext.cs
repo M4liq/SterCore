@@ -46,7 +46,7 @@ namespace leave_management.Data
         public DbSet<ResourceType> ResourceTypes { get; set; }
         public DbSet<Application> Applications { get; set; }
         public DbSet<AuthorizedDepartment> AuthorizedDepartments { get; set; }
-        public DbSet<WorkTimeScheduleEvents> WorkTimeScheduleEvents { get; set; }
+        public DbSet<WorkTimeScheduleEvent> WorkTimeScheduleEvents { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

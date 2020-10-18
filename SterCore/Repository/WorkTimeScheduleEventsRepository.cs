@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace leave_management.Repository
 {
-    public class WorkTimeScheduleEventsRepository : IWorkTimeScheduleEventsRepository
+    public class WorkTimeScheduleEventsRepository : IWorkTimeScheduleEventRepository
     {
         private readonly ApplicationDbContext _db;
         private readonly IOrganizationResourceManager<WorkTimeScheduleEvent> _organizationManager;

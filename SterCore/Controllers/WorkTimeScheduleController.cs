@@ -37,12 +37,14 @@ namespace leave_management.Controllers
     {
         private readonly IWorkTimeScheduleRepository _workTimeScheduleRepository;
         private readonly IWorkTimeScheduleEmployeesRepository _workTimeScheduleEmployeesRepository;
+        private readonly IWorkTimeScheduleEventRepository _workTimeScheduleEventRepository;
         private readonly IWorkingTimeSystemRepository _workingTimeSystemRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ILeaveHelper _leaveHelper;
         private readonly IMapper _mapper;
         public WorkTimeScheduleController(IWorkTimeScheduleRepository workTimeScheduleRepository, 
             IWorkTimeScheduleEmployeesRepository workTimeScheduleEmployeesRepository,
+            IWorkTimeScheduleEventRepository workTimeScheduleEventRepository,
             IWorkingTimeSystemRepository workingTimeSystemRepository,
             IEmployeeRepository employeeRepository,
             ILeaveHelper leaveHelper,
@@ -50,6 +52,7 @@ namespace leave_management.Controllers
         {
             _workTimeScheduleRepository = workTimeScheduleRepository;
             _workTimeScheduleEmployeesRepository = workTimeScheduleEmployeesRepository;
+            _workTimeScheduleEventRepository = workTimeScheduleEventRepository;
             _workingTimeSystemRepository = workingTimeSystemRepository;
             _employeeRepository = employeeRepository;
             _leaveHelper = leaveHelper;
@@ -318,14 +321,14 @@ namespace leave_management.Controllers
             try
             {
                 var ScheduleEventData = new WorkTimeScheduleEvent();
-                //var model = new W
-                //var workTimeSchedule = _mapper.Map<WorkTimeSchedule>(model);
-                //foreach (var item in schedulerEvents)
-                //{
-                //    var data 
-                //    await _workTimeScheduleRepository.Create(item);
 
-                //}
+
+                foreach (var item in schedulerEvents)
+                {
+                    
+                    await _workTimeScheduleEventRepository.Create(ScheduleEventData);
+
+                }
                 return  RedirectToAction(nameof(Index));
             }
             catch

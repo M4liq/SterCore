@@ -321,11 +321,28 @@ namespace leave_management.Controllers
             try
             {
                 var ScheduleEventData = new WorkTimeScheduleEvent();
-
+                var Scheduler = await _workTimeScheduleRepository.FindById(14);
 
                 foreach (var item in schedulerEvents)
                 {
-                    
+                    ScheduleEventData.EventId = item.Id;
+                    ScheduleEventData.Subject = item.Subject;
+                    ScheduleEventData.Guid = item.Guid;
+                    ScheduleEventData.StartTime = item.StartTime;
+                    ScheduleEventData.EndTime = item.EndTime;
+                    ScheduleEventData.ShiftStartTime = item.ShiftStartTime;
+                    ScheduleEventData.ShiftEndTime = item.ShiftEndTime;
+                    ScheduleEventData.IsAllDay = item.IsAllDay;
+                    ScheduleEventData.EmployeeId= item.EmployeeId;
+                    ScheduleEventData.Description= item.Description;
+                    ScheduleEventData.PauseTimeLength= item.PauseTimeLength;
+                    ScheduleEventData.WorkTimeLength= item.WorkTimeLength;
+
+                    ScheduleEventData.OrganizationToken = Scheduler.OrganizationToken;
+                    ScheduleEventData.DepartmentToken = Scheduler.DepartmentToken;
+                    ScheduleEventData.SchedulerId = Scheduler.Id;
+
+
                     await _workTimeScheduleEventRepository.Create(ScheduleEventData);
 
                 }

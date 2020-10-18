@@ -17,12 +17,12 @@ namespace leave_management.Data
         [ForeignKey("EmployeeId")]
         public Employee Employee { get; set; }
         public string EmployeeId { get; set; }
-        [ForeignKey("LeaveTypeId")]
-        public CommonLeaveTypes LeaveType { get; set; }
-        public int LeaveTypeId { get; set; }
+        [ForeignKey("CommonLeaveTypeId")]
+        public CommonLeaveTypes CommonLeaveType { get; set; }
+        public int? CommonLeaveTypeId { get; set; }
         [ForeignKey("ExplicitLeaveTypeId")]
         public ExplicitLeaveTypes ExplicitLeaveType { get; set; }
-        public int ExplicitLeaveTypeId { get; set; }
+        public int? ExplicitLeaveTypeId { get; set; }
         public int Period { get; set; }
         public string OrganizationToken { get; set; }
         public string DepartmentToken { get; set; }

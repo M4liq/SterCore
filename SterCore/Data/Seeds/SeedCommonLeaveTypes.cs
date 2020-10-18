@@ -10,9 +10,9 @@ namespace leave_management.Data.Seeds
 {
     public class SeedCommonLeaveTypes : IDataSeed
     {
-        private readonly ILeaveTypeRepository _leaveTypeRepository;
+        private readonly ICommonLeaveTypeRepository _leaveTypeRepository;
 
-        public SeedCommonLeaveTypes(ILeaveTypeRepository leaveTypeRepository)
+        public SeedCommonLeaveTypes(ICommonLeaveTypeRepository leaveTypeRepository)
         {
             _leaveTypeRepository = leaveTypeRepository;
         }
@@ -25,7 +25,8 @@ namespace leave_management.Data.Seeds
             var vacationLeave = new CommonLeaveTypes()
             {
                 Name = CommonLeaveTypesEnum.VacationLeave,
-                DefaultLimit = 20
+                Limit = 20,
+                AssignedMonthly = true
             };
 
             var result = _leaveTypeRepository.Create(vacationLeave).Result;
@@ -33,7 +34,8 @@ namespace leave_management.Data.Seeds
             var vacationLeaveExperienced = new CommonLeaveTypes()
             {
                 Name = CommonLeaveTypesEnum.VacationLeaveExperienced,
-                DefaultLimit = 26
+                Limit = 26,
+                AssignedMonthly = true
             };
 
              result = _leaveTypeRepository.Create(vacationLeaveExperienced).Result;
@@ -41,7 +43,8 @@ namespace leave_management.Data.Seeds
             var requestedLeave = new CommonLeaveTypes()
             {
                 Name = CommonLeaveTypesEnum.RequestedLeave,
-                DefaultLimit = 4
+                Limit = 4,
+                AssignedYearly = true
             };
 
             result = _leaveTypeRepository.Create(requestedLeave).Result;
@@ -49,7 +52,8 @@ namespace leave_management.Data.Seeds
             var eventLeave = new CommonLeaveTypes()
             {
                 Name = CommonLeaveTypesEnum.EventLeave,
-                DefaultLimit = 1
+                Limit = 1,
+                AssignedYearly = true
             };
 
             result = _leaveTypeRepository.Create(eventLeave).Result;
@@ -57,7 +61,8 @@ namespace leave_management.Data.Seeds
             var childCareLeave = new CommonLeaveTypes()
             {
                 Name = CommonLeaveTypesEnum.ChildCareLeave,
-                DefaultLimit = 2
+                Limit = 2,
+                AssignedYearly = true
             };
 
             result = _leaveTypeRepository.Create(childCareLeave).Result;
@@ -65,7 +70,8 @@ namespace leave_management.Data.Seeds
             var seekingJobLeave = new CommonLeaveTypes()
             {
                 Name = CommonLeaveTypesEnum.SeekingJobLeave,
-                DefaultLimit = 2
+                Limit = 2,
+                AssignedYearly = true
             };
 
             result = _leaveTypeRepository.Create(seekingJobLeave).Result;
@@ -73,7 +79,7 @@ namespace leave_management.Data.Seeds
             var sickLeaveType = new CommonLeaveTypes()
             {
                 Name = CommonLeaveTypesEnum.SickLeave,
-                DefaultLimit = 5
+                Limit = 5
             };
 
             result = _leaveTypeRepository.Create(sickLeaveType).Result;

@@ -67,6 +67,7 @@ namespace leave_management.Models
     public class EmployeeLeaveRequestsVM
     {
         public List<LeaveRequestVM> LeaveRequests { get; set; }
-        public List<LeaveAllocationVM> LeaveAllocations { get; set; }
+        public List<CommonLeaveAllocationVM> CommonLeaveAllocations { get; set; }
+        public List<ExplicitLeaveAllocationVM> ExplicitLeaveAllocations { get; set; }
     }
 }

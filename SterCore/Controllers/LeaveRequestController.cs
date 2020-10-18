@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using leave_management.Contracts;
 using leave_management.Data;
+using leave_management.Helpers.Attributes;
+using leave_management.Helpers.Enums;
 using leave_management.Models;
 using leave_management.Services.Extensions;
 using leave_management.Services.LeaveHelper.Contracts;
@@ -21,7 +23,7 @@ namespace leave_management.Controllers
     public class LeaveRequestController : Controller
     {   
         private readonly ILeaveRequestRepository _leaveRequestRepository;
-        private readonly ILeaveTypeRepository _leaveTypeRepository;
+        private readonly ICommonLeaveTypeRepository _leaveTypeRepository;
         private readonly ILeaveAllocationRepository _leaveAllocationRepository;
         private readonly ILeaveHelper _leaveHelper;
         private readonly IMapper _mapper;
@@ -29,7 +31,7 @@ namespace leave_management.Controllers
 
         public LeaveRequestController(
             ILeaveRequestRepository leaveRequestRepository,
-            ILeaveTypeRepository leaveTypeRepository,
+            ICommonLeaveTypeRepository leaveTypeRepository,
             ILeaveAllocationRepository leaveAllocationRepository,
             ILeaveHelper leaveHelper,
             IMapper mapper,
@@ -44,7 +46,7 @@ namespace leave_management.Controllers
             _leaveHelper = leaveHelper;
         }
 
-        [Authorize(Roles = "Administrator, Employer, Agent")]
+        [Roles(RoleEnum.Administrator,RoleEnum.Employer,RoleEnum.Agent,RoleEnum.Manager)]
         // GET: LeaveRequest
         public async Task<ActionResult> Index()
         {
@@ -64,7 +66,7 @@ namespace leave_management.Controllers
             return View(AdminModel);
         }
 
-        [Authorize(Roles = "Administrator, Employer, Agent")]
+        [Roles(RoleEnum.Administrator, RoleEnum.Employer, RoleEnum.Agent)]
         // GET: LeaveRequest/Details/5
         public async Task<ActionResult> Details(int id)                             
         {
@@ -73,7 +75,7 @@ namespace leave_management.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Administrator, Employer, Agent")]
+        [Roles(RoleEnum.Administrator, RoleEnum.Employer, RoleEnum.Agent)]
         public async Task<ActionResult> ApproveRequest(int id)
         {
             try
@@ -111,7 +113,7 @@ namespace leave_management.Controllers
            
         }
 
-        [Authorize(Roles = "Administrator, Employer, Agent")]
+        [Roles(RoleEnum.Administrator, RoleEnum.Employer, RoleEnum.Agent)]
         public async Task<ActionResult> RejectRequest(int id)
         {
             try
@@ -245,13 +247,21 @@ namespace leave_management.Controllers
             var leaveAllocations = await _leaveAllocationRepository.GetLeaveAllocationsByEmployee(employee.Id);
             var leaveRequests = await _leaveRequestRepository.GetLeaveRequestsByEmployee(employee.Id);
 
-            var leaveAllocationsModel = _mapper.Map<List<LeaveAllocationVM>>(leaveAllocations);
+            var commonLeaveAllocationsModel = _mapper
+                .Map<List<CommonLeaveAllocationVM>>(
+                    leaveAllocations.Where(q => q.CommonLeaveTypeId!=null));
+
+            var explicitLeaveAllocationsModel = _mapper
+                .Map<List<ExplicitLeaveAllocationVM>>(
+                    leaveAllocations.Where(q => q.CommonLeaveTypeId==null));
+
             var leaveRequestsModel = _mapper.Map<List<LeaveRequestVM>>(leaveRequests);
 
             var model = new EmployeeLeaveRequestsVM
             {
                 LeaveRequests = leaveRequestsModel,
-                LeaveAllocations = leaveAllocationsModel
+                CommonLeaveAllocations = commonLeaveAllocationsModel,
+                ExplicitLeaveAllocations = explicitLeaveAllocationsModel
             };
 
             return View(model);

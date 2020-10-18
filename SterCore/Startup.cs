@@ -40,9 +40,15 @@ namespace leave_management
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {   
+        {
+            services.AddCors(o => o.AddPolicy("SchedulerPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
 
-            if(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
             {
               services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
@@ -177,10 +183,12 @@ namespace leave_management
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+           
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseCors(options => options.AllowAnyOrigin());
+            //app.UseCors("SchedulerPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
 

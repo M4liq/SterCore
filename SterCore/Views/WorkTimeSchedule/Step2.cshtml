@@ -16,8 +16,8 @@
             <div class="col-md-12">
                 <div class="d-inline-block ">
                     <select name="actions" id="actions">
-                        <option value="delete">Usuń</option>
                         <option value="add">Dodaj</option>
+                        <option value="delete">Usuń</option>
                     </select>
                 </div>
                 <p class="d-inline-block">od:</p>
@@ -60,7 +60,7 @@
 
 
             <div class="form-group">
-                <input type="submit" value="Zapisz harmonogram" class="btn btn-success btn-block" />
+                <input id="SaveScheduler" type="button" value="Zapisz harmonogram" class="btn btn-success btn-block" />
             </div>
         </form>
     </div>
@@ -468,7 +468,20 @@
           }
           return hours + ":" + minutes;         
         }
+        $('#SaveScheduler').click(function () {
+            let eventsBoundToScheduler = scheduleObj.getEvents();
+            //let jsonData = JSON.stringify(eventsBoundToScheduler);
+            let jsonData = JSON.stringify({ 'SchedulerEvents': eventsBoundToScheduler });
+             $.ajax({
+                type: 'POST',
+                 contentType: "application/json",
+                 
+                 dataType: 'JSON',
+                data: jsonData,
+                url: "/WorkTimeSchedule/Step2"                                  
+            });
 
+        })
 
     </script>
 

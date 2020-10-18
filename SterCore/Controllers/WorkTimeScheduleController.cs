@@ -7,6 +7,7 @@ using leave_management.Contracts;
 using leave_management.Data;
 using leave_management.Models;
 using leave_management.Services.LeaveHelper.Contracts;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace leave_management.Controllers
 {
+    public class SchedulerEvents
+    {
+        public int Id { get; set; }
+        public string Subject { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public string ShiftStartTime { get; set; }
+        public string ShiftEndTime { get; set; }
+        public bool IsAllDay { get; set; }
+        public string EmployeeId { get; set; }
+        public string Description { get; set; }
+        public int PauseTimeLength { get; set; }
+        public string WorkTimeLength { get; set; }
+    }
+    //[EnableCors("SchedulerPolicy")]
     public class WorkTimeScheduleController : Controller
     {
         private readonly IWorkTimeScheduleRepository _workTimeScheduleRepository;
@@ -292,8 +308,9 @@ namespace leave_management.Controllers
 
         // POST: WorkTimeSchedule/Step2/5
         [HttpPost]
+        
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Step2(int id, IFormCollection collection)
+        public async Task<ActionResult> Step2(SchedulerEvents[] schedulerEvents)
         {
             try
             {

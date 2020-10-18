@@ -99,6 +99,7 @@ namespace leave_management
             services.AddScoped<IWorkingTimeSystemRepository, WorkingTimeSystemRepository>();
             services.AddScoped<IWorkTimeScheduleRepository, WorkTimeScheduleRepository>();
             services.AddScoped<IWorkTimeScheduleEmployeesRepository, WorkTimeScheduleEmployeesRepository>();
+            services.AddScoped<IWorkTimeScheduleEventRepository, WorkTimeScheduleEventRepository>();
 
             //Organization Resource Manager Initialization Fields
             services.AddScoped<IOrganizationResourceManager<LeaveType>, OrganizationResourceManager<LeaveType>>();
@@ -123,6 +124,7 @@ namespace leave_management
             services.AddScoped<IOrganizationResourceManager<ExplicitLeaveTypes>, OrganizationResourceManager<ExplicitLeaveTypes>>();
             services.AddScoped<IOrganizationResourceManager<WorkTimeSchedule>, OrganizationResourceManager<WorkTimeSchedule>>();
             services.AddScoped<IOrganizationResourceManager<WorkTimeScheduleEmployee>, OrganizationResourceManager<WorkTimeScheduleEmployee>>();
+            services.AddScoped<IOrganizationResourceManager<WorkTimeScheduleEvent>, OrganizationResourceManager<WorkTimeScheduleEvent>>();
 
             //Initializind Data Seeding and Generic List required to handle Seeds
             services.AddScoped<ISeed, Seed>();

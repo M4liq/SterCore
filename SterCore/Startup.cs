@@ -41,6 +41,7 @@ namespace leave_management
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddCors();
             services.AddCors(o => o.AddPolicy("SchedulerPolicy", builder =>
             {
                 builder.AllowAnyOrigin()
@@ -171,6 +172,7 @@ namespace leave_management
             ISeed seed
         )
         {
+           
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -182,13 +184,19 @@ namespace leave_management
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+           // app.UseCors(builder => builder
+           //    .AllowAnyHeader()
+           //    .AllowAnyMethod()
+           //    .SetIsOriginAllowed((host) => true)
+           //    .AllowCredentials()
+           //);
             app.UseHttpsRedirection();
            
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseCors(options => options.AllowAnyOrigin());
-            //app.UseCors("SchedulerPolicy");
+
+            app.UseCors("SchedulerPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
 

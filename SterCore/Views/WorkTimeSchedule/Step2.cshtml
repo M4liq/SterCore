@@ -471,7 +471,7 @@
         $('#SaveScheduler').click(function () {
             let eventsBoundToScheduler = scheduleObj.getEvents();
             //let jsonData = JSON.stringify(eventsBoundToScheduler);
-            let jsonData = JSON.stringify({ 'SchedulerEvents': eventsBoundToScheduler });
+            let jsonData = JSON.stringify( eventsBoundToScheduler );
              $.ajax({
                 type: 'POST',
                  contentType: "application/json",

@@ -12,15 +12,18 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace leave_management.Controllers
 {
-    public class SchedulerEvents
+    public class SchedulerEvent
     {
         public int Id { get; set; }
         public string Subject { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public string Guid { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
         public string ShiftStartTime { get; set; }
         public string ShiftEndTime { get; set; }
         public bool IsAllDay { get; set; }
@@ -29,7 +32,7 @@ namespace leave_management.Controllers
         public int PauseTimeLength { get; set; }
         public string WorkTimeLength { get; set; }
     }
-    //[EnableCors("SchedulerPolicy")]
+    [EnableCors("SchedulerPolicy")]
     public class WorkTimeScheduleController : Controller
     {
         private readonly IWorkTimeScheduleRepository _workTimeScheduleRepository;
@@ -309,14 +312,20 @@ namespace leave_management.Controllers
         // POST: WorkTimeSchedule/Step2/5
         [HttpPost]
         
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Step2(SchedulerEvents[] schedulerEvents)
+      
+        public async Task<ActionResult> Step2([FromBody]List<SchedulerEvent> schedulerEvents)
         {
             try
             {
-                // TODO: Add delete logic here
+                //var model = new W
+                //var workTimeSchedule = _mapper.Map<WorkTimeSchedule>(model);
+                //foreach (var item in schedulerEvents)
+                //{
+                //    var data 
+                //    await _workTimeScheduleRepository.Create(item);
 
-                return RedirectToAction(nameof(Index));
+                //}
+                return  RedirectToAction(nameof(Index));
             }
             catch
             {

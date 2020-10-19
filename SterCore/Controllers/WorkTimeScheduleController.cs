@@ -70,7 +70,38 @@ namespace leave_management.Controllers
         // GET: WorkTimeSchedule/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            return View();
+            var success = await _workTimeScheduleRepository.Exists(id);
+            if (!success)
+            {
+                return NotFound();
+            }
+            var workTimeSchedule = await _workTimeScheduleRepository.FindById(id);
+            var events = await _workTimeScheduleEventRepository.FindBySchedulerId(id);
+            var model = _mapper.Map<List<WorkTimeScheduleEvent>, List<DetailsWorkTimeScheduleVM>>(events.ToList());
+
+            var workTimeScheduleEmployees = await _workTimeScheduleEmployeesRepository.FindAll();
+            var EmployeeIds = new List<string>();
+            foreach (var item in workTimeScheduleEmployees)
+            {
+                if (item.ScheduleId == id)
+                {
+                    EmployeeIds.Add(item.EmployeeId);
+                }
+            }
+            var ListOfNames = new List<string>();
+            foreach (var item in EmployeeIds)
+            {
+                var Employee = await _employeeRepository.FindById(item);
+                ListOfNames.Add(String.Format("{0} {1}", Employee.Lastname, Employee.Firstname));
+            }
+            var UnavailableDates = _leaveHelper.ListUnavailableDates(workTimeSchedule.DateFrom, workTimeSchedule.DateTo);
+
+            model[0].DateFrom = workTimeSchedule.DateFrom;
+            model[0].DateTo = workTimeSchedule.DateTo;
+            model[0].EmployeeFullNames = ListOfNames;
+            model[0].EmployeeIds = EmployeeIds;
+            model[0].UnavailableDates = UnavailableDates;
+            return View(model);
         }
 
         // GET: WorkTimeSchedule/Create

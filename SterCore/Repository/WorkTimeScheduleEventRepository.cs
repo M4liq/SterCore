@@ -48,6 +48,12 @@ namespace leave_management.Repository
             var WorkTimeScheduleEvents = _organizationManager.FilterDbSetByView(_db.WorkTimeScheduleEvents);
             return await WorkTimeScheduleEvents.ToListAsync();
         }
+
+        public async Task<ICollection<WorkTimeScheduleEvent>> FindBySchedulerId(int id)
+        {
+            var WorkTimeScheduleEvents = _organizationManager.FilterDbSetByView(_db.WorkTimeScheduleEvents);
+            return await WorkTimeScheduleEvents.Where(q => q.SchedulerId == id).ToListAsync();
+        }
         public async Task<bool> RemoveBySchedulerId(int id)
         {
             var WorkTimeScheduleEvents = _organizationManager.FilterDbSetByView(_db.WorkTimeScheduleEvents);

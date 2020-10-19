@@ -59,17 +59,36 @@ namespace leave_management.Models
     {
         public int Id { get; set; }
         public string OrganizationToken { get; set; }
-
         public List<string> EmployeeIds { get; set; }
         public List<string> EmployeeFullNames { get; set; }
-
         public int ScheduleId { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
         public List<DateTime> UnavailableDates { get; set; }
-
         public IEnumerable<SelectListItem> Employees { get; set; }
-
     }
+    public class DetailsWorkTimeScheduleVM
+    {
+        public int Id { get; set; }
+        public int SchedulerId { get; set; }
+        public string Subject { get; set; }
+        public string Guid { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
+        public string ShiftStartTime { get; set; }
+        public string ShiftEndTime { get; set; }
+        public bool IsAllDay { get; set; }
+        public string EmployeeId { get; set; }
+        public string Description { get; set; }
+        public int PauseTimeLength { get; set; }
+        public string WorkTimeLength { get; set; }
+
+        public DateTime DateFrom { get; set; }
+        public DateTime DateTo { get; set; }
+        public List<DateTime> UnavailableDates { get; set; }
+        public List<string> EmployeeIds { get; set; }
+        public List<string> EmployeeFullNames { get; set; }
+    }
+
 
 }

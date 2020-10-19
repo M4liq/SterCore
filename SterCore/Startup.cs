@@ -102,7 +102,6 @@ namespace leave_management
             services.AddScoped<IWorkTimeScheduleEventRepository, WorkTimeScheduleEventRepository>();
 
             //Organization Resource Manager Initialization Fields
-            services.AddScoped<IOrganizationResourceManager<LeaveType>, OrganizationResourceManager<LeaveType>>();
             services.AddScoped<IOrganizationResourceManager<Document>, OrganizationResourceManager<Document>>();
             services.AddScoped<IOrganizationResourceManager<Employee>, OrganizationResourceManager<Employee>>();
             services.AddScoped<IOrganizationResourceManager<LeaveAllocations>, OrganizationResourceManager<LeaveAllocations>>();

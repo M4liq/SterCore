@@ -10,5 +10,6 @@ namespace leave_management.Contracts
     public interface IWorkTimeScheduleEventRepository : IRepositoryBase<WorkTimeScheduleEvent>
     {
         Task<bool> RemoveBySchedulerId(int id);
+        Task<ICollection<WorkTimeScheduleEvent>> FindBySchedulerId(int id);
     }
 }

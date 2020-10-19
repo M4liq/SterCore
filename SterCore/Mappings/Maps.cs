@@ -57,6 +57,7 @@ namespace leave_management.Mappings
             CreateMap<WorkTimeSchedule, WorkTimeScheduleVM>().ReverseMap();
             CreateMap<WorkTimeSchedule, CreateWorkTimeScheduleVM>().ReverseMap();
             CreateMap<WorkTimeScheduleEmployee, WorkTimeScheduleEmployeeVM>().ReverseMap();
+            CreateMap<WorkTimeScheduleEvent, DetailsWorkTimeScheduleVM>().ReverseMap();
         }
     }
 }

@@ -152,8 +152,8 @@
         var selectedDateFrom = new Date('@String.Format("{0}/{1}/{2}", Model.DateFrom.Month, Model.DateFrom.Day, Model.DateFrom.Year)');
         var selectedDateTo = new Date('@String.Format("{0}/{1}/{2}",Model.DateTo.Month,Model.DateTo.Day,Model.DateTo.Year)');
         var selectedEmployeeId="";
-        var selectedTimeTo = new Date(2020, 1, 1, 16, 0);
-        var selectedTimeFrom = new Date(2020, 1, 1, 8, 0);
+        var selectedTimeTo = new Date(2020, 1, 1, 16, 00);
+        var selectedTimeFrom = new Date(2020, 1, 1, 8, 00);
         var dataSources = [];
         var unAvailableDates = [];
         var i = 1;
@@ -282,7 +282,6 @@
             format: 'HH:mm',
             change: function (args) {
                 selectedTimeFrom = args.value;
-                console.log(selectedTimeFrom)
             }
         });
         timepickerFrom.appendTo('#timeFrom');
@@ -293,7 +292,6 @@
             format: 'HH:mm',
             change: function (args) {
                 selectedTimeTo = args.value;
-                console.log(selectedTimeFrom)
             }
         });
         timepickerTo.appendTo('#timeTo');
@@ -355,14 +353,37 @@
                                 })
                             }
                             if (thisDayIsAvailable) {
+                                var shiftStartTimeVal;
+                                if (selectedTimeFrom.getHours() < 10) {
+                                    shiftStartTimeVal = "0" + selectedTimeFrom.getHours();
+                                } else {
+                                     shiftStartTimeVal = selectedTimeFrom.getHours();
+                                }
+                                if (selectedTimeFrom.getMinutes() < 10) {
+                                    shiftStartTimeVal += ":0" + selectedTimeFrom.getMinutes();
+                                } else {
+                                     shiftStartTimeVal += ":"+selectedTimeFrom.getMinutes();
+                                }
+                                 var shiftEndTimeVal;
+                                if (selectedTimeTo.getHours() < 10) {
+                                    shiftEndTimeVal = "0" + selectedTimeTo.getHours();
+                                } else {
+                                     shiftEndTimeVal = selectedTimeTo.getHours();
+                                }
+                                if (selectedTimeTo.getMinutes() < 10) {
+                                    shiftEndTimeVal += ":0" + selectedTimeTo.getMinutes();
+                                } else {
+                                     shiftEndTimeVal += ":"+selectedTimeTo.getMinutes();
+                                }
+
                                 var MyEvent = {
                                     Id: i,
                                     SchedulerId: @Model.ScheduleId,
                                     Subject: '+',
                                     StartTime: new Date(d.getFullYear(), d.getMonth(), d.getDate(), selectedTimeFrom.getHours(), selectedTimeFrom.getMinutes()),
                                     EndTime: new Date(d.getFullYear(), d.getMonth(), d.getDate(), selectedTimeTo.getHours(), selectedTimeTo.getMinutes()),
-                                    ShiftStartTime: selectedTimeFrom.getHours() + ":" + selectedTimeFrom.getMinutes(),
-                                    ShiftEndTime: selectedTimeTo.getHours() + ":" + selectedTimeTo.getMinutes(),
+                                    ShiftStartTime: shiftStartTimeVal,
+                                    ShiftEndTime: shiftEndTimeVal,
                                     IsAllDay: false,
                                     EmployeeId: selectedEmployeeId,
                                     Description: descriptionText,
